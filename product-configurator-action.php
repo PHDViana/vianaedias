@@ -42,7 +42,9 @@ try {
                 $sourceText=$input['source_text']??'';
                 if(!is_string($sourceText))throw new DomainException('Texto de importação inválido.');
                 $result=vd_request_import_extract($sourceText,vd_config_uploads($_FILES['documents']??[]));
-                $suggestions=vd_request_import_suggestions($result['text'],$service->catalog()['product_types']);
+                $productTypes=$service->catalog()['product_types'];
+                $suggestions=vd_request_import_suggestions($result['text'],$productTypes);
+                $result['requests']=vd_request_import_requests($result['text'],$productTypes);
                 $result['suggestions']=$suggestions['suggestions'];
                 $result['warnings']=array_values(array_unique(array_merge($result['warnings'],$suggestions['warnings'])));
                 break;

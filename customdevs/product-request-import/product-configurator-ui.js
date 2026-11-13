@@ -11,6 +11,8 @@
             a.name.localeCompare(b.name,'pt-PT',{sensitivity:'base'}) || Number(a.id) - Number(b.id));
     let state, draft, identity, request, pending, uploads, removed, dirty;
     let importText = '', importFiles = [], importResultText = '', importSuggestions = {}, importWarnings = [];
+    // Multi-request import: candidates under review in the modal, then a queue opened one request at a time.
+    let importCandidates = [], importAttach = [], importQueue = [], importQueueTotal = 0, importQueuePosition = 0;
     let reviewTimer, reviewSequence = 0;
     const finishingRules = catalog.finishing_rules;
     const internalFinishingIds = new Set([18,21,33,35,...(finishingRules.crease || [])].map(Number));
@@ -157,6 +159,141 @@
             printed[0].fields[4229] = String(suggestions.faces);
         }
     }
+    function productTypeOptions(selected) {
+        const roots = types.filter(row => !Number(row.parent_id));
+        return '<option value="">Escolha o tipo de produto</option>' + roots.map(parent => {
+            const children = types.filter(row => Number(row.parent_id) === Number(parent.id));
+            if (!children.length) return options([parent],selected);
+            return `<optgroup label="${esc(parent.name)}">` +
+                options([{id:parent.id,name:parent.name + ' (escolher subcategoria no formulário)'}],selected) +
+                options(children.map(row => ({id:row.id,name:parent.name + ' › ' + row.name})),selected) + '</optgroup>';
+        }).join('');
+    }
+    function importDetails(suggestions) {
+        const parts = [];
+        if (suggestions.width_mm && suggestions.height_mm) parts.push(suggestions.width_mm + ' × ' + suggestions.height_mm + ' mm');
+        if (suggestions.total_pages) parts.push(suggestions.total_pages + ' páginas');
+        if (suggestions.print_mode === 'none') parts.push('sem impressão');
+        else if (suggestions.print_mode) parts.push({cmyk:'CMYK',pantone:'Pantone',cmyk_pantone:'CMYK + Pantone'}[suggestions.print_mode] +
+            (suggestions.pantone ? ' ' + suggestions.pantone : ''));
+        if (suggestions.faces) parts.push({1255:'só frente',1256:'frente e verso',1257:'só verso'}[suggestions.faces] || '');
+        if (suggestions.paper) parts.push(suggestions.paper);
+        if (suggestions.delivery) parts.push('entrega ' + suggestions.delivery.split('-').reverse().join('/'));
+        return parts.filter(Boolean).join(' · ') || 'Sem outros dados detetados.';
+    }
+    function parseQuantities(value) {
+        return [...new Set(String(value).split(/[;,\/]|\s+e\s+|\s+ou\s+/).map(part => Number(part.replace(/[.\s]/g,'')))
+            .filter(number => Number.isInteger(number) && number > 0 && number <= 10000000))].slice(0,12);
+    }
+    function renderImportCandidates() {
+        const dialog = root.querySelector('[data-import-dialog]'), area = root.querySelector('[data-import-candidates]');
+        if (!dialog || !area) return;
+        dialog.classList.toggle('vr-import-review',importCandidates.length > 0);
+        area.replaceChildren();
+        if (!importCandidates.length) return;
+        const intro = document.createElement('p');
+        intro.className = 'vr-import-summary';
+        intro.textContent = `Foram detetados ${importCandidates.length} pedidos. Cada pedido incluído será aberto no formulário, um de cada vez, para validar e completar antes de guardar; só depois gera orçamento.`;
+        const list = document.createElement('ol');
+        list.className = 'vr-import-candidates';
+        importCandidates.forEach((candidate,index) => {
+            const item = document.createElement('li');
+            item.className = candidate.include ? '' : 'vr-excluded';
+            item.innerHTML = `<label class="vr-import-include"><input type="checkbox" data-include${candidate.include ? ' checked' : ''}> Pedido ${index + 1}</label>
+                <div class="vr-grid"><label class="vr-label">Tipo de produto<select data-candidate-type>${productTypeOptions(candidate.suggestions.product_type || '')}</select></label>
+                <label class="vr-label">Quantidades<input data-candidate-quantities value="${esc((candidate.suggestions.quantities || []).join(', '))}" placeholder="Ex.: 100, 200, 500"></label></div>
+                <p class="vr-hint">${esc(importDetails(candidate.suggestions))}</p>
+                <details><summary>Texto deste pedido</summary><pre>${esc(candidate.text)}</pre></details>`;
+            item.querySelector('[data-include]').addEventListener('change',event => {
+                candidate.include = event.target.checked; item.className = candidate.include ? '' : 'vr-excluded';
+                start.textContent = startLabel();
+            });
+            item.querySelector('[data-candidate-type]').addEventListener('change',event => {
+                const value = Number(event.target.value);
+                if (value) {
+                    candidate.suggestions.product_type = value;
+                    candidate.suggestions.product_type_name = (types.find(row => Number(row.id) === value) || {}).name || '';
+                } else { delete candidate.suggestions.product_type; delete candidate.suggestions.product_type_name; }
+            });
+            item.querySelector('[data-candidate-quantities]').addEventListener('change',event => {
+                const quantities = parseQuantities(event.target.value);
+                if (quantities.length) candidate.suggestions.quantities = quantities; else delete candidate.suggestions.quantities;
+                event.target.value = quantities.join(', ');
+            });
+            list.append(item);
+        });
+        const startLabel = () => {
+            const count = importCandidates.filter(candidate => candidate.include).length;
+            return count ? `Abrir pedido 1 de ${count}` : 'Selecione pelo menos um pedido';
+        };
+        const start = button(startLabel(),startImportQueue,true);
+        const actions = document.createElement('div');
+        actions.className = 'vr-dialog-actions';
+        actions.append(button('Voltar ao texto',() => {importCandidates = []; renderImportCandidates();}),start);
+        area.append(intro,list,actions);
+    }
+    function loadImported(item) {
+        importSuggestions = item.suggestions || {};
+        importWarnings = [...(item.warnings || [])];
+        importResultText = item.text || '';
+        applyImportSuggestions(importSuggestions);
+        uploads.push(...importAttach);
+    }
+    async function startImportQueue() {
+        const chosen = importCandidates.filter(candidate => candidate.include);
+        if (!chosen.length) throw new Error('Selecione pelo menos um pedido para abrir.');
+        collect();
+        importQueue = chosen.slice(1); importQueueTotal = chosen.length; importQueuePosition = 1;
+        importCandidates = []; importText = '';
+        loadImported(chosen[0]);
+        dirty = true;
+        render();
+        message(`Pedido 1 de ${importQueueTotal} preenchido a partir da importação. Valide e complete os dados e guarde; depois abra o pedido seguinte.`);
+    }
+    function openNextImported() {
+        if (!importQueue.length) return;
+        if (dirty && !confirm('O pedido atual tem alterações por guardar. Abrir o pedido seguinte e descartá-las?')) return;
+        collect();
+        const keep = {customer:identity.customer,customer_name:identity.customer_name,
+            contact:draft.request_details?.contact || '',contact_id:draft.request_details?.contact_id || 0};
+        const next = importQueue.shift();
+        fresh();
+        identity.customer = keep.customer; identity.customer_name = keep.customer_name;
+        if (keep.contact) {draft.request_details.contact = keep.contact; draft.request_details.contact_id = keep.contact_id;}
+        history.replaceState(null,'',location.pathname + location.search);
+        importQueuePosition += 1;
+        loadImported(next);
+        dirty = true;
+        render();
+        message(`Pedido ${importQueuePosition} de ${importQueueTotal} preenchido, com o mesmo cliente e contacto. Valide e complete os dados e guarde.`);
+        root.querySelector('[data-message]').scrollIntoView({block:'center',behavior:'smooth'});
+    }
+    function renderImportQueueStatus() {
+        const area = root.querySelector('[data-import-queue-status]');
+        if (!area || !importQueueTotal) return;
+        const saved = Boolean(state.id) && !dirty;
+        const note = document.createElement('p');
+        note.className = 'vr-import-queue-note';
+        if (!importQueue.length && saved) {
+            note.textContent = `Importação múltipla concluída: ${importQueueTotal} pedido(s) abertos.`;
+            area.replaceChildren(note);
+            importQueueTotal = 0; importQueuePosition = 0; importAttach = [];
+            return;
+        }
+        note.textContent = `Importação múltipla: pedido ${importQueuePosition} de ${importQueueTotal}. ` + (importQueue.length ?
+            (saved ? 'Pedido guardado; pode abrir o seguinte.' : `Valide e guarde este pedido para passar ao seguinte (${importQueue.length} por abrir).`) :
+            'Este é o último pedido da importação.');
+        area.replaceChildren(note);
+        if (importQueue.length) {
+            const actions = document.createElement('div');
+            actions.className = 'vr-dialog-actions vr-queue-actions';
+            actions.append(button('Descartar restantes',() => {
+                if (!confirm(`Descartar os ${importQueue.length} pedido(s) importados que ainda não abriu?`)) return;
+                importQueue = []; importQueueTotal = 0; importQueuePosition = 0; importAttach = []; render();
+            }),button(`Abrir pedido seguinte (${importQueuePosition + 1} de ${importQueueTotal})`,openNextImported,saved));
+            area.append(actions);
+        }
+    }
     async function importRequest() {
         collect();
         const source = root.querySelector('[data-import-text]').value.trim();
@@ -170,6 +307,13 @@
             throw new Error('Os documentos desta importação excedem os limites do pedido.');
         }
         const result = await api('extract_request',{config_id:state.id,source_text:source},false,importFiles);
+        if ((result.requests || []).length > 1) {
+            importCandidates = result.requests.map(item => ({...item,include:true,suggestions:{...item.suggestions}}));
+            importAttach = attach; importResultText = result.text; importFiles = []; renderImportQueue();
+            renderImportCandidates();
+            return;
+        }
+        importQueue = []; importQueueTotal = 0; importQueuePosition = 0;
         importResultText = result.text;
         importSuggestions = result.suggestions || {};
         importWarnings = [...(result.warnings || [])];
@@ -674,14 +818,15 @@
             ${state.conversion?.error ? `<p class="vr-warning" role="alert">Pedido guardado, mas não convertido em orçamento: ${esc(state.conversion.error)}</p>` : ''}
             ${state.conversion?.quote ? `<p>Orçamento associado: <a href="index.php?module=items/info&amp;path=146-${Number(state.conversion.quote)}" target="_blank" rel="noopener">#${Number(state.conversion.quote)}</a>. Alterar este pedido não altera o orçamento nem o histórico já guardado.</p>` : ''}
             <section class="vr-section vr-import"><div class="vr-section-heading"><h3><span>0</span> Importar pedido de email, PDF ou imagem</h3><div data-import-open></div></div>
-                <div data-import-result></div>
+                <div data-import-queue-status></div><div data-import-result></div>
                 <dialog class="vr-import-dialog" data-import-dialog aria-labelledby="vr-import-title">
                     <div class="vr-dialog-head"><h3 id="vr-import-title">Importar pedido de email, PDF ou imagem</h3><button type="button" class="vr-dialog-close" data-import-close aria-label="Fechar">×</button></div>
                     <div data-import-message role="status" aria-live="polite"></div>
-                    <p class="vr-hint">Cole texto ou uma imagem (Ctrl/Cmd+V), ou selecione um PDF/imagem. A leitura é local no servidor; em PDFs digitalizados o OCR lê até 6 páginas. Os dados detetados preenchem um rascunho editável; confirme-os antes de guardar. O original será anexado ao pedido.</p>
+                    <div data-import-input><p class="vr-hint">Cole texto ou uma imagem (Ctrl/Cmd+V), ou selecione um PDF/imagem. A leitura é local no servidor; em PDFs digitalizados o OCR lê até 6 páginas. Os dados detetados preenchem um rascunho editável; confirme-os antes de guardar. O original será anexado ao pedido.</p>
                     <label class="vr-label">Texto do email ou pedido<textarea data-import-text rows="5" maxlength="100000" placeholder="Cole aqui o texto do email, incluindo quantidades, formato, papel e acabamentos.">${esc(importText)}</textarea></label>
                     <label class="vr-upload">Selecionar PDF ou imagem<input type="file" data-import-files multiple accept=".pdf,.jpg,.jpeg,.png,.tif,.tiff,.txt"></label>
-                    <ul data-import-queue class="vr-files"></ul><div data-import-actions class="vr-dialog-actions"></div>
+                    <ul data-import-queue class="vr-files"></ul></div>
+                    <div data-import-candidates></div><div data-import-actions class="vr-dialog-actions"></div>
                 </dialog>
             </section>
             <section class="vr-section"><h3><span>1</span> Produto <small>obrigatório</small></h3>
@@ -799,6 +944,8 @@
         });
         renderImportQueue();
         renderImportResult();
+        renderImportCandidates();
+        renderImportQueueStatus();
         if (state.id) root.querySelector('[data-top-actions]').append(button('Duplicar pedido',duplicateCurrentRequest));
         for (const input of root.querySelectorAll('[data-category]')) input.addEventListener('change',() => chooseCategory(Number(input.value)));
         for (const input of root.querySelectorAll('[data-subtype]')) input.addEventListener('change',() => {
@@ -1282,7 +1429,7 @@
     };
     root.addEventListener('input',markChanged);
     root.addEventListener('change',markChanged);
-    window.addEventListener('beforeunload',event => {if (dirty) {event.preventDefault();event.returnValue = '';}});
+    window.addEventListener('beforeunload',event => {if (dirty || importQueue.length) {event.preventDefault();event.returnValue = '';}});
     render();
     const existing = location.hash.match(/^#(configuration|duplicate)=(\d+)$/);
     if (existing) open(Number(existing[2])).then(() => {

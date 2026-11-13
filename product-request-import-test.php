@@ -58,4 +58,24 @@ $flyer = vd_request_import_suggestions("Preciso de 1.000 flyers A5 4/0 em couch�
 importCheck(($flyer['suggestions']['product_type'] ?? 0) === 3802 && ($flyer['suggestions']['quantities'] ?? []) === [1000], 'Inline product quantity failed.');
 importCheck(($flyer['suggestions']['paper'] ?? '') === 'couché mate 150g', 'Paper span extraction failed.');
 
+$catalog = [
+    ['id' => 3707, 'parent_id' => 0, 'name' => 'Economato'], ['id' => 3708, 'parent_id' => 3707, 'name' => 'Cartões'],
+    ['id' => 3709, 'parent_id' => 3707, 'name' => 'Envelopes'], ['id' => 3711, 'parent_id' => 3707, 'name' => 'Capas'],
+    ['id' => 3712, 'parent_id' => 0, 'name' => 'Revistas'], ['id' => 3714, 'parent_id' => 3712, 'name' => 'Agrafadas'],
+    ['id' => 3800, 'parent_id' => 0, 'name' => 'Publicidade'], ['id' => 3802, 'parent_id' => 3800, 'name' => "Flyer's"],
+    ['id' => 3856, 'parent_id' => 0, 'name' => 'Brochuras'], ['id' => 3862, 'parent_id' => 3856, 'name' => 'Agrafadas'],
+];
+$multi = vd_request_import_requests("Bom dia,\nEntrega: 30/11/2026\n\nCartões\n100, 200 e 500 unidades\n85x55\n\n" .
+    "Brochuras com 4 páginas\nA4, 1000 exemplares\nCapa: couché 250g\nAgrafadas\n\n" .
+    "2000 flyers A5 4/0, para colocar dentro dos envelopes", $catalog);
+importCheck(count($multi) === 3, 'Multi-request split failed: ' . count($multi));
+importCheck(($multi[0]['suggestions']['product_type'] ?? 0) === 3708 && ($multi[0]['suggestions']['quantities'] ?? []) === [100, 200, 500], 'First request mismatch.');
+importCheck(($multi[1]['suggestions']['product_type'] ?? 0) === 3862 && ($multi[1]['suggestions']['quantities'] ?? []) === [1000], 'Brochure request mismatch.');
+importCheck(($multi[2]['suggestions']['product_type'] ?? 0) === 3802 && ($multi[2]['suggestions']['quantities'] ?? []) === [2000], 'Flyer request mismatch.');
+importCheck(($multi[2]['suggestions']['delivery'] ?? '') === '2026-11-30', 'Shared header not applied to every request.');
+importCheck(vd_request_import_requests("500 cartões\n85x55\ncouché 350 gr", $catalog) === [], 'Single request must not be split.');
+importCheck(count(vd_request_import_requests("500 cartões 85x55\n1000 cartões 90x50", $catalog)) === 2, 'Same product with two quantities must split.');
+$list = vd_request_import_suggestions("Cartões de visita (100/200/500)\n4/4", $catalog);
+importCheck(($list['suggestions']['quantities'] ?? []) === [100, 200, 500], 'Quantity list after product failed.');
+
 echo "Product request import checks passed.\n";

@@ -62,6 +62,15 @@
 #vd-product-configurator .vr-dialog-close:hover{color:#1d2b3a}
 #vd-product-configurator .vr-dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 #vd-product-configurator .vr-import-dialog .vr-message{margin:0 0 12px;padding:10px 14px}
+#vd-product-configurator .vr-import-review [data-import-input],#vd-product-configurator .vr-import-review [data-import-actions]{display:none}
+#vd-product-configurator .vr-import-candidates{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px}
+#vd-product-configurator .vr-import-candidates>li{border:1px solid #d5dde8;border-radius:8px;padding:12px 14px;background:#fbfdff}
+#vd-product-configurator .vr-import-candidates>li.vr-excluded{opacity:.55;background:#f4f5f7}
+#vd-product-configurator .vr-import-candidates .vr-hint{margin:6px 0 4px}
+#vd-product-configurator .vr-import-candidates pre{white-space:pre-wrap;max-height:180px;overflow:auto;font-size:12px;background:#f6f8fb;padding:8px;border-radius:5px}
+#vd-product-configurator .vr-import-include{display:flex;align-items:center;gap:8px;font-weight:600;margin-bottom:8px}
+#vd-product-configurator .vr-import-queue-note{margin:12px 0 0;padding:9px 12px;border:1px solid #b6c8dc;border-radius:5px;background:#eef4fb;color:#1f4a77}
+#vd-product-configurator .vr-queue-actions{justify-content:flex-start;margin-top:8px}
 #vd-product-configurator .vr-import-summary{padding:9px 12px;border:1px solid #b9deca;border-radius:5px;background:#edf8f1;color:#215c42!important}
 #vd-product-configurator [data-import-result] .vr-warning{padding:8px 10px;border-radius:5px}
 #vd-product-configurator [data-import-result] pre{max-height:300px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;padding:10px;background:#f4f6f8;border:1px solid #dce4ec;border-radius:5px;font:12px/1.5 monospace}

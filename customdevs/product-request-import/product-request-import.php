@@ -225,6 +225,8 @@ function vd_request_import_aliases(): array
         'bloco de nota' => ['bloco', 'bloco de apontamento'],
         'saco de papel' => ['saco'],
         'calendario' => ['calendario de parede', 'calendario de mesa'],
+        'obra de livro' => ['livro'],
+        'menu ementa' => ['menu', 'ementa', 'carta de restaurante'],
     ];
 }
 
@@ -233,14 +235,11 @@ function vd_request_import_contains(string $haystack, string $needle): bool
     return $needle !== '' && strpos($haystack, ' ' . $needle . ' ') !== false;
 }
 
-function vd_request_import_suggestions(string $text, array $productTypes): array
+function vd_request_import_find_products(string $text, array $productTypes): array
 {
     $normalized = ' ' . vd_request_import_normalize($text) . ' ';
     $singularText = ' ' . vd_request_import_singular(trim($normalized)) . ' ';
     $aliases = vd_request_import_aliases();
-    $lines = preg_split('/\R/u', $text) ?: [];
-    $suggestions = [];
-    $warnings = [];
     $children = [];
     foreach ($productTypes as $row) {
         $parent = (int) ($row['parent_id'] ?? 0);
@@ -248,36 +247,156 @@ function vd_request_import_suggestions(string $text, array $productTypes): array
             $children[$parent] = true;
         }
     }
-
     $matches = [];
     foreach ($productTypes as $row) {
         $id = (int) ($row['id'] ?? 0);
         $name = trim((string) ($row['name'] ?? ''));
         $needle = vd_request_import_normalize($name);
-        if (!$id || strlen($needle) < 5 || isset($children[$id]) || $needle === 'outro') {
+        $isParent = isset($children[$id]);
+        // Generic top-level groups never describe a product on their own.
+        if (!$id || strlen($needle) < 5 || in_array($needle, ['outro', 'economato', 'embalagem', 'documentos', 'publicidade'], true)) {
             continue;
         }
         $singular = vd_request_import_singular($needle);
         $best = 0;
-        if (vd_request_import_contains($normalized, $needle) || vd_request_import_contains($singularText, $singular)) {
-            $best = strlen($singular);
+        $position = PHP_INT_MAX;
+        foreach (array_merge([$singular], $aliases[$singular] ?? []) as $variant) {
+            $offset = $variant === '' ? false : strpos($singularText, ' ' . $variant . ' ');
+            if ($offset !== false) {
+                $best = max($best, strlen($variant));
+                $position = min($position, substr_count(substr($singularText, 0, $offset + 1), ' ') - 1);
+            }
         }
-        foreach ($aliases[$singular] ?? [] as $alias) {
-            if (vd_request_import_contains($singularText, $alias)) $best = max($best, strlen($alias));
+        if (!$best && vd_request_import_contains($normalized, $needle)) {
+            $best = strlen($singular);
+            $position = substr_count(substr($normalized, 0, strpos($normalized, ' ' . $needle . ' ') + 1), ' ') - 1;
         }
         if ($best) {
-            $matches[] = ['id' => $id, 'name' => $name, 'length' => $best];
+            // position: index of the first word where the product is mentioned.
+            $matches[] = ['id' => $id, 'name' => $name, 'length' => $best, 'position' => $position,
+                'parent_id' => (int) ($row['parent_id'] ?? 0), 'is_parent' => $isParent];
         }
     }
     usort($matches, static function ($left, $right) {
         return $right['length'] <=> $left['length'];
     });
-    if ($matches && (!isset($matches[1]) || $matches[0]['length'] > $matches[1]['length'])) {
-        $suggestions['product_type'] = $matches[0]['id'];
-        $suggestions['product_type_name'] = $matches[0]['name'];
+    return $matches;
+}
+
+/**
+ * Picks the product the text is about: a subcategory confirmed by its category first,
+ * then the earliest mention, then the longest (most specific) name.
+ */
+function vd_request_import_choose_product(array $matches): ?array
+{
+    if (!$matches) return null;
+    $parents = [];
+    foreach ($matches as $match) {
+        if ($match['is_parent']) $parents[$match['id']] = true;
+    }
+    $key = static function ($match) use ($parents) {
+        $confirmed = !$match['is_parent'] && isset($parents[$match['parent_id']]);
+        return [$confirmed ? 1 : 0, -$match['position'], $match['length'], $match['is_parent'] ? 0 : 1];
+    };
+    usort($matches, static function ($left, $right) use ($key) {
+        return $key($right) <=> $key($left);
+    });
+    if (isset($matches[1]) && $key($matches[0]) === $key($matches[1])) {
+        // Same name under several categories: fall back to a single matched category, if any.
+        return count($parents) === 1 ? array_values(array_filter($matches, static function ($match) use ($parents) {
+            return isset($parents[$match['id']]);
+        }))[0] : null;
+    }
+    return $matches[0];
+}
+
+/**
+ * Splits a request that lists several products into one text block per product.
+ * Lines before the first product (greeting, reference, delivery) are shared by every block.
+ */
+function vd_request_import_split(string $text, array $productTypes): array
+{
+    $componentWords = '/^\s*(?:[-*•·]+|[0-9]+[.)]|[a-z][)])?\s*(?:capa|contracapa|miolo|interior|guardas?|papel|material|suporte|impress[aã]o|acabamentos?|formato|quantidades?|cores?|frente|verso|entrega|prazo|envio|nota|obs\.?|observa[cç][oõ]es|refer[eê]ncia|ref\.?|documento|texto colado)\b/iu';
+    $header = [];
+    $blocks = [];
+    $current = null;
+    foreach (preg_split('/\R/u', $text) ?: [] as $line) {
+        $start = false;
+        $product = null;
+        if (trim($line) !== '' && !preg_match($componentWords, $line)) {
+            $wordsOnly = preg_replace('/\b[0-9]+(?:[.,][0-9]+)*\b/u', ' ', $line);
+            $found = array_values(array_filter(vd_request_import_find_products($wordsOnly, $productTypes), static function ($match) {
+                return $match['position'] <= 2;
+            }));
+            usort($found, static function ($left, $right) {
+                return [$left['position'], -$left['length']] <=> [$right['position'], -$right['length']];
+            });
+            $refines = $current !== null && array_filter($found, static function ($match) use ($current) {
+                // "Agrafadas" under a "Brochuras" block, or the category of the current subcategory.
+                return $match['parent_id'] === $current['product'] || $match['id'] === $current['parent'];
+            });
+            if ($found && !$refines) {
+                $chosen = vd_request_import_choose_product($found) ?? $found[0];
+                $product = $chosen['id'];
+                $lineHasQuantity = isset(vd_request_import_suggestions($line, $productTypes, false)['suggestions']['quantities']);
+                // A repeated mention of the same product only starts a new request when both carry a quantity.
+                $start = $current === null || $product !== $current['product'] ||
+                    ($lineHasQuantity && $current['quantity']);
+            }
+        }
+        if ($start) {
+            if ($current !== null) $blocks[] = $current;
+            $current = ['product' => $product, 'parent' => $chosen['parent_id'], 'lines' => [$line], 'quantity' => $lineHasQuantity];
+        } elseif ($current === null) {
+            $header[] = $line;
+        } else {
+            $current['lines'][] = $line;
+            if (!$current['quantity'] && preg_match('/[0-9]/', $line)) {
+                $current['quantity'] = isset(vd_request_import_suggestions($line, $productTypes, false)['suggestions']['quantities']);
+            }
+        }
+    }
+    if ($current !== null) $blocks[] = $current;
+    $shared = trim(implode("\n", array_filter($header, static function ($line) {
+        return !preg_match('/^\s*(?:texto colado|documento)\s*:/iu', $line);
+    })));
+    return array_map(static function ($block) use ($shared) {
+        return trim(implode("\n", $block['lines']) . ($shared !== '' ? "\n" . $shared : ''));
+    }, $blocks);
+}
+
+/** Returns one suggestion set per detected request (a single item when the text describes one product). */
+function vd_request_import_requests(string $text, array $productTypes): array
+{
+    $blocks = vd_request_import_split($text, $productTypes);
+    if (count($blocks) < 2) {
+        return [];
+    }
+    return array_map(static function ($block) use ($productTypes) {
+        $parsed = vd_request_import_suggestions($block, $productTypes);
+        return ['text' => $block, 'suggestions' => $parsed['suggestions'], 'warnings' => $parsed['warnings']];
+    }, array_slice($blocks, 0, 20));
+}
+
+function vd_request_import_suggestions(string $text, array $productTypes, bool $detectProduct = true): array
+{
+    $normalized = ' ' . vd_request_import_normalize($text) . ' ';
+    $singularText = ' ' . vd_request_import_singular(trim($normalized)) . ' ';
+    $aliases = vd_request_import_aliases();
+    $lines = preg_split('/\R/u', $text) ?: [];
+    $suggestions = [];
+    $warnings = [];
+    $matches = $detectProduct ? vd_request_import_find_products($text, $productTypes) : [];
+    $chosen = vd_request_import_choose_product($matches);
+    if ($chosen) {
+        $suggestions['product_type'] = $chosen['id'];
+        $suggestions['product_type_name'] = $chosen['name'];
+        if ($chosen['is_parent']) {
+            $warnings[] = 'Categoria «' . $chosen['name'] . '» reconhecida; escolha a subcategoria.';
+        }
     } elseif ($matches) {
         $warnings[] = 'Foram encontradas várias subcategorias de produto igualmente prováveis; escolha manualmente.';
-    } else {
+    } elseif ($detectProduct) {
         $warnings[] = 'O tipo de produto não foi identificado com confiança; escolha-o manualmente.';
     }
 
@@ -308,16 +427,22 @@ function vd_request_import_suggestions(string $text, array $productTypes): array
     $quantityValues = [];
     foreach ($lines as $line) {
         $quantityText = null;
-        if (preg_match('/\b(?:quantidade|qtd\.?|tiragem)\s*[:=]?\s*([0-9][0-9. ]*(?:(?:,|;|\s+e\s+)\s*[0-9][0-9. ]*)*)/iu', $line, $match)) {
+        if (preg_match('/\b(?:quantidades?|qtds?\.?|tiragens?)\s*[:=]?\s*\(?\s*((?:[0-9]{1,3}(?:[. ][0-9]{3})+|[0-9]{1,9})(?:\s*(?:,|;|\/|\be\b|\bou\b)\s*(?:[0-9]{1,3}(?:[. ][0-9]{3})+|[0-9]{1,9}))*)/iu', $line, $match)) {
             $quantityText = $match[1];
-        } elseif (preg_match('/\b([0-9][0-9. ]*)\s*(?:exemplares?|unidades?|unid\.?|un\.?|uni\.?|c[oó]pias|livros?)(?=\s|$|[,.;:])/iu', $line, $match)) {
+        } elseif (preg_match('/(?<![\p{L}0-9.,\/])((?:[0-9]{1,3}(?:[. ][0-9]{3})+|[0-9]{1,9})(?:\s*(?:,|;|\/|\be\b|\bou\b)\s*(?:[0-9]{1,3}(?:[. ][0-9]{3})+|[0-9]{1,9}))*)\s*(?:exemplares?|unidades?|unid\.?|un\.?|uni\.?|c[oó]pias|livros?)(?=\s|$|[,.;:])/iu', $line, $match)) {
             $quantityText = $match[1];
-        } elseif (preg_match_all('/(?<![0-9.,\/])((?:[0-9]{1,3}(?:[. ][0-9]{3})+|[0-9]{1,9}))\s+(\p{L}[\p{L}\']*)/u', $line, $found, PREG_SET_ORDER) &&
+        } elseif (preg_match_all('/(?<![\p{L}0-9.,\/])((?:[0-9]{1,3}(?:[. ][0-9]{3})+|[0-9]{1,9})(?:\s*(?:,|;|\/|\be\b|\bou\b)\s*(?:[0-9]{1,3}(?:[. ][0-9]{3})+|[0-9]{1,9}))*)\s+(?:un\.?\s+|unidades\s+de\s+)?(\p{L}[\p{L}\']*)/u', $line, $found, PREG_SET_ORDER) &&
             ($quantityText = array_reduce($found, static function ($carry, $item) use ($productWords) {
                 // "Preciso de 300 postais": a number followed by a product name anywhere in the line.
                 return $carry ?? (isset($productWords[vd_request_import_singular(vd_request_import_normalize($item[2]))]) ? $item[1] : null);
             })) !== null) {
             // quantity found next to a product name
+        } elseif (preg_match_all('/(\p{L}[\p{L}\']*)[^0-9\n]{0,25}?[(:\-–]\s*((?:[0-9]{1,3}(?:[. ][0-9]{3})+|[0-9]{1,9})(?:\s*(?:,|;|\/|\be\b|\bou\b)\s*(?:[0-9]{1,3}(?:[. ][0-9]{3})+|[0-9]{1,9}))*)(?!\s*(?:x|×|mm|cm|gr?s?\b|gsm|pp|p[aá]g|cores?))/u', $line, $found, PREG_SET_ORDER) &&
+            ($quantityText = array_reduce($found, static function ($carry, $item) use ($productWords) {
+                if ($carry !== null || preg_match('/^[0-4]\s*\/\s*[0-4]$/', trim($item[2]))) return $carry;
+                return isset($productWords[vd_request_import_singular(vd_request_import_normalize($item[1]))]) ? $item[2] : null;
+            })) !== null) {
+            // product name followed by a list of quantities
         } elseif (preg_match('/^\s*((?:[0-9]{1,3}(?:[. ][0-9]{3})+|[0-9]{1,9}))\s+(?!(?:gr?s?|gsm|g\/m|mm|cm|m|kg|p[aá]g\w*|pp|cores?|cor|x|dias?|horas?|semanas?|faces?|lados?|vias?|furos?|dobras?)(?:\s|$|[.,;:\/²]))\p{L}/iu', $line, $match)) {
             // "500 cartões", "1.000 flyers": a leading number followed by the product name.
             $quantityText = $match[1];
