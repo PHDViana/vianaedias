@@ -1,0 +1,3035 @@
+{
+    "146": {
+        "fields": [
+            {
+                "id": "2024",
+                "name": "",
+                "type": "fieldtype_action",
+                "configuration": ""
+            },
+            {
+                "id": "2025",
+                "name": "",
+                "type": "fieldtype_id",
+                "configuration": ""
+            },
+            {
+                "id": "2026",
+                "name": "Data Pedido",
+                "type": "fieldtype_date_added",
+                "configuration": ""
+            },
+            {
+                "id": "2027",
+                "name": "",
+                "type": "fieldtype_date_updated",
+                "configuration": ""
+            },
+            {
+                "id": "2028",
+                "name": "",
+                "type": "fieldtype_created_by",
+                "configuration": ""
+            },
+            {
+                "id": "2029",
+                "name": "",
+                "type": "fieldtype_parent_item_id",
+                "configuration": ""
+            },
+            {
+                "id": "2030",
+                "name": "Estado",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"\",\"width\":\"input-small\",\"use_search\":\"0\",\"use_global_list\":\"10\"}"
+            },
+            {
+                "id": "2031",
+                "name": "Ações",
+                "type": "fieldtype_process_button",
+                "configuration": "{\"display_as\":\"inline\"}"
+            },
+            {
+                "id": "3923",
+                "name": "Cliente",
+                "type": "fieldtype_entity_ajax",
+                "configuration": "{\"entity_id\":\"26\",\"width\":\"input-large\",\"display_as\":\"dropdown\",\"default_text\":\"\",\"allow_search\":\"1\",\"heading_template\":\"\",\"copy_values\":\"[228]=[3925]\\r\\n[232]=[3926]\",\"mysql_query_where\":\"\"}"
+            },
+            {
+                "id": "3924",
+                "name": "Contacto",
+                "type": "fieldtype_entity_ajax",
+                "configuration": "{\"entity_id\":\"90\",\"width\":\"input-large\",\"display_as\":\"dropdown\",\"default_text\":\"\",\"allow_search\":\"1\",\"heading_template\":\"\",\"copy_values\":\"[921]=[3925]\\r\\n[920]=[3926]\",\"mysql_query_where\":\"parent_item_id=[3923]\"}"
+            },
+            {
+                "id": "3925",
+                "name": "Email",
+                "type": "fieldtype_input_email",
+                "configuration": "{\"allow_search\":\"1\",\"width\":\"input-large\",\"is_unique\":\"0\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "3926",
+                "name": "SMS",
+                "type": "fieldtype_phone",
+                "configuration": "{\"allow_search\":\"1\",\"width\":\"input-medium\",\"mask\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"telephony_module\":\"\",\"sms_module\":\"3\",\"show_history\":\"1\"}"
+            },
+            {
+                "id": "3927",
+                "name": "Descrição",
+                "type": "fieldtype_input",
+                "configuration": "{\"allow_search\":\"1\",\"width\":\"input-xlarge\",\"default_value\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "3928",
+                "name": "Observações Cliente",
+                "type": "fieldtype_textarea_wysiwyg",
+                "configuration": "{\"toolbar\":\"\",\"allow_search\":\"1\"}"
+            },
+            {
+                "id": "3929",
+                "name": "Anexos",
+                "type": "fieldtype_attachments",
+                "configuration": "{\"allow_search\":\"1\",\"use_image_preview\":\"1\",\"upload_limit\":\"\",\"upload_size_limit\":\"\",\"allowed_extensions\":\"\",\"confirm_delation\":\"1\"}"
+            },
+            {
+                "id": "3930",
+                "name": "Tipo",
+                "type": "fieldtype_dropdown_multilevel",
+                "configuration": "{\"use_global_list\":\"24\",\"width\":\"input-small\",\"use_search\":\"1\",\"value_displya_own_column\":\"0\",\"level_settings\":\"Tipo, Escolha o Tipo\\r\\nSubtipo\"}"
+            },
+            {
+                "id": "3931",
+                "name": "Origem",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"\",\"width\":\"input-small\",\"use_search\":\"1\",\"use_global_list\":\"\",\"display_parent_name\":\"0\",\"parent_name_separator\":\":\"}"
+            },
+            {
+                "id": "3939",
+                "name": "  ",
+                "type": "fieldtype_subentity_form",
+                "configuration": "{\"entity_id\":\"261\",\"max_count_records\":\"\",\"fields_display\":\"row\",\"fields_in_form\":[\"3938\"],\"fields_in_listing\":[\"3938\"],\"listing_type\":\"list\",\"column_width\":\"100\",\"auto_insert\":\"1\",\"hide_field_name\":\"1\",\"button_title\":\"Adicionar Quantidade\",\"button_position\":\"center\",\"button_icon\":\"\",\"button_color\":\"#039BE5\"}"
+            },
+            {
+                "id": "3947",
+                "name": "Prioridade",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"\",\"width\":\"input-small\",\"use_search\":\"1\",\"use_global_list\":\"\",\"display_parent_name\":\"0\",\"parent_name_separator\":\":\"}"
+            },
+            {
+                "id": "4417",
+                "name": "Observações do Produto",
+                "type": "fieldtype_textarea_wysiwyg",
+                "configuration": "{\"toolbar\":\"\"}"
+            },
+            {
+                "id": "4418",
+                "name": "Observações da Quantidade",
+                "type": "fieldtype_textarea_wysiwyg",
+                "configuration": "{\"toolbar\":\"\"}"
+            },
+            {
+                "id": "5985",
+                "name": "Quantidade adjudicada",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"2\\\/,\\\/ \",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"0.000001\",\"max_value\":\"\",\"negative_number_color\":\"\"}"
+            },
+            {
+                "id": "5986",
+                "name": "Preço unitário adjudicado (s\/IVA)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"4\\\/,\\\/ \",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"0\",\"max_value\":\"\",\"negative_number_color\":\"\"}"
+            },
+            {
+                "id": "5987",
+                "name": "Data de adjudicação",
+                "type": "fieldtype_input_date",
+                "configuration": "{\"date_format\":\"\",\"min_date\":\"\",\"max_date\":\"\",\"default_value\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"background\":\"\",\"day_before_date\":\"\",\"day_before_date_color\":\"\",\"day_before_date2\":\"\",\"day_before_date2_color\":\"\",\"disable_color_by_field\":\"\"}"
+            },
+            {
+                "id": "5989",
+                "name": "Total adjudicado (s\/IVA)",
+                "type": "fieldtype_formula",
+                "configuration": "{\"formula\":\"IF([5985] > 0, ROUND([5985] * [5986], 2), NULL)\",\"number_format\":\"2\\\/,\\\/ \",\"prefix\":\"\",\"suffix\":\"\",\"negative_number_color\":\"\"}"
+            },
+            {
+                "id": "6220",
+                "name": "Template",
+                "type": "fieldtype_entity",
+                "configuration": "{\"entity_id\":\"389\",\"display_as\":\"dropdown\",\"default_text\":\"Sem template\",\"default_value\":\"\",\"width\":\"input-xlarge\",\"display_as_link\":\"1\",\"allow_search\":\"1\",\"fields_in_popup\":\"\"}"
+            },
+            {
+                "id": "6221",
+                "name": "Versão do template",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"default_value\":\"\",\"maxlength\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "6222",
+                "name": "Template aplicado",
+                "type": "fieldtype_entity",
+                "configuration": "{\"entity_id\":\"389\",\"display_as\":\"dropdown\",\"default_text\":\"\",\"default_value\":\"\",\"width\":\"input-xlarge\",\"display_as_link\":\"1\",\"fields_in_popup\":\"\"}"
+            },
+            {
+                "id": "6271",
+                "name": "Acréscimo sobre o custo (%)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"2\\\/,\\\/ \",\"default_value\":\"30\",\"min_value\":\"0\",\"suffix\":\" %\"}"
+            }
+        ],
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "int(11) unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "parent_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "parent_item_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "linked_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_added",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_updated",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "created_by",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "sort_order",
+                "Type": "int(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "field_2030",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_2031",
+                "Type": "varchar(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3923",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3924",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3925",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3926",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3927",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3928",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3929",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3930",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3931",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3939",
+                "Type": "varchar(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3947",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4417",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4418",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5985",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5986",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5987",
+                "Type": "bigint(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5989",
+                "Type": "varchar(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6220",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6221",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6222",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6271",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "engine": "InnoDB"
+    },
+    "262": {
+        "fields": [
+            {
+                "id": "3940",
+                "name": "",
+                "type": "fieldtype_action",
+                "configuration": ""
+            },
+            {
+                "id": "3941",
+                "name": "",
+                "type": "fieldtype_id",
+                "configuration": ""
+            },
+            {
+                "id": "3942",
+                "name": "",
+                "type": "fieldtype_date_added",
+                "configuration": ""
+            },
+            {
+                "id": "3943",
+                "name": "",
+                "type": "fieldtype_date_updated",
+                "configuration": ""
+            },
+            {
+                "id": "3944",
+                "name": "",
+                "type": "fieldtype_created_by",
+                "configuration": ""
+            },
+            {
+                "id": "3945",
+                "name": "",
+                "type": "fieldtype_parent_item_id",
+                "configuration": ""
+            },
+            {
+                "id": "4218",
+                "name": "Largura Trabalho (mm)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\" mm\",\"display_prefix_suffix_in_form\":\"1\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4219",
+                "name": "Altura Trabalho (mm)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\" mm\",\"display_prefix_suffix_in_form\":\"1\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4220",
+                "name": "Corte\/Vinco",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"\",\"width\":\"input-small\",\"use_search\":\"0\",\"use_global_list\":\"\",\"display_parent_name\":\"0\",\"parent_name_separator\":\":\"}"
+            },
+            {
+                "id": "4221",
+                "name": "Nº Cortante",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"hide_field_if_empty\":\"1\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4224",
+                "name": "Quantidade",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/ \",\"calclulate_totals\":\"1\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\" un\",\"display_prefix_suffix_in_form\":\"1\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4225",
+                "name": "Descrição",
+                "type": "fieldtype_input",
+                "configuration": "{\"allow_search\":\"1\",\"width\":\"input-large\",\"default_value\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "4226",
+                "name": "Ações",
+                "type": "fieldtype_process_button",
+                "configuration": "{\"process_button\":[\"56\"],\"display_as\":\"inline\"}"
+            },
+            {
+                "id": "4228",
+                "name": "Estado",
+                "type": "fieldtype_autostatus",
+                "configuration": "{\"panel_type\":\"trianlge\",\"color\":\"\",\"color_active\":\"#f09300\",\"run_process_for_choice_900\":\"0\",\"run_process_for_choice_1167\":\"0\",\"run_process_for_choice_901\":\"0\",\"run_process_for_choice_902\":\"0\",\"run_process_for_choice_903\":\"0\"}"
+            },
+            {
+                "id": "4229",
+                "name": "Impressão",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"Escolha uma opção\",\"width\":\"input-small\",\"use_search\":\"0\",\"use_global_list\":\"\",\"display_parent_name\":\"0\",\"parent_name_separator\":\":\"}"
+            },
+            {
+                "id": "4230",
+                "name": "Nº OP",
+                "type": "fieldtype_parent_value",
+                "configuration": "{\"field_id\":\"2000\"}"
+            },
+            {
+                "id": "4231",
+                "name": "Início",
+                "type": "fieldtype_input_date",
+                "configuration": "{\"date_format\":\"\",\"default_value\":\"\",\"min_date\":\"\",\"max_date\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"background\":\"\",\"day_before_date\":\"\",\"day_before_date_color\":\"\",\"day_before_date2\":\"\",\"day_before_date2_color\":\"\",\"disable_color_by_field\":\"\"}"
+            },
+            {
+                "id": "4232",
+                "name": "Fim",
+                "type": "fieldtype_input_date",
+                "configuration": "{\"date_format\":\"\",\"default_value\":\"\",\"min_date\":\"\",\"max_date\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"background\":\"\",\"day_before_date\":\"\",\"day_before_date_color\":\"\",\"day_before_date2\":\"\",\"day_before_date2_color\":\"\",\"disable_color_by_field\":\"\"}"
+            },
+            {
+                "id": "4233",
+                "name": "N. Páginas",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"hide_field_if_empty\":\"1\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4238",
+                "name": "FSC?",
+                "type": "fieldtype_boolean",
+                "configuration": "{\"default_text\":\"Escolha uma opção\",\"default_value\":\"\",\"width\":\"input-small\",\"text_boolean_true\":\"Sim\",\"text_boolean_false\":\"Não\"}"
+            },
+            {
+                "id": "4239",
+                "name": "Furo",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"\",\"width\":\"input-small\",\"use_search\":\"0\",\"use_global_list\":\"\"}"
+            },
+            {
+                "id": "4240",
+                "name": "Diâmetro do furo",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"hide_field_if_empty\":\"1\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4241",
+                "name": "Progresso",
+                "type": "fieldtype_progress",
+                "configuration": "{\"step\":\"5\",\"display_progress_bar\":\"1\",\"bar_min_width\":\"\",\"bar_color\":\"\"}"
+            },
+            {
+                "id": "4242",
+                "name": "Referência",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "4243",
+                "name": "Descrição",
+                "type": "fieldtype_text_pattern",
+                "configuration": "{\"pattern\":\"[4225] ([4218] x [4219])\"}"
+            },
+            {
+                "id": "4244",
+                "name": "Descrição OP",
+                "type": "fieldtype_parent_value",
+                "configuration": "{\"field_id\":\"1994\"}"
+            },
+            {
+                "id": "6110",
+                "name": "Tipo de encadernação",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"\",\"width\":\"input-large\",\"use_search\":\"0\",\"use_global_list\":\"\",\"display_parent_name\":\"0\",\"parent_name_separator\":\":\"}"
+            },
+            {
+                "id": "6119",
+                "name": "Sangria exterior (mm)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"2\\\/,\\\/ \",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"3\",\"prefix\":\"\",\"suffix\":\" mm\",\"min_value\":\"0\",\"max_value\":\"\",\"negative_number_color\":\"\"}"
+            },
+            {
+                "id": "6120",
+                "name": "Espaçamento entre cortes (mm)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"2\\\/,\\\/ \",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"3\",\"prefix\":\"\",\"suffix\":\" mm\",\"min_value\":\"0\",\"max_value\":\"\",\"negative_number_color\":\"\"}"
+            },
+            {
+                "id": "6121",
+                "name": "Permitir reduzir sangrias internas",
+                "type": "fieldtype_boolean_checkbox",
+                "configuration": "{\"default_value\":\"false\",\"text_boolean_true\":\"\",\"text_boolean_false\":\"\"}"
+            },
+            {
+                "id": "6169",
+                "name": "Ficheiros prontos",
+                "type": "fieldtype_boolean_checkbox",
+                "configuration": "{\"default_value\":\"false\",\"text_boolean_true\":\"\",\"text_boolean_false\":\"\"}"
+            },
+            {
+                "id": "6170",
+                "name": "Papel já cortado",
+                "type": "fieldtype_boolean_checkbox",
+                "configuration": "{\"default_value\":\"false\",\"text_boolean_true\":\"\",\"text_boolean_false\":\"\"}"
+            },
+            {
+                "id": "6172",
+                "name": "Miolo já alceado",
+                "type": "fieldtype_boolean_checkbox",
+                "configuration": "{\"default_value\":\"false\",\"text_boolean_true\":\"\",\"text_boolean_false\":\"\"}"
+            },
+            {
+                "id": "6173",
+                "name": "Cadernos já dobrados",
+                "type": "fieldtype_boolean_checkbox",
+                "configuration": "{\"default_value\":\"false\",\"text_boolean_true\":\"\",\"text_boolean_false\":\"\"}"
+            },
+            {
+                "id": "6174",
+                "name": "Encadernação em cadernos",
+                "type": "fieldtype_boolean_checkbox",
+                "configuration": "{\"default_value\":\"false\",\"text_boolean_true\":\"\",\"text_boolean_false\":\"\"}"
+            },
+            {
+                "id": "6175",
+                "name": "Alceamento necessário",
+                "type": "fieldtype_boolean_checkbox",
+                "configuration": "{\"default_value\":\"true\",\"text_boolean_true\":\"\",\"text_boolean_false\":\"\"}"
+            },
+            {
+                "id": "6223",
+                "name": "Template do componente",
+                "type": "fieldtype_entity",
+                "configuration": "{\"entity_id\":\"390\",\"display_as\":\"dropdown\",\"default_text\":\"Sem template\",\"default_value\":\"\",\"width\":\"input-xlarge\",\"hide_plus_button\":\"1\",\"display_as_link\":\"1\",\"allow_search\":\"1\",\"fields_in_popup\":\"\"}"
+            },
+            {
+                "id": "6224",
+                "name": "Template do componente aplicado",
+                "type": "fieldtype_entity",
+                "configuration": "{\"entity_id\":\"390\",\"display_as\":\"dropdown\",\"default_text\":\"\",\"default_value\":\"\",\"width\":\"input-xlarge\",\"hide_plus_button\":\"1\",\"display_as_link\":\"1\",\"fields_in_popup\":\"\"}"
+            },
+            {
+                "id": "6225",
+                "name": "Versão do template",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"default_value\":\"\",\"maxlength\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "6267",
+                "name": "Plastificação — frente",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"Por definir\",\"width\":\"input-large\",\"use_search\":\"0\",\"use_global_list\":\"\",\"display_parent_name\":\"0\",\"parent_name_separator\":\":\"}"
+            },
+            {
+                "id": "6268",
+                "name": "Plastificação — verso",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"Por definir\",\"width\":\"input-large\",\"use_search\":\"0\",\"use_global_list\":\"\",\"display_parent_name\":\"0\",\"parent_name_separator\":\":\"}"
+            },
+            {
+                "id": "6276",
+                "name": "Cores de Impressão",
+                "type": "fieldtype_subentity_form",
+                "configuration": "{\"entity_id\":\"278\",\"max_count_records\":\"\",\"fields_display\":\"row\",\"fields_in_form\":[\"4251\",\"4253\"],\"listing_type\":\"table\",\"column_width\":\"\",\"auto_insert\":\"\",\"button_title\":\"\",\"button_position\":\"left\",\"button_icon\":\"\",\"button_color\":\"\"}"
+            }
+        ],
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "int(11) unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "parent_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "parent_item_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "linked_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_added",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_updated",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "created_by",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "sort_order",
+                "Type": "int(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "field_4218",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4219",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4220",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4221",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4224",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4225",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4226",
+                "Type": "varchar(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4228",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4229",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4230",
+                "Type": "varchar(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4231",
+                "Type": "bigint(11)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4232",
+                "Type": "bigint(11)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4233",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4238",
+                "Type": "varchar(8)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4239",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4240",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4241",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4242",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4243",
+                "Type": "varchar(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4244",
+                "Type": "varchar(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6110",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6119",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6120",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6121",
+                "Type": "varchar(8)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6169",
+                "Type": "varchar(8)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6170",
+                "Type": "varchar(8)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6172",
+                "Type": "varchar(8)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6173",
+                "Type": "varchar(8)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6174",
+                "Type": "varchar(8)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6175",
+                "Type": "varchar(8)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6223",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6224",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6225",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6267",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6268",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6276",
+                "Type": "varchar(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "engine": "InnoDB"
+    },
+    "276": {
+        "fields": [
+            {
+                "id": "4188",
+                "name": "",
+                "type": "fieldtype_action",
+                "configuration": ""
+            },
+            {
+                "id": "4189",
+                "name": "",
+                "type": "fieldtype_id",
+                "configuration": ""
+            },
+            {
+                "id": "4190",
+                "name": "",
+                "type": "fieldtype_date_added",
+                "configuration": ""
+            },
+            {
+                "id": "4191",
+                "name": "",
+                "type": "fieldtype_date_updated",
+                "configuration": ""
+            },
+            {
+                "id": "4192",
+                "name": "",
+                "type": "fieldtype_created_by",
+                "configuration": ""
+            },
+            {
+                "id": "4193",
+                "name": "",
+                "type": "fieldtype_parent_item_id",
+                "configuration": ""
+            },
+            {
+                "id": "4287",
+                "name": "Descrição",
+                "type": "fieldtype_entity_ajax",
+                "configuration": "{\"entity_id\":\"36\",\"width\":\"input-large\",\"display_as\":\"dropdown\",\"default_text\":\"\",\"heading_template\":\"\",\"copy_values\":\"[1983]=[4288]\\r\\n[4357]=[4349]\\r\\n[2523]=[4305]\\r\\n[2524]=[4304]\\r\\n[2525]=[4306]\",\"mysql_query_where\":\"\"}"
+            },
+            {
+                "id": "4288",
+                "name": "Equipamentos",
+                "type": "fieldtype_entity",
+                "configuration": "{\"entity_id\":\"78\",\"display_as\":\"dropdown_muliple\",\"default_text\":\"\",\"width\":\"input-medium\",\"fields_in_popup\":\"\"}"
+            },
+            {
+                "id": "6125",
+                "name": "Plastificação: margem de entrada (mm)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"min_value\":\"0\",\"width\":\"input-small\",\"number_format\":\"2\\\/,\\\/ \"}"
+            },
+            {
+                "id": "6126",
+                "name": "Plastificação: margem de saída (mm)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"min_value\":\"0\",\"width\":\"input-small\",\"number_format\":\"2\\\/,\\\/ \"}"
+            },
+            {
+                "id": "6127",
+                "name": "Plastificação: entrada pelo lado mais estreito",
+                "type": "fieldtype_boolean_checkbox",
+                "configuration": "{\"default_value\":\"false\"}"
+            },
+            {
+                "id": "6179",
+                "name": "Gerada automaticamente",
+                "type": "fieldtype_boolean_checkbox",
+                "configuration": "{\"default_value\":\"false\",\"text_boolean_true\":\"\",\"text_boolean_false\":\"\"}"
+            },
+            {
+                "id": "6180",
+                "name": "Ordem técnica",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"0\",\"max_value\":\"\",\"currencies\":[\"\"],\"negative_number_color\":\"\"}"
+            },
+            {
+                "id": "6181",
+                "name": "Origem da inclusão",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"default_value\":\"\",\"maxlength\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "6254",
+                "name": "BiAdesivo: peças por exemplar",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"1\",\"max_value\":\"\",\"negative_number_color\":\"\",\"display_prefix_suffix_in_form\":\"1\"}"
+            },
+            {
+                "id": "6255",
+                "name": "BiAdesivo: largura da peça",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"3\\\/,\\\/ \",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\" mm\",\"min_value\":\"0.001\",\"max_value\":\"\",\"negative_number_color\":\"\",\"display_prefix_suffix_in_form\":\"1\"}"
+            },
+            {
+                "id": "6256",
+                "name": "BiAdesivo: altura da peça",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"3\\\/,\\\/ \",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\" mm\",\"min_value\":\"0.001\",\"max_value\":\"\",\"negative_number_color\":\"\",\"display_prefix_suffix_in_form\":\"1\"}"
+            },
+            {
+                "id": "6257",
+                "name": "BiAdesivo: venda sobre compra",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"2\/,\/ \",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"30\",\"prefix\":\"\",\"suffix\":\" %\",\"min_value\":\"0\",\"max_value\":\"\",\"negative_number_color\":\"\",\"display_prefix_suffix_in_form\":\"1\"}"
+            },
+            {
+                "id": "6258",
+                "name": "BiAdesivo: compra por folha (manual)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"4\\\/,\\\/ \",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\" €\",\"min_value\":\"0.0001\",\"max_value\":\"\",\"negative_number_color\":\"\",\"display_prefix_suffix_in_form\":\"1\"}"
+            },
+            {
+                "id": "6259",
+                "name": "Corte: folhas por pilha",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"250\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"1\",\"max_value\":\"\",\"negative_number_color\":\"\"}"
+            },
+            {
+                "id": "6260",
+                "name": "Embalamento: peso de papel por embalagem (kg)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"2\\\/.\\\/*\",\"default_value\":\"10\",\"suffix\":\" kg\",\"min_value\":\"0.01\",\"display_prefix_suffix_in_form\":\"1\"}"
+            },
+            {
+                "id": "6261",
+                "name": "Embalamento: tipo",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"width\":\"input-medium\",\"use_search\":\"1\",\"default_text\":\"Selecionar\"}"
+            },
+            {
+                "id": "6262",
+                "name": "Embalamento: artigo de caixa",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"width\":\"input-medium\",\"use_search\":\"1\",\"default_text\":\"Selecionar\"}"
+            },
+            {
+                "id": "6263",
+                "name": "Embalamento: largura do volume (mm)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-medium\",\"number_format\":\"2\\\/.\\\/*\",\"default_value\":\"\",\"min_value\":\"0.01\",\"suffix\":\" mm\",\"display_prefix_suffix_in_form\":\"1\"}"
+            },
+            {
+                "id": "6264",
+                "name": "Embalamento: comprimento do volume (mm)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-medium\",\"number_format\":\"2\\\/.\\\/*\",\"default_value\":\"\",\"min_value\":\"0.01\",\"suffix\":\" mm\",\"display_prefix_suffix_in_form\":\"1\"}"
+            },
+            {
+                "id": "6265",
+                "name": "Embalamento: altura do volume (mm)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-medium\",\"number_format\":\"2\\\/.\\\/*\",\"default_value\":\"\",\"min_value\":\"0.01\",\"suffix\":\" mm\",\"display_prefix_suffix_in_form\":\"1\"}"
+            },
+            {
+                "id": "6266",
+                "name": "Embalamento: sobreposição do kraft (mm)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-medium\",\"number_format\":\"2\\\/.\\\/*\",\"default_value\":\"30\",\"min_value\":\"0\",\"suffix\":\" mm\",\"display_prefix_suffix_in_form\":\"1\"}"
+            }
+        ],
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "int(11) unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "parent_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "parent_item_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "linked_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_added",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_updated",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "created_by",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "sort_order",
+                "Type": "int(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "field_4287",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4288",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6125",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6126",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6127",
+                "Type": "varchar(8)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6179",
+                "Type": "varchar(8)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6180",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6181",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6254",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6255",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6256",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6257",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6258",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6259",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6260",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6261",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6262",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6263",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6264",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6265",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6266",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "engine": "InnoDB"
+    },
+    "279": {
+        "fields": [
+            {
+                "id": "4206",
+                "name": "",
+                "type": "fieldtype_action",
+                "configuration": ""
+            },
+            {
+                "id": "4207",
+                "name": "",
+                "type": "fieldtype_id",
+                "configuration": ""
+            },
+            {
+                "id": "4208",
+                "name": "",
+                "type": "fieldtype_date_added",
+                "configuration": ""
+            },
+            {
+                "id": "4209",
+                "name": "",
+                "type": "fieldtype_date_updated",
+                "configuration": ""
+            },
+            {
+                "id": "4210",
+                "name": "",
+                "type": "fieldtype_created_by",
+                "configuration": ""
+            },
+            {
+                "id": "4211",
+                "name": "",
+                "type": "fieldtype_parent_item_id",
+                "configuration": ""
+            },
+            {
+                "id": "4254",
+                "name": "Estado",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"\",\"width\":\"input-small\",\"use_search\":\"0\",\"use_global_list\":\"10\"}"
+            },
+            {
+                "id": "4255",
+                "name": "Ações",
+                "type": "fieldtype_process_button",
+                "configuration": "{\"display_as\":\"inline\"}"
+            },
+            {
+                "id": "4256",
+                "name": "Descrição do Plano de Impressão",
+                "type": "fieldtype_entity_ajax",
+                "configuration": "{\"entity_id\":\"157\",\"width\":\"input-medium\",\"display_as\":\"dropdown\",\"default_text\":\"Introduza as dimensões do trabalho\",\"heading_template\":\"\",\"copy_values\":\"[2181]=[2207]\\r\\n[2174]=[2200]\\r\\n[2186]=[2212]\\r\\n[2185]=[2211]\\r\\n[2184]=[2210]\\r\\n[2170]=[2196]\\r\\n[2213]=[2187]\\r\\n[2180]=[2206]\\r\\n[2173]=[2199]\\r\\n[2183]=[2209]\\r\\n[2179]=[2205]\\r\\n[2178]=[2204]\\r\\n[2182]=[2208]\\r\\n[2177]=[2203]\\r\\n[2187]=[2213]\\r\\n[2189]=[2215]\\r\\n[2175]=[2201]\\r\\n[2176]=[2202]\\r\\n[2188]=[2214]\\r\\n[2569]=[2567]\",\"mysql_query_where\":\"[2199]=e.field_2173 and [2200]=e.field_2174\"}"
+            },
+            {
+                "id": "4257",
+                "name": "Largura Trabalho (mm)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"2\\\/.\\\/ \",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\" mm\",\"display_prefix_suffix_in_form\":\"1\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4258",
+                "name": "Altura Trabalho (mm)",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\" mm\",\"display_prefix_suffix_in_form\":\"1\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4259",
+                "name": "X - <i class=\"las la-angle-up\"><\/i>",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4260",
+                "name": "Y - <i class=\"las la-angle-right\"><\/i>",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4261",
+                "name": "Por plano",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4262",
+                "name": "Plano Largura",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4263",
+                "name": "Plano Altura",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4264",
+                "name": "Largura da Folha",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4265",
+                "name": "Altura da Folha",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4266",
+                "name": "Planos por Folha",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4267",
+                "name": "Plano",
+                "type": "fieldtype_textarea_wysiwyg",
+                "configuration": "{\"toolbar\":\"\"}"
+            },
+            {
+                "id": "4268",
+                "name": "Dimensões do Trabalho",
+                "type": "fieldtype_section",
+                "configuration": "{\"description\":\"\"}"
+            },
+            {
+                "id": "4269",
+                "name": "Dimensões do Plano de Impressão",
+                "type": "fieldtype_section",
+                "configuration": "{\"description\":\"\"}"
+            },
+            {
+                "id": "4270",
+                "name": "Dimensões do Papel",
+                "type": "fieldtype_section",
+                "configuration": "{\"description\":\"\"}"
+            },
+            {
+                "id": "4271",
+                "name": "Tipo de Impressão",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"\",\"width\":\"input-small\",\"use_search\":\"0\",\"use_global_list\":\"28\"}"
+            },
+            {
+                "id": "4272",
+                "name": "Equip. Imp.",
+                "type": "fieldtype_entity_ajax",
+                "configuration": "{\"entity_id\":\"78\",\"width\":\"input-medium\",\"display_as\":\"dropdown_multiple\",\"default_text\":\"\",\"heading_template\":\"\",\"copy_values\":\"\",\"mysql_query_where\":\"\"}"
+            },
+            {
+                "id": "4273",
+                "name": "Máquina de Impressão",
+                "type": "fieldtype_section",
+                "configuration": "{\"description\":\"\"}"
+            },
+            {
+                "id": "4274",
+                "name": "Cadernos",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"1\\\/.\\\/*\",\"unique_error_msg\":\"\",\"default_value\":\"1\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "4275",
+                "name": "Perímetro",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\" mm\",\"min_value\":\"\",\"max_value\":\"\"}"
+            }
+        ],
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "int(11) unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "parent_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "parent_item_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "linked_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_added",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_updated",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "created_by",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "sort_order",
+                "Type": "int(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "field_4254",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4255",
+                "Type": "varchar(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4256",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4257",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4258",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4259",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4260",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4261",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4262",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4263",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4264",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4265",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4266",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4267",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4268",
+                "Type": "varchar(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4269",
+                "Type": "varchar(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4270",
+                "Type": "varchar(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4271",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4272",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4273",
+                "Type": "varchar(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4274",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4275",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "engine": "InnoDB"
+    },
+    "388": {
+        "fields": [
+            {
+                "id": "6095",
+                "name": "",
+                "type": "fieldtype_action",
+                "configuration": ""
+            },
+            {
+                "id": "6096",
+                "name": "",
+                "type": "fieldtype_id",
+                "configuration": ""
+            },
+            {
+                "id": "6097",
+                "name": "",
+                "type": "fieldtype_date_added",
+                "configuration": ""
+            },
+            {
+                "id": "6098",
+                "name": "",
+                "type": "fieldtype_date_updated",
+                "configuration": ""
+            },
+            {
+                "id": "6099",
+                "name": "",
+                "type": "fieldtype_created_by",
+                "configuration": ""
+            },
+            {
+                "id": "6100",
+                "name": "",
+                "type": "fieldtype_parent_item_id",
+                "configuration": ""
+            },
+            {
+                "id": "6101",
+                "name": "ID da quantidade de orçamento",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"default_value\":\"\",\"maxlength\":\"\",\"is_unique\":\"2\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "6102",
+                "name": "Quantidade da alternativa",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"2\\\/,\\\/ \",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\",\"negative_number_color\":\"\"}"
+            },
+            {
+                "id": "6103",
+                "name": "Plano de catálogo selecionado",
+                "type": "fieldtype_entity_ajax",
+                "configuration": ""
+            },
+            {
+                "id": "6104",
+                "name": "Máquina selecionada",
+                "type": "fieldtype_entity_ajax",
+                "configuration": "{\"entity_id\":\"78\",\"width\":\"input-medium\",\"display_as\":\"dropdown\",\"default_text\":\"\",\"default_value\":\"\",\"mysql_query_where\":\"\"}"
+            },
+            {
+                "id": "6105",
+                "name": "Base estimada sem IVA",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"2\\\/,\\\/ \",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\" €\",\"min_value\":\"\",\"max_value\":\"\",\"negative_number_color\":\"\"}"
+            },
+            {
+                "id": "6106",
+                "name": "Parâmetros e resultados da simulação",
+                "type": "fieldtype_textarea",
+                "configuration": "{\"width\":\"input-xlarge\",\"maxlength\":\"10000\",\"number_characters_in_list\":\"250\"}"
+            }
+        ],
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "int(11) unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "parent_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "parent_item_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "linked_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_added",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_updated",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "created_by",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "sort_order",
+                "Type": "int(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "field_6101",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6102",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6103",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6104",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6105",
+                "Type": "varchar(64)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_6106",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "engine": "InnoDB"
+    },
+    "278": {
+        "fields": [
+            {
+                "id": "4200",
+                "name": "",
+                "type": "fieldtype_action",
+                "configuration": ""
+            },
+            {
+                "id": "4201",
+                "name": "",
+                "type": "fieldtype_id",
+                "configuration": ""
+            },
+            {
+                "id": "4202",
+                "name": "",
+                "type": "fieldtype_date_added",
+                "configuration": ""
+            },
+            {
+                "id": "4203",
+                "name": "",
+                "type": "fieldtype_date_updated",
+                "configuration": ""
+            },
+            {
+                "id": "4204",
+                "name": "",
+                "type": "fieldtype_created_by",
+                "configuration": ""
+            },
+            {
+                "id": "4205",
+                "name": "",
+                "type": "fieldtype_parent_item_id",
+                "configuration": ""
+            },
+            {
+                "id": "4249",
+                "name": "Cores de Impressão",
+                "type": "fieldtype_entity_ajax",
+                "configuration": "{\"entity_id\":\"99\",\"width\":\"input-medium\",\"display_as\":\"dropdown\",\"default_text\":\"\",\"fields_for_search\":[\"1028\",\"1020\",\"1031\"],\"heading_template\":\"\",\"copy_values\":\"[2465]=[2466]\",\"mysql_query_where\":\"e.field_1019 in (191,202)\"}"
+            },
+            {
+                "id": "4250",
+                "name": "Stock",
+                "type": "fieldtype_php_code",
+                "configuration": "{\"php_code\":\"$produt_id = [2463];\\r\\n$query = db_query(\\\"SELECT field_1089 AS estado, field_1062, SUM(field_1063) AS entradas FROM app_entity_100 WHERE field_1187 = '{$produt_id}' AND field_1089 IN (226,319)\\\");\\r\\n$row = db_fetch_array($query);\\r\\n$entradas = $row['entradas'];\\r\\n$estado = $row['estado'];\\r\\n\\\/\\\/var_dump($entradas);\\r\\n\\\/\\\/var_dump($estado);\\r\\n\\r\\n$query1 = db_query(\\\"SELECT field_1062, SUM(field_1090) AS parcial FROM app_entity_100 WHERE field_1187 = '{$produt_id}' AND field_1089=225\\\");\\r\\n$row1 = db_fetch_array($query1);\\r\\n$parcial = $row1['parcial'];\\r\\n\\\/\\\/var_dump($parcial);\\r\\n\\r\\n$query2 = db_query(\\\"SELECT field_1062, SUM(field_1063) AS saidas FROM app_entity_100 WHERE field_1187 = '{$produt_id}' AND field_1089=264\\\");\\r\\n$row2 = db_fetch_array($query2);\\r\\n$saidas = $row2['saidas'];\\r\\n\\\/\\\/var_dump($saidas);\\r\\n\\r\\n$stocks = $entradas - $saidas + $parcial;\\r\\n\\\/\\\/var_dump($stocks);\\r\\nif($stocks > 0){\\r\\n\\t$output_value = '<b style=\\\"color: green\\\">' . number_format($stocks,0,\\\".\\\",\\\" \\\") . ' kg<\\\/b>';\\r\\n} else {\\r\\n\\t$output_value = '<b style=\\\"color: red;\\\">' . number_format($stocks,0,\\\".\\\",\\\" \\\") . ' kg<\\\/b>';\\r\\n};\",\"dinamic_query\":\"1\"}"
+            },
+            {
+                "id": "4251",
+                "name": "Cor",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"Escolha as cores de impressão\",\"width\":\"input-small\",\"use_search\":\"0\",\"use_global_list\":\"26\",\"display_parent_name\":\"0\",\"parent_name_separator\":\":\"}"
+            },
+            {
+                "id": "4253",
+                "name": "Ref. Pantone",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"default_value\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\"}"
+            }
+        ],
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "int(11) unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "parent_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "parent_item_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "linked_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_added",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_updated",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "created_by",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "sort_order",
+                "Type": "int(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "field_4249",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4250",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4251",
+                "Type": "int(11)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4253",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "engine": "InnoDB"
+    },
+    "26": {
+        "fields": [
+            {
+                "id": "214",
+                "name": "",
+                "type": "fieldtype_action",
+                "configuration": ""
+            },
+            {
+                "id": "215",
+                "name": "",
+                "type": "fieldtype_id",
+                "configuration": ""
+            },
+            {
+                "id": "216",
+                "name": "",
+                "type": "fieldtype_date_added",
+                "configuration": ""
+            },
+            {
+                "id": "217",
+                "name": "",
+                "type": "fieldtype_date_updated",
+                "configuration": ""
+            },
+            {
+                "id": "218",
+                "name": "",
+                "type": "fieldtype_created_by",
+                "configuration": ""
+            },
+            {
+                "id": "219",
+                "name": "",
+                "type": "fieldtype_parent_item_id",
+                "configuration": ""
+            },
+            {
+                "id": "220",
+                "name": "UID",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"0\\\/.\\\/*\",\"is_unique\":\"1\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "221",
+                "name": "Nome",
+                "type": "fieldtype_input",
+                "configuration": "{\"allow_search\":\"1\",\"width\":\"input-large\",\"default_value\":\"\",\"is_unique\":\"1\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "222",
+                "name": "NIF",
+                "type": "fieldtype_input",
+                "configuration": "{\"allow_search\":\"1\",\"width\":\"input-small\",\"default_value\":\"\",\"is_unique\":\"1\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "223",
+                "name": "Morada",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-medium\",\"default_value\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "224",
+                "name": "Tipo",
+                "type": "fieldtype_dropdown_multiple",
+                "configuration": "{\"width\":\"input-small\",\"use_global_list\":\"\"}"
+            },
+            {
+                "id": "225",
+                "name": "Código Postal",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"default_value\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "226",
+                "name": "Localidade",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"default_value\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "227",
+                "name": "Actividade",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "228",
+                "name": "e-mail",
+                "type": "fieldtype_input_email",
+                "configuration": "{\"width\":\"input-large\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "229",
+                "name": "www",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "230",
+                "name": "País",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"default_value\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "231",
+                "name": "Tel",
+                "type": "fieldtype_phone",
+                "configuration": "{\"width\":\"input-small\",\"mask\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"dynamic_mask\":\"\",\"telephony_module\":\"7\",\"sms_module\":\"3\"}"
+            },
+            {
+                "id": "232",
+                "name": "Tlm",
+                "type": "fieldtype_phone",
+                "configuration": "{\"width\":\"input-small\",\"mask\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\",\"dynamic_mask\":\"\",\"telephony_module\":\"7\",\"sms_module\":\"3\"}"
+            },
+            {
+                "id": "233",
+                "name": "Ativo?",
+                "type": "fieldtype_boolean",
+                "configuration": "{\"default_text\":\"\",\"default_value\":\"true\",\"width\":\"input-small\",\"text_boolean_true\":\"Sim\",\"text_boolean_false\":\"Não\"}"
+            },
+            {
+                "id": "234",
+                "name": "Distrito",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"default_value\":\"\",\"is_unique\":\"0\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "906",
+                "name": "Utilizador",
+                "type": "fieldtype_users_ajax",
+                "configuration": "{\"display_as\":\"dropdown_multiple\",\"default_text\":\"\",\"heading_template\":\"\",\"mysql_query_where\":\"\",\"heading_template_display\":\"\",\"copy_values\":\"\",\"entity_id\":\"1\"}"
+            },
+            {
+                "id": "952",
+                "name": "Contactos",
+                "type": "fieldtype_subentity_form",
+                "configuration": "{\"entity_id\":\"90\",\"max_count_records\":\"\",\"fields_display\":\"window\",\"fields_in_form\":[\"916\",\"917\",\"918\",\"919\",\"920\",\"921\"],\"fields_in_listing\":[\"918\",\"920\",\"921\"],\"listing_type\":\"table\",\"column_width\":\"\",\"auto_insert\":\"\",\"hide_field_name\":\"1\",\"button_title\":\"Novo Contacto\",\"button_position\":\"left\",\"button_icon\":\"\",\"button_color\":\"\"}"
+            },
+            {
+                "id": "1332",
+                "name": "Qualificação",
+                "type": "fieldtype_items_by_query",
+                "configuration": "{\"entity_id\":\"42\",\"where_query\":\"e.parent_item_id=[id]\",\"heading_template\":\"[908]<br\\\/>[372]\",\"display_as\":\"list\",\"display_as_in_listing\":\"list\",\"default_text\":\"\"}"
+            },
+            {
+                "id": "1333",
+                "name": "Ações",
+                "type": "fieldtype_process_button",
+                "configuration": "{\"process_button\":[\"25\"],\"display_as\":\"inline\"}"
+            },
+            {
+                "id": "1335",
+                "name": "Aval.Inicial",
+                "type": "fieldtype_boolean_checkbox",
+                "configuration": "{\"default_value\":\"false\",\"text_boolean_true\":\"Sim\",\"text_boolean_false\":\"Não\"}"
+            },
+            {
+                "id": "1354",
+                "name": "Link Compras Ano-1",
+                "type": "fieldtype_items_by_query",
+                "configuration": "{\"entity_id\":\"98\",\"where_query\":\"[2384]=[id] AND FROM_UNIXTIME(date_added, '%Y') = YEAR(CURDATE()) - 1\",\"heading_template\":\"[1034] - [1033]<br \\\/>\\r\\nP Unit. = [1037] | Total = [1108]\",\"display_as\":\"number\",\"display_as_in_listing\":\"number\",\"display_as_link\":\"1\",\"default_text\":\"\"}"
+            },
+            {
+                "id": "1927",
+                "name": "Atribuído a",
+                "type": "fieldtype_users_ajax",
+                "configuration": "{\"display_as\":\"dropdown_multiple\",\"default_text\":\"\",\"use_groups\":[\"6\",\"15\"],\"heading_template\":\"\",\"mysql_query_where\":\"\",\"heading_template_display\":\"\"}"
+            },
+            {
+                "id": "2042",
+                "name": "Avaliação de fornecedores",
+                "type": "fieldtype_php_code",
+                "configuration": "{\"php_code\":\"$idf = [id];\\r\\n\\\/\\\/var_dump($idf);\\r\\n\\r\\n\\\/\\\/\\\/OCORRÊNCIAS\\r\\n$info_query = db_query(\\\"SELECT count(id) as totaloc FROM app_entity_33 WHERE field_495='{$idf}' AND FROM_UNIXTIME(date_added, '%Y') = YEAR(CURDATE()) - 1\\\");\\r\\n$info = db_fetch_array($info_query);\\r\\n$totalOC = $info['totaloc'];\\r\\n\\\/\\\/var_dump($totalOC);\\r\\n\\r\\n\\\/\\\/\\\/COMPRAS\\r\\n$info_query1 = db_query(\\\"SELECT count(id) as totalforn FROM app_entity_100 WHERE field_2385='{$idf}' AND field_1089=226 AND FROM_UNIXTIME(field_2476, '%Y') = YEAR(CURDATE()) - 1\\\" );\\r\\n$info1 = db_fetch_array($info_query1);\\r\\n$totalforn = $info1['totalforn'];\\r\\n\\\/\\\/var_dump($totalforn);\\r\\n\\r\\n\\\/\\\/\\\/ATRASOS\\r\\n$info_query2 = db_query(\\\"SELECT count(field_2477) as atrasos FROM `app_entity_100` WHERE field_1089=226 AND field_2477>0 AND FROM_UNIXTIME(field_2476, '%Y') = YEAR(CURDATE()) - 1 AND field_2385=\\\". $idf );\\r\\n$info2 = db_fetch_array($info_query2);\\r\\n$atrasos = $info2['atrasos'];\\r\\n\\\/\\\/var_dump($atrasos);\\r\\n\\r\\n$aval = $totalOC + $atrasos;\\r\\n      if($totalforn > 0 ){\\r\\n$total = $aval * 100 \\\/ $totalforn;\\r\\n      } else { $total = $aval * 100 \\\/ 1;};\\r\\n\\r\\n\\\/\\\/var_dump($aval);\\r\\n\\\/\\\/var_dump($total);\\r\\n$tip = [224];\\r\\n$tipo = explode(\\\",\\\",$tip);\\r\\n\\\/\\\/var_dump($tipo);\\r\\nif ($totalforn > 0 ) {\\r\\nif(in_array('177', $tipo)){\\r\\nif($total >= 50){\\r\\n   $output_value = \\\"<span style='color:red'>C<\\\/span>\\\";\\r\\n   } \\r\\nelse if ($total > 10 && $total < 50){\\r\\n   $output_value = \\\"<span style='color:orange'>B<\\\/span>\\\";\\r\\n   } \\r\\nelse if ($total <= 10 ){\\r\\n   $output_value = \\\"<span style='color:green'>A<\\\/span>\\\";\\r\\n   } \\r\\nelse {\\r\\n   $output_value = \\\" \\\";\\r\\n   };\\r\\n} else { $output_value =' ';}\\r\\n} else {$output_value = \\\"<span style='color:#cccccc'>N\\\/A<\\\/span>\\\";}\",\"dinamic_query\":\"1\"}"
+            },
+            {
+                "id": "2129",
+                "name": "Related2Compras",
+                "type": "fieldtype_related_records",
+                "configuration": "{\"entity_id\":\"98\",\"is_collapsed\":\"1\",\"hide_field_without_records\":\"1\",\"display_in_listing\":\"count\",\"fields_in_listing\":\"\",\"fields_in_popup\":\"\",\"create_related_comment\":\"\",\"create_related_comment_text\":\"\",\"delete_related_comment\":\"\",\"delete_related_comment_text\":\"\",\"create_related_comment_to\":\"\",\"create_related_comment_to_text\":\"\",\"delete_related_comment_to\":\"\",\"delete_related_comment_to_text\":\"\",\"heading_template\":\"\"}"
+            },
+            {
+                "id": "2902",
+                "name": "FSC?",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"\",\"width\":\"input-small\",\"use_search\":\"0\",\"use_global_list\":\"30\"}"
+            },
+            {
+                "id": "3656",
+                "name": "#Compras Ano -1",
+                "type": "fieldtype_mysql_query",
+                "configuration": "{\"dinamic_query\": \"1\", \"entity_id\": \"98\", \"select_query\": \"count([2384])\", \"where_query\": \"[2384]=CAST(e.id AS CHAR) AND FROM_UNIXTIME(date_added, '%Y') = YEAR(CURDATE()) - 1\", \"number_format\": \"0\\\/.\\\/*\", \"prefix\": \"\", \"suffix\": \" OCs\"}"
+            },
+            {
+                "id": "3814",
+                "name": "Observações",
+                "type": "fieldtype_textarea_wysiwyg",
+                "configuration": "{\"toolbar\":\"\"}"
+            },
+            {
+                "id": "3815",
+                "name": "Anexo",
+                "type": "fieldtype_attachments",
+                "configuration": "{\"allow_search\":\"1\",\"upload_limit\":\"\",\"upload_size_limit\":\"\",\"allowed_extensions\":\"\"}"
+            },
+            {
+                "id": "4431",
+                "name": "CAE",
+                "type": "fieldtype_entity_ajax",
+                "configuration": "{\"entity_id\":\"286\",\"width\":\"input-medium\",\"display_as\":\"dropdown_multiple\",\"default_text\":\"\",\"allow_search\":\"1\",\"fields_for_search\":[\"4428\",\"4429\"],\"heading_template\":\"[4429] - [4428]\",\"copy_values\":\"\",\"mysql_query_where\":\"\"}"
+            },
+            {
+                "id": "4627",
+                "name": "Contas Relacionadas",
+                "type": "fieldtype_related_records",
+                "configuration": "{\"entity_id\":\"26\",\"hide_controls\":[\"add\",\"with_selected\"],\"display_in_listing\":\"list\",\"fields_in_listing\":\"\",\"fields_in_popup\":\"\",\"create_related_comment\":\"\",\"create_related_comment_text\":\"\",\"delete_related_comment\":\"\",\"delete_related_comment_text\":\"\",\"create_related_comment_to\":\"\",\"create_related_comment_to_text\":\"\",\"delete_related_comment_to\":\"\",\"delete_related_comment_to_text\":\"\",\"heading_template\":\"\"}"
+            },
+            {
+                "id": "4711",
+                "name": "Logo",
+                "type": "fieldtype_image_ajax",
+                "configuration": "{\"upload_size_limit\":\"\",\"width\":\"\",\"width_in_listing\":\"\"}"
+            },
+            {
+                "id": "5121",
+                "name": "Condições de Pagamento",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"\",\"width\":\"input-small\",\"use_search\":\"0\",\"use_global_list\":\"\"}"
+            },
+            {
+                "id": "5122",
+                "name": "IBAN",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "5123",
+                "name": "Plafond",
+                "type": "fieldtype_input",
+                "configuration": "{\"width\":\"input-small\",\"unique_error_msg\":\"\"}"
+            },
+            {
+                "id": "5124",
+                "name": "Desconto",
+                "type": "fieldtype_input_numeric",
+                "configuration": "{\"width\":\"input-small\",\"number_format\":\"2\\\/.\\\/*\",\"unique_error_msg\":\"\",\"default_value\":\"\",\"prefix\":\"\",\"suffix\":\" %\",\"min_value\":\"\",\"max_value\":\"\"}"
+            },
+            {
+                "id": "5125",
+                "name": "IVA",
+                "type": "fieldtype_dropdown",
+                "configuration": "{\"default_text\":\"\",\"width\":\"input-small\",\"use_search\":\"0\",\"use_global_list\":\"\"}"
+            },
+            {
+                "id": "5201",
+                "name": "Morada Completa",
+                "type": "fieldtype_text_pattern",
+                "configuration": "{\"pattern\":\"[223]<br\\\/>\\r\\n[225] [226]<br\\\/>\\r\\n[234]<br\\\/>\\r\\n[230]\"}"
+            },
+            {
+                "id": "5235",
+                "name": "#Ocorrências  Ano -1",
+                "type": "fieldtype_mysql_query",
+                "configuration": "{\"dinamic_query\": \"1\", \"entity_id\": \"33\", \"select_query\": \"Count(id)\", \"where_query\": \"[495]=CAST(e.id AS CHAR) AND FROM_UNIXTIME(date_added, '%Y') = YEAR(CURDATE()) - 1\", \"number_format\": \"\", \"prefix\": \"\", \"suffix\": \" OCR\"}"
+            },
+            {
+                "id": "5236",
+                "name": "#Atrasos Ano -1",
+                "type": "fieldtype_mysql_query",
+                "configuration": "{\"dinamic_query\": \"1\", \"entity_id\": \"100\", \"select_query\": \"Count([2477])\", \"where_query\": \"[2385]=CAST(e.id AS CHAR) AND [2477] > 0 AND FROM_UNIXTIME(date_added, '%Y') = YEAR(CURDATE()) - 1\", \"number_format\": \"\", \"prefix\": \"\", \"suffix\": \" ATR\"}"
+            },
+            {
+                "id": "5267",
+                "name": "Contactos",
+                "type": "fieldtype_items_by_query",
+                "configuration": "{\"entity_id\":\"90\",\"where_query\":\"e.parent_item_id=[id]\",\"heading_template\":\"[917] [918] - [920] \\\/ [921]\",\"display_as\":\"number\",\"display_as_in_listing\":\"number\",\"display_as_link\":\"1\",\"default_text\":\"# Contactos\"}"
+            },
+            {
+                "id": "5593",
+                "name": "Data da última Compra",
+                "type": "fieldtype_mysql_query",
+                "configuration": "{\"dinamic_query\": \"1\", \"entity_id\": \"98\", \"select_query\": \"IFNULL(FROM_UNIXTIME(MAX(date_updated),\\\"%d-%m-%Y\\\"),'')\", \"where_query\": \"[2384]=CAST(e.id AS CHAR)\", \"number_format\": \"\", \"prefix\": \"\", \"suffix\": \"\"}"
+            },
+            {
+                "id": "5595",
+                "name": "Avaliação contínua",
+                "type": "fieldtype_formula",
+                "configuration": "{\"formula\":\"IF([3656] > 0, \\r\\n   IF(([5236] + [5235]) * 100 \\\/ [3656] >= 50, \\\"<b style='color:red'>C<\\\/b>\\\",\\r\\n       IF(([5236] + [5235]) * 100 \\\/ [3656] > 10,  \\\"<b style='color:orange'>B<\\\/b>\\\",  \\\"<b style='color:green'>A<\\\/b>\\\")\\r\\n   ), \\r\\n   \\\"<span style='color:grey'>N\\\/A<\\\/span>\\\")\\r\\n\",\"number_format\":\"\",\"prefix\":\"\",\"suffix\":\"\",\"negative_number_color\":\"\"}"
+            }
+        ],
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "int(11) unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "parent_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "parent_item_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "linked_id",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_added",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "date_updated",
+                "Type": "bigint(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "created_by",
+                "Type": "int(11) unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "sort_order",
+                "Type": "int(11)",
+                "Null": "YES",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "field_220",
+                "Type": "varchar(64)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_221",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_222",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_223",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_224",
+                "Type": "text",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_225",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_226",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_227",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_228",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_229",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_230",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_231",
+                "Type": "varchar(64)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_232",
+                "Type": "varchar(64)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_233",
+                "Type": "varchar(8)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_234",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_906",
+                "Type": "text",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_952",
+                "Type": "varchar(1)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_1332",
+                "Type": "varchar(1)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_1333",
+                "Type": "varchar(1)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_1335",
+                "Type": "varchar(8)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_1354",
+                "Type": "varchar(1)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_1927",
+                "Type": "text",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_2042",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_2129",
+                "Type": "varchar(1)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_2902",
+                "Type": "int(11)",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3656",
+                "Type": "varchar(64)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3814",
+                "Type": "text",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_3815",
+                "Type": "text",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4431",
+                "Type": "text",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4627",
+                "Type": "varchar(1)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_4711",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5121",
+                "Type": "int(11)",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5122",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5123",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5124",
+                "Type": "varchar(64)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5125",
+                "Type": "int(11)",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5201",
+                "Type": "varchar(1)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5235",
+                "Type": "varchar(64)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5236",
+                "Type": "varchar(64)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5267",
+                "Type": "varchar(1)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5593",
+                "Type": "varchar(64)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "field_5595",
+                "Type": "varchar(1)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "engine": "InnoDB"
+    },
+    "groups": [
+        {
+            "id": "4",
+            "name": "Diretor Geral"
+        },
+        {
+            "id": "5",
+            "name": "Chefias"
+        },
+        {
+            "id": "6",
+            "name": "Clientes"
+        },
+        {
+            "id": "12",
+            "name": "Colaboradores"
+        },
+        {
+            "id": "13",
+            "name": "Diretor Produção"
+        },
+        {
+            "id": "14",
+            "name": "Diretor SGQ, FSC®, SHST"
+        },
+        {
+            "id": "15",
+            "name": "Fornecedores"
+        },
+        {
+            "id": "18",
+            "name": "Diretor Relações Humanas"
+        },
+        {
+            "id": "19",
+            "name": "Diretor Financeiro"
+        },
+        {
+            "id": "20",
+            "name": "Diretor Comercial"
+        },
+        {
+            "id": "23",
+            "name": "Auditorias Externas"
+        },
+        {
+            "id": "24",
+            "name": "Auditorias Internas"
+        },
+        {
+            "id": "25",
+            "name": "Assistente Administrativa"
+        },
+        {
+            "id": "26",
+            "name": "Assist. Produção & Aprovisionamento"
+        },
+        {
+            "id": "27",
+            "name": "Diretor Pré-Impressão"
+        },
+        {
+            "id": "30",
+            "name": "Designers & Impressão Digital"
+        },
+        {
+            "id": "34",
+            "name": "Sócios"
+        },
+        {
+            "id": "35",
+            "name": "Auditoria (Read Access)"
+        },
+        {
+            "id": "36",
+            "name": "Consulta de Stocks"
+        },
+        {
+            "id": "37",
+            "name": "Distribuidores"
+        },
+        {
+            "id": "38",
+            "name": "Técnicos"
+        },
+        {
+            "id": "39",
+            "name": "Diretor Assist. Técnica"
+        },
+        {
+            "id": "40",
+            "name": "Nexeterra"
+        },
+        {
+            "id": "41",
+            "name": "Auditorias Externas FSC"
+        },
+        {
+            "id": "43",
+            "name": "Doc. Auditoria ISO9001"
+        }
+    ],
+    "access": [
+        {
+            "id": "625",
+            "entities_id": "146",
+            "access_groups_id": "4",
+            "access_schema": "view,create,update,update_selected,copy,move,repeat,export,export_selected,import,reports"
+        },
+        {
+            "id": "3266",
+            "entities_id": "262",
+            "access_groups_id": "4",
+            "access_schema": "view,create,update,update_selected,copy,delete,delete_selected"
+        },
+        {
+            "id": "3415",
+            "entities_id": "276",
+            "access_groups_id": "4",
+            "access_schema": "view,create,update,update_selected,copy,delete,delete_selected"
+        },
+        {
+            "id": "3361",
+            "entities_id": "279",
+            "access_groups_id": "4",
+            "access_schema": "view,create,update,update_selected,copy,delete,delete_selected"
+        }
+    ]
+}

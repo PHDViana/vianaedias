@@ -1,0 +1,122 @@
+.vd-attendance{--vd-ink:#17324d;--vd-muted:#64748b;--vd-line:#e2e8f0;--vd-accent:#087e8b;color:var(--vd-ink);font-family:Arial,Helvetica,sans-serif}
+.vd-attendance-month-filter,.vd-attendance-filters{display:inline-flex;align-items:center;flex-wrap:wrap;gap:12px;margin:0 12px 12px 0}
+.vd-attendance-active{display:inline-flex;align-items:center;gap:6px;margin:0;font-weight:400}
+.vd-attendance-active input[type=checkbox]{margin:0}
+.vd-attendance-hint{color:var(--vd-muted);font-size:12px;margin-left:6px}
+.vd-attendance-filters select[multiple]{min-width:260px}
+.vd-attendance-global{box-sizing:border-box;width:100%;max-width:1200px;margin:0 auto 24px;padding:16px 24px;background:#fff;border:1px solid var(--vd-line);border-left:4px solid var(--vd-accent);border-radius:12px!important;color:var(--vd-ink)}
+.vd-attendance-global h2{margin:0 0 12px;font:700 17px Arial,Helvetica,sans-serif;color:var(--vd-ink)}
+.vd-attendance-global dl{display:flex;flex-wrap:wrap;gap:10px 36px;margin:0;font-size:14px}
+.vd-attendance-global dt{color:var(--vd-muted);margin-bottom:4px;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+.vd-attendance-global dd{margin:0;font-weight:700;font-size:18px;font-variant-numeric:tabular-nums}
+.vd-attendance-global p{margin:12px 0 0;color:#815500;font-size:13px}
+.vd-attendance-global dd a{color:var(--vd-accent);text-decoration:underline;cursor:pointer}
+.vd-attendance-global-detail{max-width:860px;margin:0 auto;color:var(--vd-ink);font-family:Arial,Helvetica,sans-serif}
+.vd-attendance-global-detail h3{margin:0 0 14px;font:700 18px Arial,Helvetica,sans-serif}
+.vd-attendance-global-detail table{width:100%;border-collapse:collapse;font-size:14px}
+.vd-attendance-global-detail th{background:var(--vd-ink);color:#fff;text-align:left;padding:8px 10px}
+.vd-attendance-global-detail td{padding:8px 10px;border-bottom:1px solid var(--vd-line)}
+.vd-attendance-global-detail .num{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.vd-attendance-global-detail tr.total td{border-top:2px solid var(--vd-ink);border-bottom:0;font-weight:700;background:#e9f1f7}
+.vd-attendance-global-detail p{margin:12px 0;color:var(--vd-muted);font-size:13px}
+.vd-attendance-global-detail .vd-attendance-global-types{color:var(--vd-ink);font-size:14px;line-height:1.6}
+.vd-attendance-guide{padding:20px 24px;margin:12px 0 24px;border:1px solid #d6e8ed;border-left:4px solid var(--vd-accent);border-radius:12px!important;background:#f0f9fb}
+.vd-attendance-guide>strong{display:block;font-size:19px;margin-bottom:5px}
+.vd-attendance-guide>span{display:block;color:#426477}
+.vd-attendance-guide p{margin:12px 0;max-width:1000px;line-height:1.6}
+.vd-attendance-sheet{box-sizing:border-box;width:100%;max-width:1200px;margin:0 auto 28px;padding:28px;background:#fff;border:1px solid var(--vd-line);border-radius:16px!important;box-shadow:0 6px 24px #17324d0a;color:var(--vd-ink);font-size:10px}
+.vd-attendance-tools{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin-bottom:20px}
+.vd-attendance .btn{border-radius:7px!important;font-weight:600}
+.vd-attendance .btn-primary{background:var(--vd-accent);border-color:var(--vd-accent);color:#fff}
+.vd-attendance-sheet header{position:relative;padding:0 0 20px;margin-bottom:20px;border-bottom:2px solid var(--vd-line)}
+.vd-attendance-company{font-size:19px;letter-spacing:-.8px;font-weight:800;margin-bottom:18px}
+.vd-attendance-company span{color:var(--vd-accent)}
+.vd-attendance-eyebrow{font-size:9px;letter-spacing:1.5px;font-weight:700;color:var(--vd-accent)}
+.vd-attendance-sheet h1{margin:6px 0 0;font:700 29px/1.2 Arial,Helvetica,sans-serif;letter-spacing:-.7px;color:var(--vd-ink)}
+.vd-attendance-month{position:absolute;right:0;bottom:20px;border-left:3px solid var(--vd-accent);padding-left:14px;font-size:22px;font-weight:700}
+.vd-attendance-month span{display:block;color:var(--vd-muted);font-size:9px;font-weight:400;margin-bottom:4px}
+.vd-attendance-identity{display:grid;grid-template-columns:55% 45%;gap:12px 0;margin-bottom:20px;padding:16px;background:#f8fafc;border:1px solid var(--vd-line);border-radius:9px!important;font-size:11px}
+.vd-attendance-identity>div:last-child{grid-column:1 / -1}
+.vd-attendance-identity b{display:block;font-size:8px;letter-spacing:.5px;text-transform:uppercase;color:var(--vd-muted);margin-bottom:5px}
+.vd-attendance-days{width:100%;border-collapse:collapse;table-layout:fixed;font-size:9px;line-height:1.3}
+.vd-attendance-days th{font-weight:600;text-align:center;color:#fff;background:var(--vd-ink);border:1px solid #36506b;padding:8px 2px;overflow-wrap:anywhere}
+.vd-attendance-days thead{display:table-header-group}
+.vd-attendance-days td{height:27px;padding:5px 2px;text-align:center;border-right:1px solid var(--vd-line);border-bottom:1px solid var(--vd-line);vertical-align:middle}
+.vd-attendance-days td:first-child{border-left:1px solid var(--vd-line)}
+.vd-attendance-days tbody tr:nth-child(even){background:#fafcfe}
+.vd-attendance-days tbody tr.is-weekend{background:#f1f5f9;color:#64748b}
+.vd-attendance-days tbody tr.is-holiday{background:#e8f7f5}
+.vd-attendance-days tbody tr.has-warning{background:#fff8e6}
+.vd-attendance-days .vd-attendance-date{white-space:nowrap;font-size:8px;text-align:left;font-weight:600;padding-left:4px}
+.vd-attendance-days .vd-attendance-notes{text-align:left;overflow-wrap:anywhere;font-size:8px;color:#526478}
+.vd-attendance-days .vd-attendance-number{white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:600}
+.vd-attendance-days tbody tr.vd-attendance-totals{background:#e9f1f7}
+.vd-attendance-days .vd-attendance-totals td{border-top:2px solid var(--vd-ink);font-weight:700}
+.vd-attendance-months .vd-attendance-date a{color:var(--vd-accent);font-weight:700;text-decoration:underline;cursor:pointer}
+.vd-attendance-modal{position:fixed;top:0;left:0;right:0;bottom:0;z-index:10050;background:rgba(23,50,77,.55);overflow:auto;padding:24px 16px}
+.vd-attendance-modal[hidden]{display:none!important}
+.vd-attendance-modal-box{position:relative;max-width:1560px;margin:0 auto;background:#fff;border-radius:12px!important;padding:28px 20px 20px;overflow-x:auto;box-shadow:0 12px 40px #17324d40}
+.vd-attendance-modal-box .vd-attendance-sheet{border:0;box-shadow:none;margin:0 auto}
+.vd-attendance-modal-close{position:absolute;top:6px;right:12px;border:0;background:none;font-size:28px;line-height:1;color:var(--vd-muted);cursor:pointer}
+.vd-attendance-modal-close:hover{color:var(--vd-ink)}
+.vd-attendance-bottom{display:grid;grid-template-columns:24% 26% 17% 33%;margin-top:22px;gap:0}
+.vd-attendance-bottom>div{padding:12px;border:1px solid var(--vd-line);background:#f8fafc}
+.vd-attendance-bottom>div:first-child{border-left:3px solid var(--vd-accent)}
+.vd-attendance-sheet h2{margin:0 0 12px;font:700 11px Arial,Helvetica,sans-serif;color:var(--vd-ink)}
+.vd-attendance-sheet dl{display:grid;grid-template-columns:1fr auto;gap:7px 4px;margin:0;font-size:9px}
+.vd-attendance-sheet dt{font-weight:400;color:#526478}
+.vd-attendance-sheet dd{margin:0;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.vd-attendance-signature{text-align:center;font-size:9px!important;background:#fff!important}
+.vd-attendance-signature-line{border-bottom:1px solid #94a3b8;height:35px;margin-bottom:7px}
+.vd-attendance-sheet footer{color:#64748b;font-size:8px;line-height:1.5;margin-top:18px}
+.vd-attendance-page{text-align:right;border-top:1px solid var(--vd-line);margin-top:8px;padding-top:6px}
+.vd-attendance-records{margin-top:24px;padding:16px;border:1px solid var(--vd-line);border-radius:9px!important;font-size:12px}
+.vd-attendance-records summary{cursor:pointer;font-weight:700;color:var(--vd-accent);padding:4px}
+.vd-attendance-records p{line-height:1.6;margin:12px 0}
+.vd-attendance-records table{width:100%;margin:12px 0}
+.vd-attendance-records th,.vd-attendance-records td{text-align:left;border-bottom:1px solid var(--vd-line);padding:8px}
+.vd-attendance-records a{color:#006977;text-decoration:underline}
+.vd-attendance-badge{background:#fff1cf;color:#815500;padding:3px 6px;border-radius:4px!important}
+@media screen{
+  .vd-attendance{overflow-x:auto}
+  .vd-attendance-sheet{min-width:1500px;max-width:none;font-size:14px}
+  .vd-attendance-global{min-width:1500px;max-width:none}
+  .vd-attendance-identity{font-size:14px}
+  .vd-attendance-identity b{font-size:11px}
+  .vd-attendance-days{font-size:13px}
+  .vd-attendance-days .vd-attendance-date,.vd-attendance-days .vd-attendance-notes{font-size:12px}
+  .vd-attendance-sheet h2{font-size:14px}
+  .vd-attendance-sheet dl,.vd-attendance-signature{font-size:12px!important}
+  .vd-attendance-sheet footer{font-size:11px}
+}
+@media print{
+  @page{size:A4 portrait;margin:10mm}
+  .page-header,.page-sidebar,.page-footer,.page-title,.noprint{display:none!important}
+  .page-content,.page-content-wrapper{margin:0!important;padding:0!important}
+  .vd-attendance{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .vd-attendance-sheet{margin:0;padding:0;min-height:0;width:190mm;max-width:none;border:0;border-radius:0!important;box-shadow:none;break-after:page;page-break-after:always;font-size:7pt}
+  .vd-attendance-sheet:last-child{break-after:auto;page-break-after:auto}
+  .vd-attendance-sheet header{padding-bottom:3mm;margin-bottom:3mm}
+  .vd-attendance-company{font-size:12pt;margin-bottom:2mm}
+  .vd-attendance-eyebrow{font-size:6pt;letter-spacing:1px}
+  .vd-attendance-sheet h1{font-size:20pt;margin-top:1mm}
+  .vd-attendance-month{font-size:15pt;bottom:3mm}
+  .vd-attendance-month span{font-size:6pt}
+  .vd-attendance-identity{padding:2mm;margin-bottom:3mm;gap:2mm 0;font-size:8pt}
+  .vd-attendance-identity b{font-size:5.5pt;margin-bottom:.6mm}
+  .vd-attendance-days{font-size:6pt;line-height:1.15}
+  .vd-attendance-days th{padding:1mm .2mm;font-size:6pt}
+  .vd-attendance-days td{height:4.7mm;padding:.4mm .2mm}
+  .vd-attendance-days .vd-attendance-date{font-size:5.7pt;padding-left:.5mm}
+  .vd-attendance-days .vd-attendance-notes{font-size:5.5pt}
+  .vd-attendance-days tr,.vd-attendance-bottom{break-inside:avoid;page-break-inside:avoid}
+  .vd-attendance-days a{color:inherit!important;text-decoration:none!important}
+  .vd-attendance-bottom{margin-top:3mm}
+  .vd-attendance-bottom>div{padding:2mm}
+  .vd-attendance-sheet h2{font-size:7pt;margin-bottom:2mm}
+  .vd-attendance-sheet dl{font-size:6pt;gap:1mm}
+  .vd-attendance-signature{font-size:6pt!important}
+  .vd-attendance-signature-line{height:9mm;margin-bottom:1mm}
+  .vd-attendance-sheet footer{font-size:5.5pt;line-height:1.3;margin-top:3mm}
+  .vd-attendance-page{padding-top:1mm;margin-top:2mm}
+}

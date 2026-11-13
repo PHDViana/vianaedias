@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euo pipefail
+if [ "$#" -ne 0 ]; then exit 64; fi
+exec /usr/bin/flock -n -E 75 /run/lock/vd-ink-worker.lock /usr/bin/systemd-run --quiet --pipe --wait --collect \
+  -p DynamicUser=yes -p PrivateNetwork=yes -p PrivateTmp=yes \
+  -p ProtectSystem=strict -p ProtectHome=yes -p NoNewPrivileges=yes \
+  -p PrivateDevices=yes -p ProtectKernelTunables=yes -p ProtectKernelModules=yes \
+  -p 'TemporaryFileSystem=/tmp:rw,size=128M,mode=1777' \
+  -p ProtectControlGroups=yes \
+  -p 'CapabilityBoundingSet=' -p 'RestrictAddressFamilies=AF_UNIX' \
+  -p 'InaccessiblePaths=/run /var/lib/mysql /var/log /var/spool /mnt /media' \
+  -p MemoryMax=384M -p TasksMax=8 -p RuntimeMaxSec=45 -p LimitCPU=35 \
+  -p LimitFSIZE=67108864 -p UMask=0077 \
+  /opt/cpanel/ea-php74/root/usr/bin/php -n -d memory_limit=96M \
+  -d extension=/opt/cpanel/ea-php74/root/usr/lib64/php/modules/json.so \
+  /usr/local/libexec/vd-ink-worker.php

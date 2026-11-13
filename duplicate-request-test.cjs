@@ -1,0 +1,23 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const path = require('node:path');
+const source = fs.readFileSync(path.join(__dirname, 'product-configurator-ui.js'), 'utf8');
+const start = source.indexOf('    function duplicateRequest(');
+const end = source.indexOf('    function fresh()', start);
+assert.ok(start >= 0 && end > start);
+const duplicate = vm.runInNewContext(source.slice(start, end) + '\nduplicateRequest;');
+const payload = {product_type:3824,quantities:[140,280],components:[{id:1,fields:{4229:'1256'},
+    request:{paper:'Invercote Duo 450 gr'}}],request_details:{workflow_version:2},selections:{1:{140:{price:10}}}};
+const identity = {name:'Cartazes',customer:1135,notes:'Notas',reference:'REF'};
+const original = JSON.stringify({payload,identity});
+const copy = duplicate(payload,identity);
+assert.equal(copy.draft.selections, undefined);
+assert.equal(JSON.stringify(copy.draft.components), JSON.stringify(payload.components));
+assert.equal(JSON.stringify(copy.identity), JSON.stringify(identity));
+copy.draft.components[0].fields[4229] = '1255';
+copy.identity.notes = 'Alteradas';
+assert.equal(JSON.stringify({payload,identity}), original);
+assert.ok(source.includes('fresh(); draft = copy.draft; identity = copy.identity; dirty = true;'));
+assert.ok(source.includes('Os documentos não foram copiados'));
+console.log('7 request duplication, reset and source isolation checks passed.');

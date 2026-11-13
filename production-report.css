@@ -1,0 +1,47 @@
+.vd-production-print { color: #17212b; font: 12px/1.35 Arial, sans-serif; max-width: 190mm; margin: 0 auto; }
+.vd-production-print h1 { font-size: 24px; margin: 0 0 5mm; }
+.vd-production-print h2 { font-size: 18px; border-bottom: 2px solid #263238; margin: 6mm 0 3mm; }
+.vd-production-print h3 { font-size: 15px; margin: 5mm 0 2mm; }
+.vd-production-print table { width: 100%; border-collapse: collapse; margin: 3mm 0; }
+.vd-production-print th, .vd-production-print td { border: 1px solid #999; padding: 5px; text-align: left; vertical-align: top; }
+.vd-production-print th { background: #edf2f5; }
+.vd-production-print thead { display: table-header-group; }
+.vd-production-print tr, .vd-production-print svg { break-inside: avoid; page-break-inside: avoid; }
+.vd-production-print a { color: inherit; text-decoration: none; }
+.vd-production-print .vd-signoff td { height: 12mm; }
+.vd-production-print .vd-print-meta { font-size: 10px; color: #555; }
+.vd-production-print .vd-production-presentation svg { height: 72mm !important; }
+.vd-production-print .vd-production-presentation .btn { display: none; }
+@page { size: A4 portrait; margin: 12mm; }
+/* VD production columns */
+.vd-production-print .vd-production-columns { display: flex; gap: 5mm; align-items: flex-start; }
+.vd-production-print .vd-production-columns > div { flex: 1 1 0; min-width: 0; }
+.vd-production-print .vd-production-columns h3 { margin-top: 5mm; }
+.vd-production-print .vd-production-plan svg { width: 100% !important; height: auto !important; max-height: 85mm; }
+/* End VD production columns */
+/* VD production compact A4 */
+.vd-production-print .vd-production-materials { table-layout: fixed; }
+.vd-production-print .vd-production-materials th:nth-child(1) { width: 23%; }
+.vd-production-print .vd-production-materials th:nth-child(2) { width: 54%; }
+.vd-production-print .vd-production-materials th:nth-child(3) { width: 23%; }
+.vd-production-print .vd-production-materials td { overflow-wrap: anywhere; }
+.vd-production-print .vd-production-materials td:last-child { text-align: right; }
+@media print {
+    .vd-production-print { width: 186mm; max-width: 100%; font-size: 10px; line-height: 1.2; }
+    .vd-production-print h1 { font-size: 19px; margin: 0 0 2mm; }
+    .vd-production-print h2 { font-size: 14px; margin: 3mm 0 1.5mm; }
+    .vd-production-print h3, .vd-production-print .vd-production-columns h3 { font-size: 12px; margin: 2mm 0 1mm; }
+    .vd-production-print p { margin: 1mm 0; }
+    .vd-production-print table, .vd-production-print .table { margin: 1.5mm 0; }
+    .vd-production-print th, .vd-production-print td { padding: 3px 4px; }
+    .vd-production-print .vd-production-plan svg { max-height: 58mm; }
+    .vd-production-print .vd-signoff td { height: 7mm; }
+    .vd-production-print .vd-print-meta { font-size: 8px; }
+}
+/* End VD production compact A4 */
+@media print {
+    .vd-production-print { max-width: none; font-size: 10px; }
+    .vd-production-print h2, .vd-production-print h3 { break-after: avoid; page-break-after: avoid; }
+    .vd-production-print th { background: #edf2f5 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .vd-production-print svg { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}

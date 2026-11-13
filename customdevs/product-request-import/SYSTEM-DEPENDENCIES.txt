@@ -1,0 +1,9 @@
+Product configurator request import
+
+Local-only server dependencies:
+- poppler-utils (pdftotext and pdftoppm)
+- tesseract
+- tesseract-langpack-por (Portuguese OCR)
+
+No uploaded customer document or extracted text is sent to an external service.
+PDF text extraction and OCR run on the Viana & Dias application server.

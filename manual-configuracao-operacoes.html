@@ -1,0 +1,52 @@
+<p>Este manual explica como configurar uma operação e rever os seus custos. Os dados são referências para a preparação de orçamentos: confirme sempre o resultado antes de o utilizar.</p>
+
+<h3>1. Criar ou rever uma operação</h3>
+<ol>
+  <li>Abra <strong>Configuração de Operações</strong> e selecione uma operação existente ou clique em <strong>Nova Operação</strong>.</li>
+  <li>Preencha a descrição, estado, tipo, departamento e posição. Indique a operação base e a etapa de aplicação quando forem relevantes.</li>
+  <li>Associe os equipamentos e recursos humanos aplicáveis na ficha principal. Na secção <strong>Equipamentos</strong> e <strong>Recursos Humanos</strong>, configure também os parâmetros de cada associação.</li>
+  <li>Confirme a base de cálculo, a unidade de produtividade, os tempos e se a operação está ativa no catálogo. Use as notas para identificar valores estimados ou por confirmar.</li>
+</ol>
+<p>As associações e campos indicativos não substituem a tarifa em <strong>Custos</strong>. A configuração pode ser diferente para operações internas, externas, de impressão ou de assemblagem; valide o cálculo no orçamento.</p>
+
+<h3>2. Equipamentos</h3>
+<ol>
+  <li>Na operação, abra <strong>Equipamentos</strong> e adicione cada máquina que a pode executar.</li>
+  <li>Para cada máquina indique a produtividade mínima, média e máxima, a respetiva unidade (por exemplo, folhas/h), e o tempo de acerto em minutos. A produtividade média e o acerto são utilizados em cálculos que suportam esses parâmetros.</li>
+  <li>Preencha <strong>Custo horário do equipamento (€/h)</strong> com uma referência validada, sem voltar a incluir pessoas ou custos já calculados à parte. Máquinas alternativas são opções separadas, não se somam.</li>
+</ol>
+<p>Na ficha de cada máquina, o separador <strong>Custo do equipamento</strong> permite estimar uma referência a partir de renovação, manutenção, outros custos e horas de utilização. A reserva anual é (valor de substituição − montante reservado) ÷ anos até à substituição; o custo horário divide os encargos anuais pelas horas semanais × semanas anuais. A amortização contabilística é informativa e não é somada novamente à reserva. Energia e pessoas não estão incluídas.</p>
+<p><strong>Limitação atual:</strong> o custo na ficha da máquina não atualiza automaticamente o campo na associação à operação nem a tarifa em Custos. Quando houver dados por confirmar, o valor apresentado na máquina é apenas parcial. A reserva de renovação tem de ser constituída efetivamente.</p>
+
+<h3>3. Recursos Humanos</h3>
+<ol>
+  <li>Abra <strong>Recursos Humanos</strong> na operação e associe os operadores elegíveis. Indique a função e o número inteiro de pessoas que trabalham em simultâneo.</li>
+  <li>Confirme o campo <strong>Custo/h.</strong> de cada operador na tabela de Recursos Humanos. A sugestão usa o maior custo/h dos operadores elegíveis multiplicado pelo número de pessoas em simultâneo; não soma todos os operadores elegíveis.</li>
+  <li>Se houver várias associações de RH elegíveis, mantenha coerentes o número de pessoas e o regime de intervenção. Dados incompletos ou inconsistentes são assinalados na sugestão.</li>
+</ol>
+<p>Os campos de intervenção distinguem o tempo efetivo de pessoas do tempo de máquina: preparação por trabalho e intervenção por unidade devem ser preenchidas em conjunto, incluindo zero quando aplicável. A intervenção por hora de equipamento, quando preenchida, substitui os dois campos anteriores e deve estar entre 0 e 60 minutos por hora. Ambos vazios mantêm a referência de presença contínua. Atualmente estes tempos são aplicados ao CTP nos novos cálculos; outras operações mantêm o regime vigente.</p>
+
+<h3>4. Materiais e energia</h3>
+<p>Em <strong>Materiais</strong>, associe os artigos realmente usados e indique unidade de consumo, quantidade de referência e notas ou regra de consumo. Confirme a unidade e o preço de compra na origem utilizada pelo orçamento. Estes campos podem ser indicativos; não presumem, por si só, que qualquer consumo será calculado automaticamente em todas as operações. Não crie artigos fictícios.</p>
+<p>Os materiais e cliques, quando aplicáveis, são tratados separadamente da sugestão de equipamento + RH. A energia ainda não tem uma parcela automática geral neste cálculo. Registe como é considerada e evite incluí-la simultaneamente no custo da máquina e noutro encargo.</p>
+
+<h3>5. Custos e tarifa vigente</h3>
+<ol>
+  <li>Abra <strong>Custos</strong> e reveja a base, custo unitário de referência, versão e datas de vigência. Para operações por hora, o valor deve ser o custo consolidado da operação na base aplicável; materiais ou outros encargos calculados separadamente não devem ser incluídos duas vezes.</li>
+  <li>Use <strong>Sugestão de custo de execução</strong> para rever equipamento + RH. É uma sugestão, não uma atualização automática da tarifa. Em equipamentos autónomos com intervenção de RH, a sugestão distingue horas de máquina e horas efetivas de pessoas, em vez de assumir presença contínua.</li>
+  <li>Ao criar uma nova versão, defina uma única tarifa atual e vigente para a operação, desmarcando a anterior e preenchendo as datas aplicáveis. Confirme a base de cálculo usada pelo fluxo em causa; no cálculo de operações do configurador são suportadas as bases <strong>h</strong> e <strong>serviço</strong>.</li>
+  <li>Teste um orçamento novo ou em preparação. Uma tarifa ausente, duplicada, fora de vigência ou com base não suportada deve ser corrigida antes de usar o cálculo.</li>
+</ol>
+<p>Uma tarifa consolidada já inclui os custos de execução que a compõem: não some novamente equipamento e RH. O valor de venda histórico da tarifa não é o custo; nos novos cálculos comerciais é aplicado o acréscimo definido no orçamento. O campo de custo na ficha de equipamento é uma referência separada e ainda não alimenta automaticamente a tarifa. Rever a configuração não reescreve versões de orçamento já guardadas.</p>
+
+<h3>6. Etapas e dependências</h3>
+<p>Em <strong>Etapas</strong>, registe a sequência e os tempos ou unidades aplicáveis. O campo <strong>Operação prévia necessária</strong> pode documentar uma dependência; por si só, não garante inclusão automática. Os campos <strong>Regra automática</strong>, <strong>Alternativas válidas (IDs)</strong> e <strong>Relação ativa</strong> são usados pela configuração de dependências dos orçamentos em preparação. Não invente códigos nem IDs: valide a regra, as alternativas e o resultado no orçamento, evitando dependências circulares ou operações duplicadas.</p>
+
+<h3>7. Verificação antes de utilizar</h3>
+<ul>
+  <li>Operação ativa e apropriada ao produto ou etapa; equipamento e operadores corretos.</li>
+  <li>Produtividade e acerto coerentes com a unidade e com a máquina escolhida.</li>
+  <li>Custos de máquina e RH completos, sem duplicação de energia, materiais ou pessoas.</li>
+  <li>Uma tarifa atual, dentro da vigência e na base correta; preço e acréscimo comercial revistos.</li>
+  <li>Materiais e dependências conferidos e orçamento de teste validado. Não alterar valores históricos para corrigir novos cálculos.</li>
+</ul>
