@@ -15,6 +15,13 @@ function vd_product_stage_simulation(mysqli $db,array &$simulation,$component) {
     $quote=(int)$simulation['workflow_component'][0]['parent_item_id'];
     $metadata=vd_product_component($db,$quote,$component);
     if(empty($metadata['stage']))return;
+    $folding=$metadata['requirements']['details']['folding']??null;
+    if($folding!==null) {
+        $simulation['component'][0]['flat_folding']=true;
+        $simulation['component'][0]['folding_count']=$folding['count'];
+    }
+    $quantities=$metadata['requirements']['details']['quote_preparation']['operation_quantities']??[];
+    if($quantities)$simulation['component'][0]['operation_quantities']=$quantities;
     $thickness=$metadata['requirements']['details']['quote_preparation']['paper_thickness']??[];
     $papers=array_column($simulation['papers']??[],null,'id');
     foreach($simulation['papers']??[] as $index=>$paper)foreach($thickness as $article=>$mm) {

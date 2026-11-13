@@ -29,13 +29,23 @@
         if (!response.ok || !result.ok) throw new Error(result.error || 'Não foi possível concluir a operação.');
         return result.data;
     }
-    async function refresh() {
+    async function refresh(quantityId) {
         const response = await fetch(initial.url + '&api=product_state',{credentials:'same-origin'});
         const result = await response.json();
         if (!response.ok || !result.ok) throw new Error(result.error || 'Falha ao atualizar o produto.');
-        data = result.data; render();
+        data = result.data; await render(quantityId);
     }
-    function render() {
+    async function render(quantityId) {
+        if (initial.component_id) {
+            root.innerHTML = '<div data-message></div><div data-editor></div>';
+            const component = data.components.find(c => Number(c.id) === Number(initial.component_id));
+            if (!component?.product || component.product.kind === 'printed') {
+                notify('Componente sem configuração de operações e materiais. Reveja a estrutura do produto.', true);
+                return;
+            }
+            await edit(component, quantityId);
+            return;
+        }
         root.innerHTML = `<div data-message></div><p>Um produto por orçamento. Os componentes impressos mantêm o configurador habitual. Materiais/estrutura e assemblagem não exigem papel, cores nem imposição.</p>
         <p>Caixas: indicar manualmente o formato aberto e selecionar o cortante existente na identificação do componente. Não é gerado desenho estrutural.</p>
         <label>Tipo de produto <select data-type>${options(Object.entries(data.types).map(([id,name])=>({id,name})),data.type)}</select></label>
@@ -73,24 +83,57 @@
             }
         }
     }
-    async function edit(component) {
+    async function edit(component, selectedQuantityId) {
         const editor=root.querySelector('[data-editor]');
         const stateResponse=await fetch(initial.url+'&api=state',{credentials:'same-origin'});
         const stateResult=await stateResponse.json();
         if(!stateResponse.ok||!stateResult.ok)throw new Error(stateResult.error||'Falha ao consultar versões.');
         const versions=stateResult.data.versions;
-        const definition=component.definition||{markup:0,operations:[],materials:[]};
+        const quantityId=Number(selectedQuantityId||data.quantities[0]?.id);
+        const saved=versions.find(v=>Number(v.component_id)===Number(component.id)&&Number(v.quantity_id)===quantityId);
+        let calculation=null;
+        if(saved) {
+            const response=await fetch(initial.url+'&api=snapshot&version='+encodeURIComponent(saved.id),{credentials:'same-origin'});
+            const result=await response.json();
+            if(!response.ok||!result.ok)throw new Error(result.error||'Falha ao consultar valores guardados.');
+            calculation=result.data.calculation;
+        }
+        const definition=calculation?.definition||{markup:0,operations:[],materials:[]};
         const stages={component:'Componente',assembly:'Assemblagem',packaging:'Embalamento individual',dispatch:'Expedição'};
         const eligible=data.catalog.filter(op=>!forbidden.includes(Number(op.id))&&(!component.product?.stage||op.stage===stages[component.product.stage]));
         const operationOptions=selected=>options([{id:'',name:'Escolha explicitamente a variante técnica'},...eligible.map(op=>({...op,name:op.name+(op.machines?' — máquina':'')}))],selected??'');
         const quantities=data.quantities.map(q=>({id:q.id,name:q.quantity+' produtos'}));
         if(!quantities.length)throw new Error('Adicione primeiro as quantidades do orçamento.');
-        editor.innerHTML=`<h3>${escape(component.name)} — operações e materiais</h3><p>Sem impressão/imposição. Custos explicitamente indicativos: introduza minutos totais (incluindo preparação), custo/h e consumos totais; não há movimentação de stock.</p>
+        const money=(value,digits=2)=>value===null||value===undefined?'Por completar':Number(value).toLocaleString('pt-PT',{style:'currency',currency:'EUR',minimumFractionDigits:digits,maximumFractionDigits:digits});
+        const states={draft:'Rascunho',confirmed:'Confirmada',approved:'Aprovada',superseded:'Substituída'};
+        editor.innerHTML=`<h3>${escape(component.name)} — operações e materiais</h3>
+        <h4>Valores guardados por alternativa</h4>
+        <div style="overflow:auto"><table class="table table-bordered"><thead><tr><th>Quantidade</th><th>Versão</th><th>Estado</th><th>Custo total</th><th>Venda total</th><th>Venda/un.</th></tr></thead><tbody>
+        ${data.quantities.map(q=>{
+            const version=versions.find(v=>Number(v.component_id)===Number(component.id)&&Number(v.quantity_id)===Number(q.id));
+            return `<tr><td>${escape(q.quantity)}</td><td>${version?'#'+escape(version.id):'Não guardada'}</td><td>${version?escape(states[version.state]||version.state):'—'}</td><td>${version?money(version.totals.cost):'—'}</td><td>${version?money(version.totals.sale):'—'}</td><td>${version?money(version.totals.unitSale,4):'—'}</td></tr>`;
+        }).join('')}</tbody></table></div><div data-workflow></div>
+        <p>Guarde uma versão para cada alternativa. Confirme as versões no painel habitual para construir a proposta com Capa, Miolo e restantes componentes.</p>
+        <p>Sem impressão/imposição. Custos explicitamente indicativos: introduza minutos totais (incluindo preparação), custo/h e consumos totais; não há movimentação de stock.</p>
         <p>Requisitos: ${escape((component.product?.requirements?.operations||[]).map(op=>op.name+' (variantes: '+(op.variants||[op.id]).join(', ')+')').join('; ')||'Rever preparação técnica')}. Indique uma única variante por requisito. Materiais de embalagem têm consumos e preços próprios.</p>
-        <label>Alternativa <select data-quantity>${options(quantities,'')}</select></label>
+        <label>Alternativa <select data-quantity>${options(quantities,quantityId)}</select></label>
         <label>Acréscimo sobre custo (%) <input data-markup type="number" min="0" step="any" value="${escape(definition.markup)}"></label>
         <h4>Operações (pela ordem de execução)</h4><div data-operations></div><div data-operation-add></div>
         <h4>Materiais (cola, arame, cartão, caixas, etc.)</h4><div data-materials></div><div data-material-add></div><hr><div data-save></div><pre data-result style="white-space:pre-wrap"></pre>`;
+        editor.querySelector('[data-workflow]').append(button('Versões, confirmação, aprovação e proposta',()=>{
+            const url=new URL(initial.url,location.href);
+            url.searchParams.set('modal','1');
+            window.open_dialog(url.pathname+url.search);
+        }));
+        editor.querySelector('[data-quantity]').addEventListener('change',async event=>{
+            const select=event.target;
+            select.disabled=true;
+            try { await edit(component,select.value); } catch(error) { notify(error.message,true); }
+            finally { select.disabled=false; }
+        });
+        function showCalculation(result) {
+            editor.querySelector('[data-result]').textContent='Custo total: '+money(result.allOperations.cost)+'; venda: '+money(result.allOperations.sale)+'\n'+result.allOperations.lines.map(l=>l.name+': '+money(l.cost)).join('\n');
+        }
         function operation(input={}) {
             const div=document.createElement('div');div.dataset.operation='';div.dataset.basis=input.basis||'h';div.style.cssText='display:flex;gap:6px;flex-wrap:wrap;margin:8px 0';
             div.innerHTML=`<label>Operação / variante <select data-id aria-label="Operação">${operationOptions(input.operation_id)}</select></label>
@@ -124,6 +167,7 @@
             editor.querySelector('[data-materials]').append(div);
         }
         definition.operations.forEach(operation);definition.materials.forEach(material);
+        if(calculation)showCalculation(calculation);
         editor.querySelector('[data-operation-add]').append(button('Adicionar operação',()=>operation()));
         editor.querySelector('[data-material-add]').append(button('Adicionar material',()=>material()));
         function number(element) {
@@ -165,12 +209,15 @@
                 '\nReveja e use «Calcular» para ver custos ou «Guardar nova versão».';
         }),button('Calcular',async()=>{
             const result=await api('nonprint_preview',payload());
-            editor.querySelector('[data-result]').textContent='Custo total: '+result.allOperations.cost.toFixed(2)+' €; venda: '+result.allOperations.sale.toFixed(2)+' €\n'+result.allOperations.lines.map(l=>l.name+': '+l.cost.toFixed(2)+' €').join('\n');
+            showCalculation(result);
         }),button('Guardar nova versão',async()=>{
-            const result=await api('nonprint_save',payload());
-            await refresh();notify('Versão #'+result.workflow_version+' guardada. Confirme e aprove no painel de versões habitual.');
+            const input=payload();
+            const result=await api('nonprint_save',input);
+            await refresh(input.quantity_id);
+            if(!initial.component_id)await edit(data.components.find(c=>Number(c.id)===Number(component.id)),input.quantity_id);
+            notify('Versão #'+result.workflow_version+' guardada para '+input.definition.quantity+' produtos. Confirme e aprove no painel de versões habitual.');
         }));
         editor.scrollIntoView({block:'nearest'});
     }
-    render();
+    render().catch(error=>notify(error.message,true));
 })();

@@ -63,8 +63,13 @@ function vd_config_quote_preparation_catalog(mysqli $db,VDProductConfigurator $s
         $configuration=json_decode($field['configuration'],true,512,JSON_THROW_ON_ERROR);
         $catalog['defaults'][(int)$field['id']]=$configuration['default_value']??'';
     }
-    $catalog['articles']=$db->query("SELECT id,field_1020 name,field_3632 internal_id,field_1374 unit,field_1021 width,field_1022 height,field_1023 weight,field_1024 thickness,FIND_IN_SET('190',field_1019)>0 is_paper FROM app_entity_99 ORDER BY field_1020,id")->fetch_all(MYSQLI_ASSOC);
+    $catalog['articles']=$db->query("SELECT id,field_1020 name,field_3632 internal_id,field_1374 unit,field_1021 width,field_1022 height,field_1023 weight,field_1024 thickness,FIND_IN_SET('190',field_1019)>0 is_paper,FIND_IN_SET('322',field_1019)>0 is_sticker FROM app_entity_99 ORDER BY field_1020,id")->fetch_all(MYSQLI_ASSOC);
     return $catalog;
+}
+
+function vd_config_article_is_print_material(array $article,array $payload) {
+    return !empty($article['is_paper'])||
+        ((int)($payload['product_type']??0)===3761&&!empty($article['is_sticker']));
 }
 
 function vd_config_quote_preparation(array $base,array $catalog,array $answers=[]) {
@@ -72,6 +77,21 @@ function vd_config_quote_preparation(array $base,array $catalog,array $answers=[
     $operations=array_column($catalog['operations'],null,'id');
     $machines=array_column($catalog['machines'],null,'id');
     $articles=array_column($catalog['articles'],null,'id');
+    $cutting=vd_config_sticker_cutting_choices()[$payload['request_details']['cutting_operation']??'']??null;
+    if((int)($payload['product_type']??0)===3761) {
+        if(!$cutting)throw new DomainException('Escolha a operação de corte pretendida para os autocolantes.');
+        $operationIds=array_values(array_filter($cutting['operation_ids'],static function($operationId)use($operations){return isset($operations[$operationId]);}));
+        if(!$operationIds)throw new DomainException('A operação de corte escolhida não está disponível no catálogo de produção.');
+        foreach($payload['components'] as &$part)if($part['kind']==='printed') {
+            $selectedIds=array_map('intval',array_column($part['request']['finishing_operations']??[],'id'));
+            if(!array_intersect($operationIds,$selectedIds)) {
+                $part['request']['finishing_operations'][]=[
+                    'id'=>$operationIds[0],'name'=>$cutting['label'],'variants'=>$operationIds
+                ];
+            }
+        }
+        unset($part);
+    }elseif($cutting)throw new DomainException('A operação de corte indicada só se aplica a autocolantes.');
     $add=static function($key,$label,$kind,$value,array $options=[],$min=0)use(&$fields,&$answers,&$used) {
         $missing=$value===null||$value==='';
         if($missing&&array_key_exists($key,$answers)) {
@@ -126,11 +146,15 @@ function vd_config_quote_preparation(array $base,array $catalog,array $answers=[
                     $resolved[]=$name.' — Papel: '.$matches[0]['name'].' (descrição e gramagem do pedido)';
                 }
             }
-            foreach($paper as $article)if(!isset($articles[$article])||($part['kind']==='printed'&&empty($articles[$article]['is_paper'])))
-                throw new DomainException($name.': artigo/papel guardado indisponível no catálogo.');
+            foreach($paper as $article)if(!isset($articles[$article])||
+                ($part['kind']==='printed'&&!vd_config_article_is_print_material($articles[$article],$payload)))
+                throw new DomainException($name.': artigo/material guardado indisponível no catálogo.');
             if(!$paper) {
-                $options=array_values(array_filter($catalog['articles'],static function($row)use($part){return $part['kind']!=='printed'||!empty($row['is_paper']);}));
-                $article=$add("$id.paper",$name.' — '.($part['kind']==='printed'?'Papel do catálogo (pedido: '.($part['request']['paper']??'não indicado').')':'Material do catálogo'),'select','',$options);
+                $options=array_values(array_filter($catalog['articles'],static function($row)use($part,$payload){
+                    return $part['kind']!=='printed'||vd_config_article_is_print_material($row,$payload);
+                }));
+                $sticker=(int)($payload['product_type']??0)===3761;
+                $article=$add("$id.paper",$name.' — '.($part['kind']==='printed'?($sticker?'Papel/material':'Papel').' do catálogo (pedido: '.($part['request']['paper']??'não indicado').')':'Material do catálogo'),'select','',$options);
                 if($article!==null&&$article!=='')$part['papers']=[(int)$article];
             }
             if($part['kind']==='printed')foreach($part['papers']??[] as $article) {
@@ -143,7 +167,7 @@ function vd_config_quote_preparation(array $base,array $catalog,array $answers=[
                     $part['request']['quote_preparation']['paper_thickness'][$article]=(float)$thickness;
                 if((!is_numeric($thickness)||(float)$thickness<=0)&&!array_key_exists("$id.thickness.$article",$answers)) {
                     $values=[];
-                    foreach($catalog['articles'] as $candidate)if(!empty($candidate['is_paper'])&&
+                    foreach($catalog['articles'] as $candidate)if(vd_config_article_is_print_material($candidate,$payload)&&
                         (int)$candidate['internal_id']===(int)$paper['internal_id']&&
                         (float)$candidate['weight']===(float)$paper['weight']&&
                         is_numeric($candidate['thickness'])&&(float)$candidate['thickness']>0&&(float)$candidate['thickness']<=80)
@@ -155,7 +179,7 @@ function vd_config_quote_preparation(array $base,array $catalog,array $answers=[
                     }
                 }
                 if(!is_numeric($thickness)||(float)$thickness<=0||(float)$thickness>80) {
-                    $thickness=$add("$id.thickness.$article",$name.' — Espessura real do papel (mm): '.$paper['name'],'number','',[],0.001);
+                    $thickness=$add("$id.thickness.$article",$name.' — Espessura real do material (mm): '.$paper['name'],'number','',[],0.001);
                     if($thickness!==null&&$thickness!=='') {
                         if((float)$thickness>80)throw new DomainException('A espessura real do papel não pode exceder 80 mm.');
                         $part['request']['quote_preparation']['paper_thickness'][$article]=(float)$thickness;
@@ -182,6 +206,15 @@ function vd_config_quote_preparation(array $base,array $catalog,array $answers=[
             if(in_array('delivery',$payload['request_details']['dispatch']??[],true))$selected[12]=[];
         }
         if($part['kind']==='printed') {
+            if(isset($part['request']['folding'])) {
+                $creaseIds=$catalog['finishing_rules']['crease']??[18];
+                $heavyPaper=false;
+                foreach($part['papers']??[] as $article)if((float)$articles[$article]['weight']>150)$heavyPaper=true;
+                if($heavyPaper&&!array_intersect(array_keys($selected),$creaseIds)) {
+                    $selected[18]=[];
+                    if(!in_array((int)($part['fields'][4220]??0),[1248,1249],true))$part['fields'][4220]=1608;
+                }
+            }
             if(($part['fields'][6169]??'')==='false')$selected[1]=[];
             if(($part['fields'][6170]??'')==='false')$selected[2]=[];
             if(in_array((int)($part['fields'][4220]??0),[1248,1249],true))
@@ -208,12 +241,14 @@ function vd_config_quote_preparation(array $base,array $catalog,array $answers=[
             foreach($catalog['equipment']??[] as $resource)if((int)$resource['operation_id']===$operation)
                 $parameters[]=[$resource['unit'],is_numeric($resource['speed'])?(float)$resource['speed']:null,is_numeric($resource['setup'])?(float)$resource['setup']:null];
             $shared=$part['kind']==='printed'&&count($parameters)>1&&
+                !in_array($operation,$catalog['finishing_rules']['crease']??[18],true)&&
                 count(array_unique(array_map('serialize',$parameters)))===1;
             if(count($equipment)>1&&!$shared)$machine=$add("$id.equipment.$operation",$name.' — Equipamento: '.$row['name'],'select','',$equipment);
             $settings=['operation_id'=>(int)$operation,'equipment'=>(string)($machine??'')];
             if(isset($requirement['tape']))$settings+=['adhesive_per_copy'=>$requirement['tape']['quantity'],
                 'adhesive_width'=>$requirement['tape']['x_mm'],'adhesive_height'=>$requirement['tape']['y_mm']];
-            if($part['kind']!=='printed'||isset($requirement['tape'])||(count($equipment)>1&&!$shared))
+            if($part['kind']!=='printed'||isset($requirement['tape'])||(count($equipment)>1&&!$shared)||
+                (isset($part['request']['folding'])&&in_array($operation,[18,21,33,35],true)))
                 $part['technical_operations'][]=$settings;
         }
     }

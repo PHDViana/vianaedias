@@ -9,9 +9,15 @@ function vd_config_request_summary(array $state,array $choices=[]) {
         'Data pretendida: '.($request['delivery']??'')];
     $dispatch=['pickup'=>'Levantar nas instalações','carrier'=>'Envio por Transportador','delivery'=>'Entrega (Sujeito a disponibilidade e confirmação)'];
     foreach($request['dispatch']??[] as $method)$lines[]='Expedição: '.($dispatch[$method]??$method);
+    $cutting=vd_config_sticker_cutting_choices()[$request['cutting_operation']??'']??null;
+    if($cutting)$lines[]='Operação de corte pretendida: '.$cutting['label'].'; confirmar tecnicamente a imposição e equipamento.';
     if(!empty($request['final_format']['width_mm'])||!empty($request['final_format']['height_mm']))
         $lines[]='Formato final fechado: '.(($request['final_format']['width_mm']??'')?:'por definir').' × '.(($request['final_format']['height_mm']??'')?:'por definir').' mm';
     if(isset($request['total_pages']))$lines[]='Páginas totais (incluindo capa): '.$request['total_pages'];
+    if(isset($request['folding'])) {
+        $lines[]='Número de dobras: '.$request['folding']['count'];
+        $lines[]='Entrega do desdobrável: '.($request['folding']['delivery']==='open'?'aberto':'fechado');
+    }
     if(!empty($request['final_format']['thickness_mm']))$lines[]='Espessura final indicada: '.$request['final_format']['thickness_mm'].' mm; confirmar tecnicamente.';
     if(!empty($request['other_product']))$lines[]='Outro produto: '.$request['other_product'];
     if(isset($request['box'])) {

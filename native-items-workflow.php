@@ -12,6 +12,29 @@
  */
 
 // Immutable workflow snapshots and projections are never edited by native single-item actions.
+if ((int) $current_entity_id === 146 && $app_module_action === 'save' && isset($_GET['id'])) {
+    $vdExtraField = db_fetch_array(db_query("SELECT field_id FROM app_vd_quote_native_fields WHERE entity_id=146 AND role='extra_discount'"));
+    $vdExtraId = (int) ($vdExtraField['field_id'] ?? 0);
+    if ($vdExtraId && array_key_exists($vdExtraId, $_POST['fields'] ?? [])) {
+        require_once 'includes/vd_quote_workflow/quote-workflow-domain.php';
+        try {
+            $vdExtraValue = vd_workflow_discount_percent($_POST['fields'][$vdExtraId]);
+            $vdQuoteId = (int) $_GET['id'];
+            $vdCurrentQuote = db_fetch_array(db_query("SELECT * FROM app_entity_146 WHERE id=$vdQuoteId"));
+            $vdCustomerId = (int) ($_POST['fields'][3923] ?? $vdCurrentQuote['field_3923'] ?? 0);
+            $vdCustomer = db_fetch_array(db_query("SELECT field_5124 FROM app_entity_26 WHERE id=$vdCustomerId"));
+            vd_workflow_discounted_price(0, 1, $vdCustomer['field_5124'] ?? 0, $vdExtraValue);
+            if ($vdExtraValue !== vd_workflow_discount_percent($vdCurrentQuote['field_' . $vdExtraId] ?? 0) &&
+                db_fetch_array(db_query("SELECT id FROM app_vd_quote_documents WHERE quote_id=$vdQuoteId AND
+                    (sent_at IS NOT NULL OR state IN('sending','send_unknown')) LIMIT 1"))) {
+                throw new DomainException('O desconto extra não pode ser alterado após o envio da proposta.');
+            }
+        } catch (DomainException $vdDiscountError) {
+            http_response_code(409);
+            die(htmlspecialchars($vdDiscountError->getMessage(), ENT_QUOTES, 'UTF-8'));
+        }
+    }
+}
 if ((int) $current_entity_id === 276 && in_array($app_module_action, ['save','delete'], true)) {
     $vdOperation = isset($_GET['id']) ? db_fetch_array(db_query("SELECT parent_item_id,vd_workflow_version,field_6179 FROM app_entity_276 WHERE id='" . db_input(_get::int('id')) . "'")) : false;
     $vdComponentId = (int) ($vdOperation['parent_item_id'] ?? $parent_entity_item_id ?? 0);

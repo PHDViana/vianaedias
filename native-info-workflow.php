@@ -12,7 +12,145 @@
  */
 ?>
 
+<?php
+if ((int) $current_entity_id === 395) {
+    require_once 'includes/vd_quote_workflow/product-request-view.php';
+    vd_config_request_info((int) $current_item_id);
+    return;
+}
+?>
 <?php require(component_path('items/navigation')) ?>
+<?php if ((int) $current_entity_id === 121): ?>
+<?php $vdProductionSource = db_fetch_array(db_query("SELECT document_id,quantity,unassigned_materials FROM app_vd_quote_production_orders WHERE order_id=" . (int) $current_item_id)); ?>
+<?php if ($vdProductionSource): ?>
+<div class="alert alert-info">OP criada a partir da proposta #<?= (int) $vdProductionSource['document_id'] ?>, alternativa de <?= htmlspecialchars($vdProductionSource['quantity'], ENT_QUOTES, 'UTF-8') ?> unidades. Componentes, rubricas, planos, operações e materiais foram fixados sem movimentar stock. O restabelecimento da adjudicação está bloqueado enquanto existir OP.</div>
+<?php if ((int) $vdProductionSource['unassigned_materials'] > 0): ?>
+<div class="alert alert-warning"><?= (int) $vdProductionSource['unassigned_materials'] ?> material(is) têm referência/consumo previstos mas não um artigo específico fixado. Reveja os materiais antes de reservar stock.</div>
+<?php endif; ?>
+<?php endif; ?>
+<?php endif; ?>
+
+
+<?php if ((int) $current_entity_id === 158): ?>
+<?php
+require_once 'includes/vd_quote_workflow/quote-workflow-store.php';
+$vdProductionDb = new mysqli(DB_SERVER, DB_SERVER_USERNAME, DB_SERVER_PASSWORD, DB_DATABASE, (int) DB_SERVER_PORT);
+$vdProductionDb->set_charset('utf8mb4');
+$vdProductionWorkflow = new VDQuoteWorkflow($vdProductionDb, $app_user);
+try {
+    echo $vdProductionWorkflow->productionPresentation((int) $current_entity_id, (int) $current_item_id);
+} catch (Throwable $vdProductionError) {
+    error_log('VD production presentation: ' . $vdProductionError->getMessage());
+    echo '<div class="alert alert-danger">Não foi possível apresentar os materiais ou o gráfico da imposição. Consulte o registo técnico.</div>';
+}
+$vdProductionDb->close();
+?>
+<?php endif; ?>
+<?php if ((int) $current_entity_id === 121): ?>
+<?php
+$vdFlowOrder = (int) $current_item_id;
+$vdConfigOriginField = (int) db_fetch_array(db_query("SELECT native_id FROM app_vd_config_schema WHERE role='quote.config'"))['native_id'];
+$vdFlowOrigin = db_fetch_array(db_query("SELECT p.quote_id,q.field_$vdConfigOriginField config_id FROM app_vd_quote_production_orders p JOIN app_entity_146 q ON q.id=p.quote_id WHERE p.order_id=$vdFlowOrder"));
+$vdFlowEvaluation = db_fetch_array(db_query("SELECT native_id FROM app_vd_production_evaluations WHERE order_id=$vdFlowOrder"));
+$vdFlowQueue = db_fetch_array(db_query("SELECT error FROM app_vd_variance_queue WHERE order_id=$vdFlowOrder"));
+?>
+<?php if ($vdFlowOrigin): ?>
+<div class="vd-production-flow" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+<a class="btn btn-default btn-sm" href="<?= htmlspecialchars(url_for('items/info','path=146-'.(int)$vdFlowOrigin['quote_id']),ENT_QUOTES,'UTF-8') ?>">Orçamento de origem</a>
+<?php if (!empty($vdFlowOrigin['config_id'])): ?>
+<?php $vdFlowConfigReport = db_fetch_array(db_query("SELECT native_id FROM app_vd_config_schema WHERE role='config.report'")); ?>
+<a class="btn btn-default btn-sm" href="<?= htmlspecialchars(url_for('report_page/view','id='.(int)$vdFlowConfigReport['native_id']).'#configuration='.(int)$vdFlowOrigin['config_id'],ENT_QUOTES,'UTF-8') ?>">Configurador de Produto</a>
+<?php endif; ?>
+<?php if ($vdFlowEvaluation): ?>
+<?php $vdFlowEvaluationEntity = db_fetch_array(db_query("SELECT native_id FROM app_vd_config_schema WHERE role='evaluation.entity'")); ?>
+<a class="btn btn-info btn-sm" href="<?= htmlspecialchars(url_for('items/info','path='.(int)$vdFlowEvaluationEntity['native_id'].'-'.(int)$vdFlowEvaluation['native_id']),ENT_QUOTES,'UTF-8') ?>">Avaliação de desvios</a>
+<?php endif; ?>
+<?php if ($vdFlowQueue): ?><span class="alert <?= !empty($vdFlowQueue['error'])?'alert-danger':'alert-info' ?>"><?= !empty($vdFlowQueue['error'])?'Não foi possível atualizar a avaliação. O erro ficou registado para intervenção técnica.':'Avaliação de desvios: atualização automática pendente.' ?></span><?php endif; ?>
+</div>
+<?php endif; ?>
+<?php endif; ?>
+<?php if (in_array((int) $current_entity_id, [146,262], true) && users::has_access_to_entity(146, 'view')): ?>
+<?php
+$vdActionQuote = (int) $current_entity_id === 146 ? (int) $current_item_id : (int) $item_info['parent_item_id'];
+$vdActionControl = db_fetch_array(db_query("SELECT production_document FROM app_vd_quote_control WHERE quote_id=$vdActionQuote"));
+$vdAdjudicated = !empty($vdActionControl['production_document']);
+$vdActionOrder = db_fetch_array(db_query("SELECT p.order_id,o.field_1992 delivery_date FROM app_vd_quote_production_orders p JOIN app_entity_121 o ON o.id=p.order_id WHERE p.quote_id=$vdActionQuote"));
+$vdConfigOriginField = (int) db_fetch_array(db_query("SELECT native_id FROM app_vd_config_schema WHERE role='quote.config'"))['native_id'];
+$vdConfigSource = db_fetch_array(db_query("SELECT field_$vdConfigOriginField config_id FROM app_entity_146 WHERE id=$vdActionQuote AND field_$vdConfigOriginField+0>0"));
+$vdDiscountStale = null;
+$vdStaleDocument = null;
+if (!$vdAdjudicated && !db_fetch_array(db_query("SELECT id FROM app_vd_quote_documents WHERE quote_id=$vdActionQuote AND (sent_at IS NOT NULL OR state IN('sending','send_unknown')) LIMIT 1"))) {
+    $vdStaleDocument = db_fetch_array(db_query("SELECT id,snapshot FROM app_vd_quote_documents WHERE quote_id=$vdActionQuote AND state IN('approved','send_failed') ORDER BY id DESC LIMIT 1"));
+    if ($vdStaleDocument) {
+        require_once 'includes/vd_quote_workflow/quote-workflow-domain.php';
+        $vdExtraRole = db_fetch_array(db_query("SELECT field_id FROM app_vd_quote_native_fields WHERE entity_id=146 AND role='extra_discount'"));
+        $vdDiscountQuote = db_fetch_array(db_query("SELECT q.field_" . (int) $vdExtraRole['field_id'] . " extra,c.field_5124 customer FROM app_entity_146 q LEFT JOIN app_entity_26 c ON c.id=q.field_3923 WHERE q.id=$vdActionQuote"));
+        $vdDocumentCustomer = json_decode($vdStaleDocument['snapshot'], true)['customer'] ?? [];
+        try {
+            $vdApprovedDiscount = [vd_workflow_discount_percent($vdDocumentCustomer['discountPercent'] ?? 0),
+                vd_workflow_discount_percent($vdDocumentCustomer['extraDiscountPercent'] ?? 0)];
+            $vdCurrentDiscount = [vd_workflow_discount_percent($vdDiscountQuote['customer'] ?? null),
+                vd_workflow_discount_percent($vdDiscountQuote['extra'] ?? 0)];
+            if ($vdApprovedDiscount !== $vdCurrentDiscount) $vdDiscountStale = [$vdApprovedDiscount, $vdCurrentDiscount];
+        } catch (DomainException $vdDiscountError) {
+            $vdDiscountStale = $vdDiscountError->getMessage();
+        }
+    }
+}
+$vdPercent = function (array $values) {
+    return implode(' + ', array_map(function ($value) { return str_replace('.', ',', (string) (0 + $value)) . ' %'; }, $values));
+};
+?>
+<?php if ($vdDiscountStale): ?>
+<div class="alert alert-warning vd-discount-stale"><strong>Desconto alterado depois da aprovação.</strong>
+<?php if (is_array($vdDiscountStale)): ?>
+A proposta #<?= (int) $vdStaleDocument['id'] ?> foi aprovada com <?= htmlspecialchars($vdPercent($vdDiscountStale[0]), ENT_QUOTES, 'UTF-8') ?>; o desconto atual é <?= htmlspecialchars($vdPercent($vdDiscountStale[1]), ENT_QUOTES, 'UTF-8') ?>.
+<?php else: ?>
+<?= htmlspecialchars($vdDiscountStale, ENT_QUOTES, 'UTF-8') ?>
+<?php endif; ?>
+A proposta e o PDF aprovados não refletem este desconto e não podem ser enviados.
+<?= link_to_modalbox('Aprovar novamente com o desconto atual', url_for('items/vd_quote_workflow', 'path=' . urlencode($current_path) . '&modal=1'), ['class' => 'btn btn-warning btn-sm']) ?>
+</div>
+<?php endif; ?>
+<div class="vd-quote-actions" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:15px">
+<?php if ($vdConfigSource): ?>
+<?php $vdConfigReport = db_fetch_array(db_query("SELECT native_id FROM app_vd_config_schema WHERE role='config.report'")); ?>
+<a class="btn btn-default btn-sm" href="<?= htmlspecialchars(url_for('report_page/view','id='.(int)$vdConfigReport['native_id']).'#configuration='.(int)$vdConfigSource['config_id'],ENT_QUOTES,'UTF-8') ?>">Abrir Configurador de Produto</a>
+<?php endif; ?>
+<?= link_to_modalbox('Produto, componentes e etapas', url_for('items/vd_quote_workflow', 'path=' . urlencode($current_path) . '&product=1'), ['class' => 'btn btn-default btn-sm']) ?>
+<?= link_to_modalbox('Análise de tinta (PDF)', url_for('items/vd_quote_ink', 'path=' . urlencode($current_path)), ['class' => 'btn btn-default btn-sm']) ?>
+<?= link_to_modalbox('Versões, aprovação e proposta comercial do orçamento', url_for('items/vd_quote_workflow', 'path=' . urlencode($current_path) . '&modal=1'), ['class' => 'btn btn-info btn-sm']) ?>
+<?php if ($vdDiscountStale): ?>
+<button type="button" class="btn btn-primary btn-sm" disabled title="Aprove novamente com o desconto atual">Descarregar orçamento em PDF</button>
+<?php else: ?>
+<a class="btn btn-primary btn-sm" href="<?= htmlspecialchars(url_for('items/vd_quote_workflow', 'path=' . urlencode($current_path) . '&pdf=1'), ENT_QUOTES, 'UTF-8') ?>">Descarregar orçamento em PDF</a>
+<?php endif; ?>
+<?php if ($vdAdjudicated): ?>
+<button type="button" class="btn btn-success btn-sm" disabled title="Orçamento adjudicado">Enviar ao cliente</button>
+<?php else: ?>
+<?= link_to_modalbox('Enviar ao cliente', url_for('items/vd_quote_workflow', 'path=' . urlencode($current_path) . '&modal=1&send_only=1'), ['class' => 'btn btn-success btn-sm']) ?>
+<?php endif; ?>
+<?php if ((int) $current_entity_id === 146): ?>
+<?php if ($vdAdjudicated): ?>
+<button type="button" class="btn btn-primary btn-sm" disabled title="Orçamento adjudicado">Adjudicar orçamento</button>
+<?php else: ?>
+<?= link_to_modalbox('Adjudicar orçamento', url_for('items/vd_quote_workflow', 'path=' . urlencode($current_path) . '&modal=1&accept_only=1'), ['class' => 'btn btn-primary btn-sm']) ?>
+<?php endif; ?>
+<?php endif; ?>
+<?php if ($vdActionOrder && users::has_access_to_entity(121, 'view')): ?>
+<a class="btn btn-info btn-sm" href="<?= htmlspecialchars(url_for('items/info', 'path=121-' . (int) $vdActionOrder['order_id']), ENT_QUOTES, 'UTF-8') ?>">Abrir ordem de produção</a>
+<?php if (!(int) $vdActionOrder['delivery_date']): ?>
+<?= link_to_modalbox('Definir data prevista de entrega', url_for('items/vd_quote_workflow', 'path=' . urlencode($current_path) . '&modal=1&accept_only=1'), ['class' => 'btn btn-warning btn-sm']) ?>
+<?php endif; ?>
+<?php elseif (!$vdActionOrder && $vdAdjudicated): ?>
+<?= link_to_modalbox('Gerar ordem de produção', url_for('items/vd_quote_workflow', 'path=' . urlencode($current_path) . '&modal=1&accept_only=1'), ['class' => 'btn btn-info btn-sm']) ?>
+<?php endif; ?>
+<?php if ($vdAdjudicated && !$vdActionOrder && (int) $app_user['group_id'] === 0): ?>
+<?= link_to_modalbox('Restabelecer envio e adjudicação', url_for('items/vd_quote_workflow', 'path=' . urlencode($current_path) . '&modal=1&accept_only=1'), ['class' => 'btn btn-warning btn-sm']) ?>
+<?php endif; ?>
+</div>
+<?php endif; ?>
+
 
 <?php
 
@@ -337,10 +475,18 @@ echo $forms_fields_rules->apply();
 <?php require(component_path('items/load_items_listing.js')); ?>
 
 <?php require(component_path('items/item_page_custom_code')); ?>
-
-
-<?php if (in_array((int) $current_entity_id, [146,262], true) && users::has_access_to_entity(146, 'view')): ?>
-<div class="alert alert-info"><?= link_to_modalbox('Versões, aprovação e proposta comercial do orçamento', url_for('items/vd_quote_workflow', 'path=' . urlencode($current_path) . '&modal=1')) ?></div>
-<?php endif; ?><?php if ((int) $current_entity_id === 276 && (int) ($parent_entity_item_id ?? 0) > 0): ?>
+<?php if ((int) $current_entity_id === 161): ?>
+<?php $vdMaterialSource = db_fetch_array(db_query("SELECT id FROM app_vd_quote_production_rows WHERE entity_id=161 AND native_id=" . (int) $current_item_id)); ?>
+<?php if ($vdMaterialSource): ?>
+<div class="alert alert-info">Material previsto: <?= htmlspecialchars($item_info['field_2543'], ENT_QUOTES, 'UTF-8') ?>. Consulte o artigo, referência interna, quantidade de precisão e unidade previstos. Não existe reserva ou consumo de stock. O campo Stock legado não representa disponibilidade verificada deste artigo; a ligação ao armazém fica para a fase de aprovisionamento.</div>
+<?php endif; ?>
+<?php endif; ?>
+<?php if ((int) $current_entity_id === 170 && users::has_access_to_entity(161, 'view')): ?>
+<?php $vdOperationMaterials = db_fetch_array(db_query("SELECT COUNT(*) total FROM app_vd_quote_production_rows WHERE entity_id=161 AND parent_id=" . (int) $current_item_id)); ?>
+<?php if ((int) $vdOperationMaterials['total'] > 0): ?>
+<p><a class="btn btn-info btn-sm" href="<?= htmlspecialchars(url_for('items/items', 'path=' . $current_path . '/161'), ENT_QUOTES, 'UTF-8') ?>">Materiais previstos desta operação (<?= (int) $vdOperationMaterials['total'] ?>)</a></p>
+<?php endif; ?>
+<?php endif; ?>
+<?php if ((int) $current_entity_id === 276 && (int) ($parent_entity_item_id ?? 0) > 0): ?>
 <div class="alert alert-info">As linhas manuais configuram a simulação; as operações de produção só são materializadas após a aprovação do orçamento.</div>
 <?php endif; ?>

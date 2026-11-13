@@ -175,6 +175,8 @@ function vd_config_finishing_review(array $payload,array $types,array $operation
         }
         $component=$scope['component'];
         if($component) {
+            if(count(array_intersect($ids,$rules['crease']??[18]))>1)$errors[]=$prefix.'escolha apenas uma variante de vinco: manual ou máquina.';
+            if(count(array_intersect($ids,[21,33,35]))>1)$errors[]=$prefix.'escolha apenas uma variante de dobra: manual ou máquina.';
             $die=$component['request']['die']??null;
             if($die!==null) {
                 if(!is_array($die)||!in_array($die['status']??'', ['none','new','used'],true)||!is_string($die['number']??null)||strlen($die['number'])>100) {
