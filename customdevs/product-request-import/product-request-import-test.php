@@ -78,4 +78,8 @@ importCheck(count(vd_request_import_requests("500 cartões 85x55\n1000 cartões 
 $list = vd_request_import_suggestions("Cartões de visita (100/200/500)\n4/4", $catalog);
 importCheck(($list['suggestions']['quantities'] ?? []) === [100, 200, 500], 'Quantity list after product failed.');
 
+$brochure = "500 brochuras A4 (fechado) agrafadas\n16 páginas\n4 cores cmyk\nCapa: couché 300 gr\nmiolo: 250gr\nplastificado na capa";
+importCheck(vd_request_import_requests($brochure, $catalog) === [], 'A product mentioned in a detail line must not open a new request.');
+importCheck((vd_request_import_suggestions($brochure, $catalog)['suggestions']['product_type'] ?? 0) === 3862, 'Brochure subcategory detection failed.');
+
 echo "Product request import checks passed.\n";

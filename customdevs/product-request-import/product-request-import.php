@@ -339,8 +339,11 @@ function vd_request_import_split(string $text, array $productTypes): array
                 $chosen = vd_request_import_choose_product($found) ?? $found[0];
                 $product = $chosen['id'];
                 $lineHasQuantity = isset(vd_request_import_suggestions($line, $productTypes, false)['suggestions']['quantities']);
+                // Inside an open request, a product mentioned in passing ("plastificado na capa") is a detail:
+                // a new request needs a quantity on the line or the line to begin with the product.
                 // A repeated mention of the same product only starts a new request when both carry a quantity.
-                $start = $current === null || $product !== $current['product'] ||
+                $start = $current === null ||
+                    ($product !== $current['product'] && ($lineHasQuantity || $found[0]['position'] === 0)) ||
                     ($lineHasQuantity && $current['quantity']);
             }
         }
