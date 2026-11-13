@@ -351,8 +351,11 @@ function vd_request_import_suggestions(string $text, array $productTypes): array
             $suggestions['width_mm'] = (float) str_replace(',', '.', $match[1]) * $factor;
             $suggestions['height_mm'] = (float) str_replace(',', '.', $match[3]) * $factor;
         }
-    } elseif (preg_match('/\b[0-9]{2,4}(?:[.,][0-9]+)?\s*[x×]\s*[0-9]{2,4}(?:[.,][0-9]+)?\b/iu', $text)) {
-        $warnings[] = 'Foram detetadas dimensões sem unidade explícita; confirme se são milímetros.';
+    } elseif (preg_match('/\b([0-9]{2,4}(?:[.,][0-9]+)?)\s*[x×]\s*([0-9]{2,4}(?:[.,][0-9]+)?)\b/iu', $text, $match)) {
+        // Print sizes are quoted in millimetres by default (e.g. "85x55" business cards).
+        $suggestions['width_mm'] = (float) str_replace(',', '.', $match[1]);
+        $suggestions['height_mm'] = (float) str_replace(',', '.', $match[2]);
+        $warnings[] = 'Dimensões sem unidade (' . $match[1] . ' × ' . $match[2] . ') assumidas em milímetros; confirme.';
     } elseif (preg_match('/\bA\s*([3-6])\b/iu', $text, $match)) {
         $formats = [3 => [297, 420], 4 => [210, 297], 5 => [148, 210], 6 => [105, 148]];
         $suggestions['width_mm'] = $formats[(int) $match[1]][0];

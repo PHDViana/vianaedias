@@ -37,10 +37,12 @@ $email = vd_request_import_extract("Produto: Cartões de visita\nQuantidade: 250
 importCheck(strpos($email['text'], 'Quantidade: 250') !== false, 'Text file extraction failed.');
 
 $ambiguous = vd_request_import_suggestions("Formato: 90 x 50\nQuantidade: 250", $types);
-importCheck(!isset($ambiguous['suggestions']['width_mm']), 'Dimensions without a unit must not be applied.');
+importCheck(($ambiguous['suggestions']['width_mm'] ?? 0) === 90.0 && ($ambiguous['suggestions']['height_mm'] ?? 0) === 50.0, 'Dimensions without a unit must default to millimetres.');
 importCheck((bool) array_filter($ambiguous['warnings'], static function ($warning) {
     return strpos($warning, 'sem unidade') !== false;
-}), 'Ambiguous dimension warning missing.');
+}), 'Unitless dimension warning missing.');
+$card = vd_request_import_suggestions("500 cartões\n85x55\n4 cores cmyk", [['id' => 3708, 'parent_id' => 3707, 'name' => 'Cartões']]);
+importCheck(($card['suggestions']['width_mm'] ?? 0) === 85.0 && ($card['suggestions']['height_mm'] ?? 0) === 55.0, 'Compact unitless dimensions failed.');
 
 $loose = vd_request_import_suggestions("500 cartões\n4 cores cmyk\nFrente e Verso\ncouché 350 gr", [
     ['id' => 3707, 'parent_id' => 0, 'name' => 'Economato'],
