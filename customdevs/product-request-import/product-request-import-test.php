@@ -82,4 +82,11 @@ $brochure = "500 brochuras A4 (fechado) agrafadas\n16 páginas\n4 cores cmyk\nCa
 importCheck(vd_request_import_requests($brochure, $catalog) === [], 'A product mentioned in a detail line must not open a new request.');
 importCheck((vd_request_import_suggestions($brochure, $catalog)['suggestions']['product_type'] ?? 0) === 3862, 'Brochure subcategory detection failed.');
 
+$parts = vd_request_import_suggestions($brochure, $catalog)['suggestions'];
+importCheck(($parts['cover_paper'] ?? '') === 'couché 300 gr' && ($parts['inner_paper'] ?? '') === '250gr', 'Cover/inner paper extraction failed.');
+importCheck(($parts['lamination'] ?? null) === ['target' => 'cover', 'finish' => '', 'faces' => 'front'], 'Cover lamination detection failed.');
+$cards = vd_request_import_suggestions("500 cartões\n4/0 couché 350g\nplastificação mate frente e verso", $catalog)['suggestions'];
+importCheck(($cards['lamination'] ?? null) === ['target' => 'product', 'finish' => 'matt', 'faces' => 'both'], 'Matt lamination detection failed.');
+importCheck(($cards['faces'] ?? 0) === 1255, 'Lamination faces must not change print faces.');
+
 echo "Product request import checks passed.\n";

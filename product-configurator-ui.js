@@ -62,6 +62,9 @@
                     key === 'height_mm' ? '' :
                     key === 'total_pages' ? value + ' páginas' :
                     key === 'paper' ? 'papel/material' :
+                    key === 'cover_paper' ? 'papel da capa' :
+                    key === 'inner_paper' ? 'papel do miolo' :
+                    key === 'lamination' ? 'plastificação' + (value.target === 'cover' ? ' da capa' : '') :
                     key === 'colors' ? 'cores de impressão' :
                     key === 'faces' ? 'faces de impressão' :
                     key === 'print_mode' ? 'impressão' :
@@ -140,7 +143,18 @@
             }
         }
         const printed = draft.components.filter(component => component.kind === 'printed');
-        if (suggestions.paper && printed.length && printed.every(component => !component.request?.paper)) {
+        const cover = printed.find(component => component.role === 'cover');
+        const inner = cover ? printed.find(component => component !== cover) : null;
+        const setPaper = (component,paper) => {
+            if (component && paper && !component.request?.paper) component.request = {...component.request,paper};
+        };
+        if (cover && (suggestions.cover_paper || suggestions.inner_paper)) {
+            // "Capa: couché 300 gr" / "Miolo: 250gr" go to their own components.
+            setPaper(cover,suggestions.cover_paper);
+            setPaper(inner,suggestions.inner_paper);
+            const missing = printed.filter(component => !component.request?.paper).map(component => component.name);
+            if (missing.length) importWarnings.push('Papel não indicado para: ' + missing.join(', ') + '; complete no formulário.');
+        } else if (suggestions.paper && printed.length && printed.every(component => !component.request?.paper)) {
             printed[0].request = {...printed[0].request,paper:suggestions.paper};
             if (printed.length > 1) importWarnings.push('O papel foi preenchido apenas no primeiro componente; confirme o papel de cada componente.');
         }
@@ -157,6 +171,19 @@
         } else if (suggestions.faces && printed.length && !printed[0].fields?.[4229]) {
             printed[0].fields = printed[0].fields || {};
             printed[0].fields[4229] = String(suggestions.faces);
+        }
+        if (suggestions.lamination && printed.length) {
+            const target = (suggestions.lamination.target === 'cover' ? cover : null) || cover || printed[0];
+            target.request = {...target.request,lamination:true};
+            target.fields = target.fields || {};
+            const finish = field => catalog.choices.find(choice => Number(choice.fields_id) === field && choice.value === suggestions.lamination.finish);
+            if (suggestions.lamination.finish) {
+                const front = finish(6267), back = finish(6268);
+                if (front && !target.fields[6267]) target.fields[6267] = String(front.id);
+                if (suggestions.lamination.faces === 'both' && back && !target.fields[6268]) target.fields[6268] = String(back.id);
+            } else {
+                importWarnings.push(`Plastificação detetada (${target.name}); escolha o tipo: brilho, mate ou antirrisco.`);
+            }
         }
     }
     function productTypeOptions(selected) {
@@ -177,7 +204,12 @@
         else if (suggestions.print_mode) parts.push({cmyk:'CMYK',pantone:'Pantone',cmyk_pantone:'CMYK + Pantone'}[suggestions.print_mode] +
             (suggestions.pantone ? ' ' + suggestions.pantone : ''));
         if (suggestions.faces) parts.push({1255:'só frente',1256:'frente e verso',1257:'só verso'}[suggestions.faces] || '');
-        if (suggestions.paper) parts.push(suggestions.paper);
+        if (suggestions.cover_paper || suggestions.inner_paper) {
+            if (suggestions.cover_paper) parts.push('capa ' + suggestions.cover_paper);
+            if (suggestions.inner_paper) parts.push('miolo ' + suggestions.inner_paper);
+        } else if (suggestions.paper) parts.push(suggestions.paper);
+        if (suggestions.lamination) parts.push('plastificação' + (suggestions.lamination.target === 'cover' ? ' da capa' : '') +
+            ({matt:' mate',gloss:' brilho','anti-scuff':' antirrisco'}[suggestions.lamination.finish] || ''));
         if (suggestions.delivery) parts.push('entrega ' + suggestions.delivery.split('-').reverse().join('/'));
         return parts.filter(Boolean).join(' · ') || 'Sem outros dados detetados.';
     }

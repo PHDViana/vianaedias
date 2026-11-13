@@ -381,6 +381,29 @@ function vd_request_import_requests(string $text, array $productTypes): array
     }, array_slice($blocks, 0, 20));
 }
 
+function vd_request_import_is_lamination(string $line): bool
+{
+    return (bool) preg_match('/\b(?:plastific\w*|laminad[oa]s?|lamina[cç][aã]o|pelicula|película)\b/iu', $line);
+}
+
+/** Extracts the paper description from a text fragment ("em couché mate 150g" → "couché mate 150g"). */
+function vd_request_import_paper_span(string $segment): ?string
+{
+    $paperWord = '\\b(?:couch[eé]|offset|reciclad[oa]|kraft|cartolina|bond|autocopiativ[oa]|munken|condat|ivory|ivoire|' .
+        'gc1|gc2|sbs|vergu?[eé]|texturad[oa]|nacarad[oa]|perolad[oa]|vinil|polipropileno|pvc)\\b' .
+        '(?:\\s+(?:mate|matt?e|brilho|brilhante|silk|acetinad[oa]|branc[oa]|natural|premium))*';
+    $grammage = '\\b[0-9]{2,3}\\s*(?:gr?s?|gsm|g\\/m2?|g\\/m²|gramas?)(?=\\s|$|[.,;:)])';
+    $bounds = [];
+    foreach (['/' . $paperWord . '/iu', '/' . $grammage . '/iu'] as $pattern) {
+        if (preg_match($pattern, $segment, $hit, PREG_OFFSET_CAPTURE)) {
+            $bounds[] = [$hit[0][1], $hit[0][1] + strlen($hit[0][0])];
+        }
+    }
+    if (!$bounds) return null;
+    $start = min(array_column($bounds, 0));
+    return trim(substr($segment, $start, max(array_column($bounds, 1)) - $start));
+}
+
 function vd_request_import_suggestions(string $text, array $productTypes, bool $detectProduct = true): array
 {
     $normalized = ' ' . vd_request_import_normalize($text) . ' ';
@@ -501,26 +524,46 @@ function vd_request_import_suggestions(string $text, array $productTypes, bool $
         }
     }
     if (!isset($suggestions['paper'])) {
-        $paperWord = '\\b(?:couch[eé]|offset|reciclad[oa]|kraft|cartolina|bond|autocopiativ[oa]|munken|condat|ivory|ivoire|' .
-            'gc1|gc2|sbs|vergu?[eé]|texturad[oa]|nacarad[oa]|perolad[oa]|vinil|polipropileno|pvc)\\b' .
-            '(?:\\s+(?:mate|matt?e|brilho|brilhante|silk|acetinad[oa]|branc[oa]|natural|premium))*';
-        $grammage = '\\b[0-9]{2,3}\\s*(?:gr?s?|gsm|g\\/m2?|g\\/m²|gramas?)(?=\\s|$|[.,;:)])';
         foreach ($lines as $line) {
+            if (vd_request_import_is_lamination($line)) continue;
             foreach (preg_split('/[,;|]/u', $line) ?: [] as $segment) {
-                $bounds = [];
-                foreach (['/' . $paperWord . '/iu', '/' . $grammage . '/iu'] as $pattern) {
-                    if (preg_match($pattern, $segment, $hit, PREG_OFFSET_CAPTURE)) {
-                        $bounds[] = [$hit[0][1], $hit[0][1] + strlen($hit[0][0])];
-                    }
+                $paper = vd_request_import_paper_span($segment);
+                if ($paper !== null) {
+                    $suggestions['paper'] = $paper;
+                    break 2;
                 }
-                if (!$bounds) continue;
-                $start = min(array_column($bounds, 0));
-                $end = max(array_column($bounds, 1));
-                $suggestions['paper'] = trim(substr($segment, $start, $end - $start));
-                break 2;
             }
         }
     }
+    // Per-component paper for products with cover and inner pages: "Capa: couché 300 gr", "Miolo: 250gr".
+    foreach ($lines as $line) {
+        if (preg_match('/^\s*(?:[-*•·]\s*)?(capa|miolo|interior)\s*[:=\-–]\s*(.{1,300})$/iu', $line, $match) &&
+            !vd_request_import_is_lamination($match[2])) {
+            $key = mb_strtolower($match[1], 'UTF-8') === 'capa' ? 'cover_paper' : 'inner_paper';
+            if (!isset($suggestions[$key])) {
+                $suggestions[$key] = vd_request_import_paper_span($match[2]) ?? trim($match[2]);
+            }
+        }
+    }
+    // Lamination: where (cover or whole product), finish and faces.
+    $printLines = [];
+    foreach ($lines as $line) {
+        if (!vd_request_import_is_lamination($line)) {
+            $printLines[] = $line;
+            continue;
+        }
+        $finish = preg_match('/\b(?:mate|matt?e?|fosc[oa])\b/iu', $line) ? 'matt' :
+            (preg_match('/\b(?:brilho|brilhante|gloss)\b/iu', $line) ? 'gloss' :
+            (preg_match('/\b(?:anti\s*-?\s*risco|antirrisco|anti\s*-?\s*scuff)\b/iu', $line) ? 'anti-scuff' : ''));
+        $both = (bool) preg_match('/\b(?:frente\s*(?:e|\/|&)\s*verso|f\s*\/\s*v|ambos\s+os\s+lados|(?:2|duas)\s+faces|1\s*\+\s*1)\b/iu', $line);
+        $suggestions['lamination'] = [
+            'target' => preg_match('/\bcapas?\b/iu', $line) ? 'cover' : 'product',
+            'finish' => $finish,
+            'faces' => $both ? 'both' : 'front',
+        ];
+        break;
+    }
+    $text = implode("\n", $printLines);
 
     // Faces and colours are detected independently: a request usually states both.
     $ratio = null;
