@@ -9,15 +9,15 @@ if (!is_dir($custom) || !is_file($custom . '/product-request-import.php')) {
 $targets = [
     'product-configurator-action.php' => [
         'target' => $root . '/modules/items/actions/vd_product_configurator.php',
-        'old' => '44dbff0efe2bf9c67f1f48c43be163e2da010f587fd0ce151fc6ce1378724253',
+        'old' => 'c081d9eb0b16eae7d2551b2e32a874f20d50a6ea9928342eb2d2308f8313de03',
     ],
     'product-configurator-ui.js' => [
         'target' => $root . '/js/vd-product-configurator.js',
-        'old' => '4c78e56df27231646238ba5a869942796e3abbbbce16ca145c57900551eb5ad5',
+        'old' => '25c9fd7bd3f967cd17b5fcd62424370d3f2c45c58faa5e609c6e0126be801773',
     ],
     'product-request.css' => [
         'target' => $root . '/js/vd-product-request.css',
-        'old' => 'ee0164da1bd4fc451277992423f1db76d94dea6a830fecfaecf107528855e9a6',
+        'old' => 'a6ca8711df30eca095804acf19b9e116c58203f61728b2ea12c4aeb59e0dc267',
     ],
 ];
 $written = [];
