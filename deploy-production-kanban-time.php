@@ -18,7 +18,7 @@ try {
     $action = file_get_contents($actionPath);
     $component = file_get_contents($componentPath);
     $currentFiles = [$actionPath => $action, $componentPath => $component];
-    $helperPath = 'includes/vd_quote_workflow/production-kanban-time.php';
+    $helperPath = '_CustomDEVs/quote-workflow/vd_quote_workflow/production-kanban-time.php';
     if (is_file($helperPath)) $currentFiles[$helperPath] = file_get_contents($helperPath);
     foreach ($currentFiles as $path => $content) {
         $stmt = $db->prepare('SELECT hash FROM app_vd_production_time_files WHERE path=?');
@@ -52,7 +52,7 @@ try {
             '                                });' . $matches[1][0], $component);
     }
     $helper = file_get_contents(__DIR__ . '/production-kanban-time.php');
-    $targets = ['includes/vd_quote_workflow/production-kanban-time.php' => $helper,
+    $targets = ['_CustomDEVs/quote-workflow/vd_quote_workflow/production-kanban-time.php' => $helper,
         $actionPath => $updatedAction, $componentPath => $updatedComponent];
     foreach ($targets as $path => $content) {
         token_get_all($content, TOKEN_PARSE);

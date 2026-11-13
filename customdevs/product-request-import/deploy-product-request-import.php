@@ -8,15 +8,15 @@ if (!is_dir($custom) || !is_file($custom . '/product-request-import.php')) {
 }
 $targets = [
     'product-configurator-action.php' => [
-        'target' => $root . '/modules/items/actions/vd_product_configurator.php',
+        'target' => $root . '/_CustomDEVs/quote-workflow/modules/items/actions/vd_product_configurator.php',
         'old' => 'c081d9eb0b16eae7d2551b2e32a874f20d50a6ea9928342eb2d2308f8313de03',
     ],
     'product-configurator-ui.js' => [
-        'target' => $root . '/js/vd-product-configurator.js',
+        'target' => $root . '/_CustomDEVs/quote-workflow/js/vd-product-configurator.js',
         'old' => '25c9fd7bd3f967cd17b5fcd62424370d3f2c45c58faa5e609c6e0126be801773',
     ],
     'product-request.css' => [
-        'target' => $root . '/js/vd-product-request.css',
+        'target' => $root . '/_CustomDEVs/quote-workflow/js/vd-product-request.css',
         'old' => 'a6ca8711df30eca095804acf19b9e116c58203f61728b2ea12c4aeb59e0dc267',
     ],
 ];
@@ -59,7 +59,7 @@ try {
         }
     }
 
-    $config = $root . '/includes/vd_quote_workflow/product-configurator.php';
+    $config = $root . '/_CustomDEVs/quote-workflow/vd_quote_workflow/product-configurator.php';
     $configSource = file_get_contents($config);
     $canonical = file_get_contents($custom . '/product-configurator.php');
     if ($configSource === false || $canonical === false) throw new RuntimeException('Cannot read native configurator validator.');

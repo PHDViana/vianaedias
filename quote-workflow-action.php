@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/vd_quote_workflow/quote-workflow-store.php';
+require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/quote-workflow-store.php';
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 $vdDb = new mysqli(DB_SERVER, DB_SERVER_USERNAME, DB_SERVER_PASSWORD, DB_DATABASE, (int) DB_SERVER_PORT);
 $vdDb->set_charset('utf8mb4');
@@ -82,7 +82,7 @@ if (($_GET['product']??'')==='1') {
         echo '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Produto, componentes e etapas</h4></div>';
         echo '<div class="modal-body" style="max-height:80vh;overflow:auto"><div id="vd-product"></div><script type="application/json" id="vd-product-data">' .
             json_encode($vdProductState,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_THROW_ON_ERROR) .
-            '</script><script src="js/vd-quote-product.js?v='.hash_file('sha256','js/vd-quote-product.js').'"></script></div>';
+            '</script><script src="_CustomDEVs/quote-workflow/js/vd-quote-product.js?v='.hash_file('sha256','_CustomDEVs/quote-workflow/js/vd-quote-product.js').'"></script></div>';
     } catch (Throwable $vdError) {
         error_log('VD product view: '.$vdError->getMessage());
         http_response_code(403);
@@ -114,7 +114,7 @@ if (isset($_GET['approval_file'])) {
 if (isset($_GET['pdf'])) {
     try {
         $vdDocument = $vdWorkflow->document($vdQuote, isset($_GET['document']) ? _get::int('document') : 0);
-        require_once 'includes/vd_quote_workflow/quote-workflow-pdf.php';
+        require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/quote-workflow-pdf.php';
         $vdPdf = vd_workflow_pdf($vdDocument);
         $vdFilename = vd_workflow_pdf_filename($vdDocument);
         header('Content-Type: application/pdf');
@@ -163,7 +163,7 @@ if (($_GET['modal'] ?? '') === '1') {
     echo '#vd-quote-workflow th{background:#f5f5f5}#vd-quote-workflow button{padding:6px 12px;border:1px solid #ccc;border-radius:4px;background:#fff;color:#333;cursor:pointer}';
     echo '#vd-quote-workflow button:disabled{opacity:.6}#vd-quote-workflow input{max-width:100%;padding:6px;border:1px solid #ccc;border-radius:4px}';
     echo '#vd-quote-workflow a{color:#337ab7}#vd-quote-workflow #vd-workflow-message{margin:8px 0}</style>';
-    $vdView = 'modules/items/views/vd_quote_workflow.php';
+    $vdView = '_CustomDEVs/quote-workflow/modules/items/views/vd_quote_workflow.php';
     if (!is_file($vdView)) throw new RuntimeException('Workflow modal view is unavailable.');
     require $vdView;
     echo '</div>';

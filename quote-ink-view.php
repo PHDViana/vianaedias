@@ -16,4 +16,4 @@ header('Cache-Control: private, no-store');
 <div id="vd-ink-content"></div>
 <script type="application/json" id="vd-ink-state"><?= json_encode($vdInkState,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_THROW_ON_ERROR) ?></script>
 </section></div>
-<script src="js/vd-quote-ink.js?v=<?= $vdEscape(hash_file('sha256','js/vd-quote-ink.js')) ?>"></script>
+<script src="_CustomDEVs/quote-workflow/js/vd-quote-ink.js?v=<?= $vdEscape(hash_file('sha256','_CustomDEVs/quote-workflow/js/vd-quote-ink.js')) ?>"></script>

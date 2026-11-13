@@ -17,4 +17,4 @@ $vdEscape = static function ($value) { return htmlspecialchars((string) $value, 
     <script type="application/json" id="vd-workflow-state"><?= json_encode($vdState, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_THROW_ON_ERROR) ?></script>
     </div>
 </section>
-<script src="js/vd-quote-workflow.js?v=<?= $vdEscape(hash_file('sha256', 'js/vd-quote-workflow.js')) ?>"></script>
+<script src="_CustomDEVs/quote-workflow/js/vd-quote-workflow.js?v=<?= $vdEscape(hash_file('sha256', '_CustomDEVs/quote-workflow/js/vd-quote-workflow.js')) ?>"></script>

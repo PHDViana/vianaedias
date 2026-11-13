@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/vd_quote_workflow/product-configurator.php';
+require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/product-configurator.php';
 mysqli_report(MYSQLI_REPORT_ERROR|MYSQLI_REPORT_STRICT);
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -17,7 +17,7 @@ try {
             case 'internal_customer':$result=$service->internalCustomer();break;
             case 'contacts':$result=$service->contacts((int)($_GET['customer_id']??0),$_GET['term']??'');break;
             case 'quote_preparation':
-                require_once 'includes/vd_quote_workflow/product-quote-preparation.php';
+                require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/product-quote-preparation.php';
                 vd_config_quote_preparation_access($service,$id);
                 $result=vd_config_quote_preparation_state($service,$id);break;
             case 'download':
@@ -37,28 +37,17 @@ try {
         $input=json_decode($_POST['payload']??'{}',true,512,JSON_THROW_ON_ERROR);
         $id=(int)($input['config_id']??0);
         switch($_POST['api']??'') {
-            case 'extract_request':
-                require_once DIR_FS_CATALOG . '_CustomDEVs/product-request-import/product-request-import.php';
-                $sourceText=$input['source_text']??'';
-                if(!is_string($sourceText))throw new DomainException('Texto de importação inválido.');
-                $result=vd_request_import_extract($sourceText,vd_config_uploads($_FILES['documents']??[]));
-                $productTypes=$service->catalog()['product_types'];
-                $suggestions=vd_request_import_suggestions($result['text'],$productTypes);
-                $result['requests']=vd_request_import_requests($result['text'],$productTypes);
-                $result['suggestions']=$suggestions['suggestions'];
-                $result['warnings']=array_values(array_unique(array_merge($result['warnings'],$suggestions['warnings'])));
-                break;
             case 'submit':$result=$service->submit($id,$input['revision']??0,$input['identity']??[],$input['payload']??[],$input['request_id']??'',vd_config_uploads($_FILES['documents']??[]),$input['removed_attachments']??[]);break;
             case 'template':$result=$service->template($id,(int)($input['template']??0));break;
             case 'finishing_review':$result=$service->finishingReview($input['payload']??[],$id);break;
             case 'quote_preparation':
             case 'create_quote':
-                require_once 'includes/vd_quote_workflow/product-quote-preparation.php';
+                require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/product-quote-preparation.php';
                 vd_config_quote_preparation_access($service,$id);
                 if(!isset($input['revision'])||!is_int($input['revision'])||!is_array($input['answers']??null))throw new DomainException('Preparação inválida. Atualize o formulário.');
                 if($_POST['api']==='quote_preparation')$result=vd_config_quote_preparation_state($service,$id,$input['answers'],$input['revision']);
                 else {
-                    require_once 'includes/vd_quote_workflow/product-request-conversion.php';
+                    require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/product-request-conversion.php';
                     $result=vd_config_request_to_draft($db,$app_user,$id,false,$input['answers'],$input['revision']);
                     $result['url']=url_for('items/info','path=146-'.(int)$result['quote']);
                 }

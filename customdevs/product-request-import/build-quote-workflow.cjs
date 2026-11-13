@@ -19,11 +19,11 @@ const dependencyPrior = dependencyCurrent.replace("'plates' => $flags['plates'] 
 const dependencyCode = dependencyCurrent;
 fs.writeFileSync(path.join(base, 'native-dependencies-workflow.php'), '<?php\n' + dependencyCode);
 for (const name of ['quote-workflow-domain.php', 'quote-workflow-store.php', 'quote-workflow-discovery.php', 'quote-operation-dependencies.php']) {
-    files['includes/vd_quote_workflow/' + name] = { source: name, hash: hash(read(name)) };
+    files['_CustomDEVs/quote-workflow/vd_quote_workflow/' + name] = { source: name, hash: hash(read(name)) };
 }
-for (const [source, target] of [['quote-workflow-action.php', 'modules/items/actions/vd_quote_workflow.php'],
-    ['quote-workflow-view.php', 'modules/items/views/vd_quote_workflow.php'],
-    ['quote-workflow-ui.js', 'js/vd-quote-workflow.js']]) files[target] = { source, hash: hash(read(source)) };
+for (const [source, target] of [['quote-workflow-action.php', '_CustomDEVs/quote-workflow/modules/items/actions/vd_quote_workflow.php'],
+    ['quote-workflow-view.php', '_CustomDEVs/quote-workflow/modules/items/views/vd_quote_workflow.php'],
+    ['quote-workflow-ui.js', '_CustomDEVs/quote-workflow/js/vd-quote-workflow.js']]) files[target] = { source, hash: hash(read(source)) };
 const infoBase = read('native-info-baseline.php');
 const info = infoBase + `\n<?php if (in_array((int) $current_entity_id, [146,262], true) && users::has_access_to_entity(146, 'view')): ?>
 <div class="alert alert-info"><?= link_to_modalbox('Versões, aprovação e proposta comercial do orçamento', url_for('items/vd_quote_workflow', 'path=' . urlencode($current_path) . '&modal=1')) ?></div>
@@ -101,21 +101,21 @@ if ($current_entity_id == 276 && $parent_entity_item_id > 0) {
 fs.writeFileSync(path.join(base, 'native-listing-workflow.php'), listing);
 files['modules/items/actions/listing.php'] = { source: 'native-listing-workflow.php', hash: hash(listing), baseline: hash(listingBase) };
 for (const [local, source, target] of [
-    ['customdevs/product-request-import/product-configurator.php', '../../_CustomDEVs/product-request-import/product-configurator.php', 'includes/vd_quote_workflow/product-configurator.php'],
-    ['customdevs/product-request-import/product-configurator-native.php', '../../_CustomDEVs/product-request-import/product-configurator-native.php', 'includes/vd_quote_workflow/product-configurator-native.php'],
-    ['customdevs/product-request-import/product-configurator-queries.php', '../../_CustomDEVs/product-request-import/product-configurator-queries.php', 'includes/vd_quote_workflow/product-configurator-queries.php'],
-    ['customdevs/product-request-import/product-configurator-view.php', '../../_CustomDEVs/product-request-import/product-configurator-view.php', 'includes/vd_quote_workflow/product-configurator-view.php'],
-    ['customdevs/product-request-import/product-configurator-action.php', '../../_CustomDEVs/product-request-import/product-configurator-action.php', 'modules/items/actions/vd_product_configurator.php'],
-    ['customdevs/product-request-import/product-configurator-ui.js', '../../_CustomDEVs/product-request-import/product-configurator-ui.js', 'js/vd-product-configurator.js'],
-    ['customdevs/product-request-import/product-request.css', '../../_CustomDEVs/product-request-import/product-request.css', 'js/vd-product-request.css'],
-    ['customdevs/product-request-import/product-request-import.php', '../../_CustomDEVs/product-request-import/product-request-import.php', '_CustomDEVs/product-request-import/product-request-import.php'],
-    ['customdevs/product-request-import/.htaccess', '../../_CustomDEVs/product-request-import/.htaccess', '_CustomDEVs/product-request-import/.htaccess'],
-    ['customdevs/product-request-import/deploy-product-request-import.php', '../../_CustomDEVs/product-request-import/deploy-product-request-import.php', '_CustomDEVs/product-request-import/deploy-product-request-import.php'],
-    ['customdevs/product-request-import/SYSTEM-DEPENDENCIES.txt', '../../_CustomDEVs/product-request-import/SYSTEM-DEPENDENCIES.txt', '_CustomDEVs/product-request-import/SYSTEM-DEPENDENCIES.txt'],
-    ['customdevs/product-request-import/product-request-import-test.php', '../../_CustomDEVs/product-request-import/product-request-import-test.php', '_CustomDEVs/product-request-import/product-request-import-test.php'],
-    ['customdevs/product-request-import/product-request-import-integration-test.php', '../../_CustomDEVs/product-request-import/product-request-import-integration-test.php', '_CustomDEVs/product-request-import/product-request-import-integration-test.php'],
-    ['customdevs/product-request-import/README.md', '../../_CustomDEVs/product-request-import/README.md', '_CustomDEVs/product-request-import/README.md'],
-    ['customdevs/product-request-import/build-quote-workflow.cjs', '../../_CustomDEVs/product-request-import/build-quote-workflow.cjs', '_CustomDEVs/product-request-import/build-quote-workflow.cjs']
+    ['customdevs/product-request-import/product-configurator.php', '../../product-request-import/product-configurator.php', '_CustomDEVs/quote-workflow/vd_quote_workflow/product-configurator.php'],
+    ['customdevs/product-request-import/product-configurator-native.php', '../../product-request-import/product-configurator-native.php', '_CustomDEVs/quote-workflow/vd_quote_workflow/product-configurator-native.php'],
+    ['customdevs/product-request-import/product-configurator-queries.php', '../../product-request-import/product-configurator-queries.php', '_CustomDEVs/quote-workflow/vd_quote_workflow/product-configurator-queries.php'],
+    ['customdevs/product-request-import/product-configurator-view.php', '../../product-request-import/product-configurator-view.php', '_CustomDEVs/quote-workflow/vd_quote_workflow/product-configurator-view.php'],
+    ['customdevs/product-request-import/product-configurator-action.php', '../../product-request-import/product-configurator-action.php', '_CustomDEVs/quote-workflow/modules/items/actions/vd_product_configurator.php'],
+    ['customdevs/product-request-import/product-configurator-ui.js', '../../product-request-import/product-configurator-ui.js', '_CustomDEVs/quote-workflow/js/vd-product-configurator.js'],
+    ['customdevs/product-request-import/product-request.css', '../../product-request-import/product-request.css', '_CustomDEVs/quote-workflow/js/vd-product-request.css'],
+    ['customdevs/product-request-import/product-request-import.php', '../../product-request-import/product-request-import.php', '_CustomDEVs/product-request-import/product-request-import.php'],
+    ['customdevs/product-request-import/.htaccess', '../../product-request-import/.htaccess', '_CustomDEVs/product-request-import/.htaccess'],
+    ['customdevs/product-request-import/deploy-product-request-import.php', '../../product-request-import/deploy-product-request-import.php', '_CustomDEVs/product-request-import/deploy-product-request-import.php'],
+    ['customdevs/product-request-import/SYSTEM-DEPENDENCIES.txt', '../../product-request-import/SYSTEM-DEPENDENCIES.txt', '_CustomDEVs/product-request-import/SYSTEM-DEPENDENCIES.txt'],
+    ['customdevs/product-request-import/product-request-import-test.php', '../../product-request-import/product-request-import-test.php', '_CustomDEVs/product-request-import/product-request-import-test.php'],
+    ['customdevs/product-request-import/product-request-import-integration-test.php', '../../product-request-import/product-request-import-integration-test.php', '_CustomDEVs/product-request-import/product-request-import-integration-test.php'],
+    ['customdevs/product-request-import/README.md', '../../product-request-import/README.md', '_CustomDEVs/product-request-import/README.md'],
+    ['customdevs/product-request-import/build-quote-workflow.cjs', '../../product-request-import/build-quote-workflow.cjs', '_CustomDEVs/product-request-import/build-quote-workflow.cjs']
 ]) {
     files[target] = { source, hash: hash(read(local)) };
 }

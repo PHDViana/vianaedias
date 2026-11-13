@@ -16,7 +16,7 @@ if ((int) $current_entity_id === 146 && $app_module_action === 'save' && isset($
     $vdExtraField = db_fetch_array(db_query("SELECT field_id FROM app_vd_quote_native_fields WHERE entity_id=146 AND role='extra_discount'"));
     $vdExtraId = (int) ($vdExtraField['field_id'] ?? 0);
     if ($vdExtraId && array_key_exists($vdExtraId, $_POST['fields'] ?? [])) {
-        require_once 'includes/vd_quote_workflow/quote-workflow-domain.php';
+        require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/quote-workflow-domain.php';
         try {
             $vdExtraValue = vd_workflow_discount_percent($_POST['fields'][$vdExtraId]);
             $vdQuoteId = (int) $_GET['id'];

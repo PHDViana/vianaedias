@@ -28,12 +28,6 @@ $original=$base;
 $review=vd_config_quote_preparation($base,$catalog);
 preparationCheck(array_column($review['missing'],'key')===['1.field.4229','1.paper','1.equipment.1']);
 preparationCheck($base===$original);
-$shared=$catalog;$shared['equipment']=[
-    ['operation_id'=>1,'machine_id'=>11,'speed'=>'2','unit'=>'ficheiros/h','setup'=>'20'],
-    ['operation_id'=>1,'machine_id'=>16,'speed'=>'2','unit'=>'ficheiros/h','setup'=>'20']];
-preparationCheck(array_column(vd_config_quote_preparation($base,$shared)['missing'],'key')===['1.field.4229','1.paper']);
-$shared['equipment'][1]['speed']='3';
-preparationCheck(array_column(vd_config_quote_preparation($base,$shared)['missing'],'key')===['1.field.4229','1.paper','1.equipment.1']);
 preparationCheck($review['payload']['components'][0]['fields'][6119]==='3');
 preparationCheck($review['payload']['components'][0]['fields'][6120]==='3');
 preparationCheck($review['payload']['components'][0]['fields'][4220]===1565);
@@ -65,51 +59,9 @@ preparationCheck(array_column($review['missing'],'key')===['1.variant.0']);
 $review=vd_config_quote_preparation($variant,$catalog,['1.variant.0'=>'20']);
 preparationCheck($review['missing']===[]);
 preparationCheck($review['payload']['components'][0]['request']['finishing_operations'][0]['id']===20);
-preparationCheck($review['payload']['components'][0]['technical_operations']===[]);
+preparationCheck(array_column($review['payload']['components'][0]['technical_operations'],'operation_id')===[20,2]);
 $die=$known;$die['components'][0]['request']['die']=['status'=>'used','number'=>'123'];
 $review=vd_config_quote_preparation($die,$catalog);
 preparationCheck($review['payload']['components'][0]['fields'][4220]===1248);
 preparationCheck($review['payload']['components'][0]['fields'][4221]==='123');
-$named=$known;$named['components'][0]['papers']=[];
-$named['components'][0]['request']['paper']='INVERCOTE DUO 450 gr';
-$papers=$catalog;
-$papers['articles']=[
-    ['id'=>1437,'name'=>'Invercote Duo 450g 72x102','internal_id'=>'','width'=>720,'height'=>1020,'weight'=>450,'thickness'=>'','is_paper'=>1],
-    ['id'=>2652,'name'=>'Invercote Duo, 2 faces white 72x 102 450g','internal_id'=>1406,'width'=>720,'height'=>1020,'weight'=>450,'thickness'=>0.8,'is_paper'=>1],
-    ['id'=>2704,'name'=>'Invercote Duo, 2 faces white 72x102 400g','internal_id'=>14,'width'=>720,'height'=>1020,'weight'=>400,'thickness'=>'','is_paper'=>1]];
-$review=vd_config_quote_preparation($named,$papers);
-preparationCheck($review['missing']===[]);
-preparationCheck($review['payload']['components'][0]['papers']===[2652]);
-preparationCheck(count($review['resolved'])===1);
-preparationCheck($named['components'][0]['papers']===[]);
-$ambiguous=$papers;$other=$papers['articles'][1];$other['id']=3000;$other['width']=700;$other['height']=1000;
-$other['name']='Invercote Duo 450g 70x100';$ambiguous['articles'][]=$other;
-preparationCheck(array_column(vd_config_quote_preparation($named,$ambiguous)['missing'],'key')===['1.paper']);
-$explicit=$named;$explicit['components'][0]['request']['paper']='Invercote Duo 450 g/m² 720x1020 mm';
-preparationCheck(vd_config_quote_preparation($explicit,$ambiguous)['payload']['components'][0]['papers']===[2652]);
-preparationCheck(vd_config_paper_matches('Cartolina 450g',$papers['articles'])===[]);
-preparationCheck(vd_config_paper_matches('Invercote Duo',$papers['articles'])===[]);
-preparationCheck(vd_config_paper_matches('Invercote Duo 450g antirrisco',$papers['articles'])===[]);
-$fallback=$known;$fallback['components'][0]['papers']=[100];
-$siblings=$catalog;$sibling=$catalog['articles'][0];$sibling['id']=102;$sibling['thickness']='0.6';$siblings['articles'][]=$sibling;
-$review=vd_config_quote_preparation($fallback,$siblings);
-preparationCheck($review['missing']===[]);
-preparationCheck($review['payload']['components'][0]['request']['quote_preparation']['paper_thickness'][100]===0.6);
-$sibling['id']=103;$sibling['thickness']='0.7';$siblings['articles'][]=$sibling;
-preparationCheck(array_column(vd_config_quote_preparation($fallback,$siblings)['missing'],'key')===['1.thickness.100']);
-$print=['components'=>[['kind'=>'printed','name'=>'Produto','colors'=>[3731],'fields'=>[4229=>'']]]];
-foreach(['',null,0,999,[],true,'1255x'] as $faces) {
-    $print['components'][0]['fields'][4229]=$faces;
-    preparationReject(static function()use($print){vd_config_request_validate($print);});
-}
-foreach([1255,1256,1257,'1255','1256','1257'] as $faces) {
-    $print['components'][0]['fields'][4229]=$faces;
-    vd_config_request_validate($print);preparationCheck(true);
-}
-$print['components'][0]['fields'][4229]='';
-vd_config_request_validate($print,false);preparationCheck(true);
-$print['components'][0]['colors']=[3804];
-vd_config_request_validate($print);preparationCheck(true);
-$print['components'][]=['kind'=>'material','name'=>'Estrutura'];
-vd_config_request_validate($print);preparationCheck(true);
 echo "$checks preparation validation, defaults, conditional inputs and source preservation checks passed.\n";

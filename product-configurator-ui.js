@@ -10,9 +10,6 @@
         .sort((a,b) => Number(Number(a.id)===3825)-Number(Number(b.id)===3825) ||
             a.name.localeCompare(b.name,'pt-PT',{sensitivity:'base'}) || Number(a.id) - Number(b.id));
     let state, draft, identity, request, pending, uploads, removed, dirty;
-    let importText = '', importFiles = [], importResultText = '', importSuggestions = {}, importWarnings = [];
-    // Multi-request import: candidates under review in the modal, then a queue opened one request at a time.
-    let importCandidates = [], importAttach = [], importQueue = [], importQueueTotal = 0, importQueuePosition = 0;
     let reviewTimer, reviewSequence = 0;
     const finishingRules = catalog.finishing_rules;
     const internalFinishingIds = new Set([18,21,33,35,...(finishingRules.crease || [])].map(Number));
@@ -33,330 +30,6 @@
         return operation;
     });
     const printPresets = {cmyk:[3728,3729,3730,3731],pantone:[3732],cmyk_pantone:[3728,3729,3730,3731,3732],white:[3821],none:[3804]};
-    function renderImportQueue() {
-        const list = root.querySelector('[data-import-queue]');
-        if (!list) return;
-        list.replaceChildren();
-        importFiles.forEach((file,index) => {
-            const item = document.createElement('li');
-            item.append(document.createTextNode(file.name + ' · ' + size(file.size) + ' '),
-                button('Retirar',() => {importFiles.splice(index,1);dirty=true;renderImportQueue();}));
-            list.append(item);
-        });
-        if (!importFiles.length) list.textContent = 'Pode colar uma imagem ou selecionar até 5 PDFs/imagens.';
-    }
-    function renderImportResult() {
-        const area = root.querySelector('[data-import-result]');
-        if (!area) return;
-        area.replaceChildren();
-        const values = Object.entries(importSuggestions || {}).filter(([key]) => key !== 'product_type_name');
-        if (values.length) {
-            const summary = document.createElement('p');
-            summary.className = 'vr-import-summary';
-            summary.textContent = 'Sugestões detetadas: ' + values.map(([key,value]) =>
-                key === 'product_type' ? 'tipo de produto: ' + (importSuggestions.product_type_name || '') :
-                    key === 'name' ? 'nome do trabalho' :
-                    key === 'reference' ? 'referência' :
-                    key === 'quantities' ? 'quantidade(s) ' + value.join(', ') :
-                    key === 'width_mm' ? 'dimensões ' + value + ' × ' + (importSuggestions.height_mm || '?') + ' mm' :
-                    key === 'height_mm' ? '' :
-                    key === 'total_pages' ? value + ' páginas' :
-                    key === 'paper' ? 'papel/material' :
-                    key === 'cover_paper' ? 'papel da capa' :
-                    key === 'inner_paper' ? 'papel do miolo' :
-                    key === 'lamination' ? 'plastificação' + (value.target === 'cover' ? ' da capa' : '') :
-                    key === 'colors' ? 'cores de impressão' :
-                    key === 'faces' ? 'faces de impressão' :
-                    key === 'print_mode' ? 'impressão' :
-                    key === 'pantone' ? 'Pantone ' + value :
-                    key === 'delivery' ? 'data pretendida' : key
-            ).filter(Boolean).join(' · ') + '.';
-            area.append(summary);
-        }
-        for (const warning of importWarnings) {
-            const note = document.createElement('p');
-            note.className = 'vr-warning';
-            note.textContent = warning;
-            area.append(note);
-        }
-        if (importResultText) {
-            const details = document.createElement('details');
-            const summary = document.createElement('summary');
-            const pre = document.createElement('pre');
-            summary.textContent = 'Rever texto reconhecido';
-            pre.textContent = importResultText;
-            details.append(summary,pre);
-            area.append(details);
-        }
-    }
-    function queueImportFiles(files) {
-        const incoming = [...files].filter(file => file && file.size).map((file,index) => {
-            if (file.name) return file;
-            const extension = file.type === 'image/jpeg' ? 'jpg' : file.type === 'image/tiff' ? 'tif' : 'png';
-            return new File([file],`imagem-colada-${Date.now()}-${index+1}.${extension}`,{type:file.type || 'image/png'});
-        });
-        const existing = (state.attachments || []).filter(file => !removed.includes(Number(file.id)));
-        const all = [...existing,...uploads,...importFiles,...incoming];
-        if (importFiles.length + incoming.length > 5 || all.length > 10 ||
-            incoming.some(file => file.size > 10*1024*1024) ||
-            all.reduce((sum,file) => sum + Number(file.size),0) > 25*1024*1024) {
-            message('Importe até 5 fontes de cada vez; máximo de 10 documentos por pedido, 10 MB por ficheiro e 25 MB no total.',true);
-            return;
-        }
-        for (const file of incoming) {
-            if (!/\.(pdf|jpe?g|png|tiff?|txt)$/i.test(file.name)) {
-                message('A importação aceita PDF, JPG, PNG, TIFF e TXT. Outros documentos podem ser anexados na secção Documentos.',true);
-                continue;
-            }
-            importFiles.push(file);
-        }
-        if (incoming.length) dirty = true;
-        renderImportQueue();
-    }
-    function applyImportSuggestions(suggestions) {
-        if (suggestions.product_type && (!categoryOf(draft.product_type) || Number(draft.product_type) === 3823)) {
-            const productType = Number(suggestions.product_type);
-            const category = categoryOf(productType);
-            draft.product_type = productType;
-            const magazine = [3712,3756,Number(productRules.brochure_category)].includes(category) &&
-                productType !== Number(productRules.brochure_simple);
-            const structureType = magazine ? 'magazine' : productType === 3751 ? 'folding_box' : 'standard';
-            if (!draft.components.length || draft.type !== structureType) structure(structureType);
-        }
-        if (!identity.name && suggestions.name) identity.name = suggestions.name;
-        if (!identity.reference && suggestions.reference) identity.reference = suggestions.reference;
-        if (!draft.quantities.length && suggestions.quantities?.length) draft.quantities = suggestions.quantities;
-        if (suggestions.delivery && !draft.request_details.delivery) draft.request_details.delivery = suggestions.delivery;
-        if (suggestions.total_pages && !draft.request_details.total_pages && hasPages()) {
-            draft.request_details.total_pages = suggestions.total_pages;
-        }
-        if (suggestions.width_mm && suggestions.height_mm) {
-            if (hasPages() && !draft.request_details.final_format) {
-                draft.request_details.final_format = {width_mm:suggestions.width_mm,height_mm:suggestions.height_mm};
-            } else {
-                const part = draft.components.find(component => component.kind === 'printed');
-                if (part) {
-                    part.fields = part.fields || {};
-                    if (!part.fields[4218]) part.fields[4218] = String(suggestions.width_mm);
-                    if (!part.fields[4219]) part.fields[4219] = String(suggestions.height_mm);
-                }
-            }
-        }
-        const printed = draft.components.filter(component => component.kind === 'printed');
-        const cover = printed.find(component => component.role === 'cover');
-        const inner = cover ? printed.find(component => component !== cover) : null;
-        const setPaper = (component,paper) => {
-            if (component && paper && !component.request?.paper) component.request = {...component.request,paper};
-        };
-        if (cover && (suggestions.cover_paper || suggestions.inner_paper)) {
-            // "Capa: couché 300 gr" / "Miolo: 250gr" go to their own components.
-            setPaper(cover,suggestions.cover_paper);
-            setPaper(inner,suggestions.inner_paper);
-            const missing = printed.filter(component => !component.request?.paper).map(component => component.name);
-            if (missing.length) importWarnings.push('Papel não indicado para: ' + missing.join(', ') + '; complete no formulário.');
-        } else if (suggestions.paper && printed.length && printed.every(component => !component.request?.paper)) {
-            printed[0].request = {...printed[0].request,paper:suggestions.paper};
-            if (printed.length > 1) importWarnings.push('O papel foi preenchido apenas no primeiro componente; confirme o papel de cada componente.');
-        }
-        if (suggestions.print_mode && printed.length) {
-            for (const component of printed) {
-                if (component.colors?.length) continue;
-                component.request = {...component.request,printing:{mode:suggestions.print_mode,pantone:suggestions.pantone || ''}};
-                component.colors = [...(suggestions.colors || [])];
-                if (suggestions.faces) {
-                    component.fields = component.fields || {};
-                    if (!component.fields[4229]) component.fields[4229] = String(suggestions.faces);
-                }
-            }
-        } else if (suggestions.faces && printed.length && !printed[0].fields?.[4229]) {
-            printed[0].fields = printed[0].fields || {};
-            printed[0].fields[4229] = String(suggestions.faces);
-        }
-        if (suggestions.lamination && printed.length) {
-            const target = (suggestions.lamination.target === 'cover' ? cover : null) || cover || printed[0];
-            target.request = {...target.request,lamination:true};
-            target.fields = target.fields || {};
-            const finish = field => catalog.choices.find(choice => Number(choice.fields_id) === field && choice.value === suggestions.lamination.finish);
-            if (suggestions.lamination.finish) {
-                const front = finish(6267), back = finish(6268);
-                if (front && !target.fields[6267]) target.fields[6267] = String(front.id);
-                if (suggestions.lamination.faces === 'both' && back && !target.fields[6268]) target.fields[6268] = String(back.id);
-            } else {
-                importWarnings.push(`Plastificação detetada (${target.name}); escolha o tipo: brilho, mate ou antirrisco.`);
-            }
-        }
-    }
-    function productTypeOptions(selected) {
-        const roots = types.filter(row => !Number(row.parent_id));
-        return '<option value="">Escolha o tipo de produto</option>' + roots.map(parent => {
-            const children = types.filter(row => Number(row.parent_id) === Number(parent.id));
-            if (!children.length) return options([parent],selected);
-            return `<optgroup label="${esc(parent.name)}">` +
-                options([{id:parent.id,name:parent.name + ' (escolher subcategoria no formulário)'}],selected) +
-                options(children.map(row => ({id:row.id,name:parent.name + ' › ' + row.name})),selected) + '</optgroup>';
-        }).join('');
-    }
-    function importDetails(suggestions) {
-        const parts = [];
-        if (suggestions.width_mm && suggestions.height_mm) parts.push(suggestions.width_mm + ' × ' + suggestions.height_mm + ' mm');
-        if (suggestions.total_pages) parts.push(suggestions.total_pages + ' páginas');
-        if (suggestions.print_mode === 'none') parts.push('sem impressão');
-        else if (suggestions.print_mode) parts.push({cmyk:'CMYK',pantone:'Pantone',cmyk_pantone:'CMYK + Pantone'}[suggestions.print_mode] +
-            (suggestions.pantone ? ' ' + suggestions.pantone : ''));
-        if (suggestions.faces) parts.push({1255:'só frente',1256:'frente e verso',1257:'só verso'}[suggestions.faces] || '');
-        if (suggestions.cover_paper || suggestions.inner_paper) {
-            if (suggestions.cover_paper) parts.push('capa ' + suggestions.cover_paper);
-            if (suggestions.inner_paper) parts.push('miolo ' + suggestions.inner_paper);
-        } else if (suggestions.paper) parts.push(suggestions.paper);
-        if (suggestions.lamination) parts.push('plastificação' + (suggestions.lamination.target === 'cover' ? ' da capa' : '') +
-            ({matt:' mate',gloss:' brilho','anti-scuff':' antirrisco'}[suggestions.lamination.finish] || ''));
-        if (suggestions.delivery) parts.push('entrega ' + suggestions.delivery.split('-').reverse().join('/'));
-        return parts.filter(Boolean).join(' · ') || 'Sem outros dados detetados.';
-    }
-    function parseQuantities(value) {
-        return [...new Set(String(value).split(/[;,\/]|\s+e\s+|\s+ou\s+/).map(part => Number(part.replace(/[.\s]/g,'')))
-            .filter(number => Number.isInteger(number) && number > 0 && number <= 10000000))].slice(0,12);
-    }
-    function renderImportCandidates() {
-        const dialog = root.querySelector('[data-import-dialog]'), area = root.querySelector('[data-import-candidates]');
-        if (!dialog || !area) return;
-        dialog.classList.toggle('vr-import-review',importCandidates.length > 0);
-        area.replaceChildren();
-        if (!importCandidates.length) return;
-        const intro = document.createElement('p');
-        intro.className = 'vr-import-summary';
-        intro.textContent = `Foram detetados ${importCandidates.length} pedidos. Cada pedido incluído será aberto no formulário, um de cada vez, para validar e completar antes de guardar; só depois gera orçamento.`;
-        const list = document.createElement('ol');
-        list.className = 'vr-import-candidates';
-        importCandidates.forEach((candidate,index) => {
-            const item = document.createElement('li');
-            item.className = candidate.include ? '' : 'vr-excluded';
-            item.innerHTML = `<label class="vr-import-include"><input type="checkbox" data-include${candidate.include ? ' checked' : ''}> Pedido ${index + 1}</label>
-                <div class="vr-grid"><label class="vr-label">Tipo de produto<select data-candidate-type>${productTypeOptions(candidate.suggestions.product_type || '')}</select></label>
-                <label class="vr-label">Quantidades<input data-candidate-quantities value="${esc((candidate.suggestions.quantities || []).join(', '))}" placeholder="Ex.: 100, 200, 500"></label></div>
-                <p class="vr-hint">${esc(importDetails(candidate.suggestions))}</p>
-                <details><summary>Texto deste pedido</summary><pre>${esc(candidate.text)}</pre></details>`;
-            item.querySelector('[data-include]').addEventListener('change',event => {
-                candidate.include = event.target.checked; item.className = candidate.include ? '' : 'vr-excluded';
-                start.textContent = startLabel();
-            });
-            item.querySelector('[data-candidate-type]').addEventListener('change',event => {
-                const value = Number(event.target.value);
-                if (value) {
-                    candidate.suggestions.product_type = value;
-                    candidate.suggestions.product_type_name = (types.find(row => Number(row.id) === value) || {}).name || '';
-                } else { delete candidate.suggestions.product_type; delete candidate.suggestions.product_type_name; }
-            });
-            item.querySelector('[data-candidate-quantities]').addEventListener('change',event => {
-                const quantities = parseQuantities(event.target.value);
-                if (quantities.length) candidate.suggestions.quantities = quantities; else delete candidate.suggestions.quantities;
-                event.target.value = quantities.join(', ');
-            });
-            list.append(item);
-        });
-        const startLabel = () => {
-            const count = importCandidates.filter(candidate => candidate.include).length;
-            return count ? `Abrir pedido 1 de ${count}` : 'Selecione pelo menos um pedido';
-        };
-        const start = button(startLabel(),startImportQueue,true);
-        const actions = document.createElement('div');
-        actions.className = 'vr-dialog-actions';
-        actions.append(button('Voltar ao texto',() => {importCandidates = []; renderImportCandidates();}),start);
-        area.append(intro,list,actions);
-    }
-    function loadImported(item) {
-        importSuggestions = item.suggestions || {};
-        importWarnings = [...(item.warnings || [])];
-        importResultText = item.text || '';
-        applyImportSuggestions(importSuggestions);
-        uploads.push(...importAttach);
-    }
-    async function startImportQueue() {
-        const chosen = importCandidates.filter(candidate => candidate.include);
-        if (!chosen.length) throw new Error('Selecione pelo menos um pedido para abrir.');
-        collect();
-        importQueue = chosen.slice(1); importQueueTotal = chosen.length; importQueuePosition = 1;
-        importCandidates = []; importText = '';
-        loadImported(chosen[0]);
-        dirty = true;
-        render();
-        message(`Pedido 1 de ${importQueueTotal} preenchido a partir da importação. Valide e complete os dados e guarde; depois abra o pedido seguinte.`);
-    }
-    function openNextImported() {
-        if (!importQueue.length) return;
-        if (dirty && !confirm('O pedido atual tem alterações por guardar. Abrir o pedido seguinte e descartá-las?')) return;
-        collect();
-        const keep = {customer:identity.customer,customer_name:identity.customer_name,
-            contact:draft.request_details?.contact || '',contact_id:draft.request_details?.contact_id || 0};
-        const next = importQueue.shift();
-        fresh();
-        identity.customer = keep.customer; identity.customer_name = keep.customer_name;
-        if (keep.contact) {draft.request_details.contact = keep.contact; draft.request_details.contact_id = keep.contact_id;}
-        history.replaceState(null,'',location.pathname + location.search);
-        importQueuePosition += 1;
-        loadImported(next);
-        dirty = true;
-        render();
-        message(`Pedido ${importQueuePosition} de ${importQueueTotal} preenchido, com o mesmo cliente e contacto. Valide e complete os dados e guarde.`);
-        root.querySelector('[data-message]').scrollIntoView({block:'center',behavior:'smooth'});
-    }
-    function renderImportQueueStatus() {
-        const area = root.querySelector('[data-import-queue-status]');
-        if (!area || !importQueueTotal) return;
-        const saved = Boolean(state.id) && !dirty;
-        const note = document.createElement('p');
-        note.className = 'vr-import-queue-note';
-        if (!importQueue.length && saved) {
-            note.textContent = `Importação múltipla concluída: ${importQueueTotal} pedido(s) abertos.`;
-            area.replaceChildren(note);
-            importQueueTotal = 0; importQueuePosition = 0; importAttach = [];
-            return;
-        }
-        note.textContent = `Importação múltipla: pedido ${importQueuePosition} de ${importQueueTotal}. ` + (importQueue.length ?
-            (saved ? 'Pedido guardado; pode abrir o seguinte.' : `Valide e guarde este pedido para passar ao seguinte (${importQueue.length} por abrir).`) :
-            'Este é o último pedido da importação.');
-        area.replaceChildren(note);
-        if (importQueue.length) {
-            const actions = document.createElement('div');
-            actions.className = 'vr-dialog-actions vr-queue-actions';
-            actions.append(button('Descartar restantes',() => {
-                if (!confirm(`Descartar os ${importQueue.length} pedido(s) importados que ainda não abriu?`)) return;
-                importQueue = []; importQueueTotal = 0; importQueuePosition = 0; importAttach = []; render();
-            }),button(`Abrir pedido seguinte (${importQueuePosition + 1} de ${importQueueTotal})`,openNextImported,saved));
-            area.append(actions);
-        }
-    }
-    async function importRequest() {
-        collect();
-        const source = root.querySelector('[data-import-text]').value.trim();
-        importText = source;
-        if (!source && !importFiles.length) throw new Error('Cole o texto do email, cole uma imagem ou selecione um PDF/imagem.');
-        const emailFile = source ? new File([source],`email-original-${Date.now()}.txt`,{type:'text/plain'}) : null;
-        const attach = [...importFiles,...(emailFile ? [emailFile] : [])];
-        const existing = (state.attachments || []).filter(file => !removed.includes(Number(file.id)));
-        if (existing.length + uploads.length + attach.length > 10 ||
-            [...existing,...uploads,...attach].reduce((sum,file) => sum + Number(file.size),0) > 25*1024*1024) {
-            throw new Error('Os documentos desta importação excedem os limites do pedido.');
-        }
-        const result = await api('extract_request',{config_id:state.id,source_text:source},false,importFiles);
-        if ((result.requests || []).length > 1) {
-            importCandidates = result.requests.map(item => ({...item,include:true,suggestions:{...item.suggestions}}));
-            importAttach = attach; importResultText = result.text; importFiles = []; renderImportQueue();
-            renderImportCandidates();
-            return;
-        }
-        importQueue = []; importQueueTotal = 0; importQueuePosition = 0;
-        importResultText = result.text;
-        importSuggestions = result.suggestions || {};
-        importWarnings = [...(result.warnings || [])];
-        applyImportSuggestions(importSuggestions);
-        uploads.push(...attach);
-        importFiles = [];
-        importText = '';
-        dirty = true;
-        render();
-        message('Importação concluída como rascunho. Reveja os campos preenchidos, complete o que falta e guarde para criar o registo do pedido.');
-    }
     function productReady() {
         const category = categoryOf(draft.product_type);
         return Boolean(category)&&!types.some(row=>Number(row.parent_id)===Number(draft.product_type));
@@ -604,12 +277,10 @@
         draft = {product_type:3823, type:'standard', quantities:[], components:[], request_details:{workflow_version:2}};
         identity = {name:'', customer:0, customer_name:'', reference:'', notes:''};
         request = crypto.randomUUID(); pending = null; uploads = []; removed = []; dirty = false;
-        importText='';importFiles=[];importResultText='';importSuggestions={};importWarnings=[];
     }
     fresh();
     function message(text, error = false) {
-        const dialog = root.querySelector('[data-import-dialog]');
-        const box = dialog?.open ? dialog.querySelector('[data-import-message]') : root.querySelector('[data-message]');
+        const box = root.querySelector('[data-message]');
         box.className = text ? 'vr-message ' + (error ? 'vr-error' : 'vr-success') : '';
         box.textContent = text;
         if (error) box.scrollIntoView({block:'center', behavior:'smooth'});
@@ -771,7 +442,6 @@
         const loaded = await api('state',{config_id:id},true);
         state = loaded; draft = loaded.payload;
         identity = {name:loaded.name,customer:Number(loaded.customer),customer_name:loaded.customer_name,reference:loaded.reference || '',notes:loaded.notes || ''};
-        importText='';importFiles=[];importResultText='';importSuggestions={};importWarnings=[];
         const migrated = [];
         if(![1,2].includes(draft.request_details.workflow_version)) {
             const details=draft.request_details,assembly=[...(details.finishing_operations||[])],packaging=[];
@@ -849,18 +519,6 @@
             <div data-message role="status" aria-live="polite"></div>
             ${state.conversion?.error ? `<p class="vr-warning" role="alert">Pedido guardado, mas não convertido em orçamento: ${esc(state.conversion.error)}</p>` : ''}
             ${state.conversion?.quote ? `<p>Orçamento associado: <a href="index.php?module=items/info&amp;path=146-${Number(state.conversion.quote)}" target="_blank" rel="noopener">#${Number(state.conversion.quote)}</a>. Alterar este pedido não altera o orçamento nem o histórico já guardado.</p>` : ''}
-            <section class="vr-section vr-import"><div class="vr-section-heading"><h3><span>0</span> Importar pedido de email, PDF ou imagem</h3><div data-import-open></div></div>
-                <div data-import-queue-status></div><div data-import-result></div>
-                <dialog class="vr-import-dialog" data-import-dialog aria-labelledby="vr-import-title">
-                    <div class="vr-dialog-head"><h3 id="vr-import-title">Importar pedido de email, PDF ou imagem</h3><button type="button" class="vr-dialog-close" data-import-close aria-label="Fechar">×</button></div>
-                    <div data-import-message role="status" aria-live="polite"></div>
-                    <div data-import-input><p class="vr-hint">Cole texto ou uma imagem (Ctrl/Cmd+V), ou selecione um PDF/imagem. A leitura é local no servidor; em PDFs digitalizados o OCR lê até 6 páginas. Os dados detetados preenchem um rascunho editável; confirme-os antes de guardar. O original será anexado ao pedido.</p>
-                    <label class="vr-label">Texto do email ou pedido<textarea data-import-text rows="5" maxlength="100000" placeholder="Cole aqui o texto do email, incluindo quantidades, formato, papel e acabamentos.">${esc(importText)}</textarea></label>
-                    <label class="vr-upload">Selecionar PDF ou imagem<input type="file" data-import-files multiple accept=".pdf,.jpg,.jpeg,.png,.tif,.tiff,.txt"></label>
-                    <ul data-import-queue class="vr-files"></ul></div>
-                    <div data-import-candidates></div><div data-import-actions class="vr-dialog-actions"></div>
-                </dialog>
-            </section>
             <section class="vr-section"><h3><span>1</span> Produto <small>obrigatório</small></h3>
             <fieldset class="vr-choice-group" aria-required="true"><legend class="vr-sr-only">Categoria do produto (obrigatório)</legend><div class="vr-categories">
             ${types.filter(row => !Number(row.parent_id)).map(row => `<label class="vr-choice"><input type="radio" name="vr-category" data-category required value="${row.id}"${Number(row.id) === category ? ' checked' : ''}><span>${esc(row.name)}</span></label>`).join('')}</div></fieldset>
@@ -945,39 +603,6 @@
             if (dirty && !confirm('Descartar as alterações que ainda não guardou?')) return;
             fresh(); location.hash = ''; render();
         }));
-        const importDialog = root.querySelector('[data-import-dialog]');
-        root.querySelector('[data-import-open]').append(button(importText || importFiles.length ? 'Continuar importação' : 'Importar pedido',() => {
-            importDialog.showModal(); importDialog.querySelector('[data-import-text]').focus();
-        },true));
-        root.querySelector('[data-import-close]').addEventListener('click',() => importDialog.close());
-        importDialog.addEventListener('click',event => { if (event.target === importDialog) importDialog.close(); });
-        importDialog.addEventListener('close',() => {
-            const box = importDialog.querySelector('[data-import-message]'); box.className = ''; box.textContent = '';
-        });
-        root.querySelector('[data-import-actions]').append(button('Cancelar',() => importDialog.close()),button('Extrair e preencher rascunho',importRequest,true));
-        root.querySelector('[data-import-text]').addEventListener('input',event => {
-            importText=event.target.value;dirty=true;
-        });
-        root.querySelector('[data-import-text]').addEventListener('paste',event => {
-            const pastedText=event.clipboardData?.getData('text/plain')||'';
-            const images=[...(event.clipboardData?.items||[])].filter(item=>item.kind==='file'&&item.type.startsWith('image/'))
-                .map(item=>item.getAsFile()).filter(Boolean);
-            if(!images.length)return;
-            event.preventDefault();
-            if(pastedText) {
-                const area=event.currentTarget,start=area.selectionStart,end=area.selectionEnd;
-                area.setRangeText(pastedText,start,end,'end');
-                importText=area.value;dirty=true;
-            }
-            queueImportFiles(images);
-        });
-        root.querySelector('[data-import-files]').addEventListener('change',event => {
-            queueImportFiles(event.target.files||[]);event.target.value='';
-        });
-        renderImportQueue();
-        renderImportResult();
-        renderImportCandidates();
-        renderImportQueueStatus();
         if (state.id) root.querySelector('[data-top-actions]').append(button('Duplicar pedido',duplicateCurrentRequest));
         for (const input of root.querySelectorAll('[data-category]')) input.addEventListener('change',() => chooseCategory(Number(input.value)));
         for (const input of root.querySelectorAll('[data-subtype]')) input.addEventListener('change',() => {
@@ -1461,7 +1086,7 @@
     };
     root.addEventListener('input',markChanged);
     root.addEventListener('change',markChanged);
-    window.addEventListener('beforeunload',event => {if (dirty || importQueue.length) {event.preventDefault();event.returnValue = '';}});
+    window.addEventListener('beforeunload',event => {if (dirty) {event.preventDefault();event.returnValue = '';}});
     render();
     const existing = location.hash.match(/^#(configuration|duplicate)=(\d+)$/);
     if (existing) open(Number(existing[2])).then(() => {

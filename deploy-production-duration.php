@@ -12,7 +12,7 @@ try {
     foreach ([[0,'00:00:00'],[18/60,'00:00:18'],[1/60,'00:00:01'],[19/60,'00:00:19'],[61.5,'01:01:30'],[1500,'25:00:00']] as $test) {
         if (vd_production_duration($test[0]) !== $test[1]) throw new RuntimeException('Duration test failed.');
     }
-    $files = ['includes/vd_quote_workflow/production-duration.php' => file_get_contents(__DIR__ . '/production-duration.php')];
+    $files = ['_CustomDEVs/quote-workflow/vd_quote_workflow/production-duration.php' => file_get_contents(__DIR__ . '/production-duration.php')];
     foreach (['fieldtype_formula','fieldtype_input_numeric'] as $type) {
         $path = "includes/classes/fieldstypes/$type.php";
         $source = file_get_contents($path);
@@ -25,7 +25,7 @@ try {
             $code = "\n        /* VD production duration */\n" .
                 "        if (\$cfg->get('vd_production_duration') === '1'" .
                 ($type === 'fieldtype_formula' ? " && (!isset(\$options['is_export']) || isset(\$options['is_print']))" : '') . ") {\n" .
-                "            require_once 'includes/vd_quote_workflow/production-duration.php';\n" .
+                "            require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/production-duration.php';\n" .
                 "            return vd_production_duration(\$value);\n        }\n";
             $source = substr_replace($source, $anchor . $code, $position, strlen($anchor));
         }
@@ -38,7 +38,7 @@ try {
         if (substr_count($totals, $anchor) !== 1) throw new RuntimeException('Duration totals anchor changed.');
         $code = "    /* VD duration totals */\n" .
             "    if (\$cfg->get('vd_production_duration') === '1') {\n" .
-            "        require_once 'includes/vd_quote_workflow/production-duration.php';\n" .
+            "        require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/production-duration.php';\n" .
             "        \$value = vd_production_duration(\$totals['total_' . \$field['id']] ?? 0);\n" .
             "        \$avg_value = \$listing_split->number_of_rows > 0 ? vd_production_duration((\$totals['total_' . \$field['id']] ?? 0) / \$listing_split->number_of_rows) : '';\n" .
             "    }\n";

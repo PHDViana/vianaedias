@@ -71,7 +71,7 @@ guardar, **Atualizar tabela** recarrega os valores. Filtro "Apenas ativas no
 catálogo" (persistido na sessão) e pesquisa por nome no navegador. Operações
 com linhas de custo mas sem tarifa atual ficam assinaladas. Instalação
 idempotente por `deploy-operation-config-table.php`; o conteúdo vive em
-`operation-config-table.php`/`.css` (includes/vd_quote_workflow).
+`operation-config-table.php`/`.css` (_CustomDEVs/quote-workflow/vd_quote_workflow).
 
 ## Configurador de Produto — recolha autónoma de pedidos
 
@@ -79,19 +79,6 @@ A entrada **Configurador de Produto** no menu abre diretamente o Report Designer
 27, sem `path` nem registo prévio. O report não está associado a uma entidade.
 A entidade 395 guarda os dados submetidos e disponibiliza os processos nativos
 sobre os pedidos; mantém-se fora do menu.
-
-#### Importação local para rascunho
-
-O Configurador aceita texto de email e colagem de imagem, PDF e ficheiros de
-imagem. A extração usa Poppler/Tesseract no servidor, sem enviar documentos
-para serviços externos; PDFs digitalizados usam OCR até às primeiras 6 páginas.
-As sugestões (tipo de produto, nome, referência, quantidades, dimensões, páginas,
-papel, faces e prazo quando explícitos) apenas preenchem campos vazios. Cliente,
-acabamentos e dados ambíguos exigem revisão. O utilizador revê o rascunho e
-carrega em **Guardar pedido**; o OCR nunca cria nem converte automaticamente um
-pedido. Os originais são anexados apenas ao guardar. O código e os backups do
-desenvolvimento são mantidos em
-`/home/vianaedias/public_html/_CustomDEVs/product-request-import/`.
 
 ### Conversão nativa do pedido em orçamento
 
@@ -1152,7 +1139,7 @@ node --test quotation-load-performance.test.cjs
 ```
 
 Copiar fontes geradas, fontes do manifesto, testes e manifestos para
-`/home/vianaedias/public_html/includes/vd_workflow_deployment/`, usando SSH com
+`/home/vianaedias/public_html/_CustomDEVs/quote-workflow/vd_workflow_deployment/`, usando SSH com
 `BatchMode=yes` e `StrictHostKeyChecking=yes`. Nesse diretório:
 
 ```sh
@@ -1349,7 +1336,7 @@ reiniciam o contador de horas. Os timestamps existentes não são alterados.
 `deploy-production-kanban-time.php` integra a alteração do estado 2425 da
 entidade de operações 170 com a entidade nativa **Tempos** (171). Mantém os
 outros Kanbans inalterados. O instalador guarda cópias dos ficheiros nativos e
-verifica hashes antes de atualizar; o helper fica em `includes/vd_quote_workflow/`.
+verifica hashes antes de atualizar; o helper fica em `_CustomDEVs/quote-workflow/vd_quote_workflow/`.
 Preparar o schema com `--schema-only` antes dos testes de integração.
 
 - **Em curso** (3717) / **Reiniciado** (3725) abre um intervalo do utilizador

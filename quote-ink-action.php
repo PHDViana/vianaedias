@@ -1,6 +1,6 @@
 <?php
-require_once 'includes/vd_quote_workflow/quote-workflow-store.php';
-require_once 'includes/vd_quote_workflow/quote-ink-store.php';
+require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/quote-workflow-store.php';
+require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/quote-ink-store.php';
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 $vdDb=new mysqli(DB_SERVER,DB_SERVER_USERNAME,DB_SERVER_PASSWORD,DB_DATABASE,(int)DB_SERVER_PORT);
 $vdDb->set_charset('utf8mb4');
@@ -52,7 +52,7 @@ try {
         exit;
     }
     $vdInkState=$vdComponentId ? $vdInk->state($vdQuote,$vdComponentId) : null;
-    include 'includes/vd_quote_workflow/quote-ink-view.php';
+    include '_CustomDEVs/quote-workflow/vd_quote_workflow/quote-ink-view.php';
 } catch (Throwable $vdError) {
     if (!($vdError instanceof DomainException)) error_log('VD ink: '.get_class($vdError).': '.$vdError->getMessage());
     if (http_response_code()===200) http_response_code($vdError instanceof DomainException?409:500);

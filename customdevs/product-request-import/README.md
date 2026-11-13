@@ -6,10 +6,10 @@ desenvolvimento são mantidos em
 
 O instalador publica cópias de runtime em:
 
-- `modules/items/actions/vd_product_configurator.php`
-- `js/vd-product-configurator.js`
-- `js/vd-product-request.css`
-- `includes/vd_quote_workflow/product-configurator.php` (apenas permite anexos TXT)
+- `_CustomDEVs/quote-workflow/modules/items/actions/vd_product_configurator.php`
+- `_CustomDEVs/quote-workflow/js/vd-product-configurator.js`
+- `_CustomDEVs/quote-workflow/js/vd-product-request.css`
+- `_CustomDEVs/quote-workflow/vd_quote_workflow/product-configurator.php` (apenas permite anexos TXT)
 
 O extrator usa `pdftotext`/`pdftoppm` e Tesseract localmente. Não envia ficheiros
 nem texto a serviços externos. Os temporários de OCR ficam em `/tmp` e são

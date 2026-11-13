@@ -28,7 +28,7 @@ if(($argv[1]??'')==='--inspect') {
         'filter_columns'=>array_column($result['app_reports_filters_columns'],'Field')],JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR),"\n";exit;
 }
 if(($argv[1]??'')==='--enable') {
-    $runtime='includes/vd_quote_workflow/product-request-conversion.php';
+    $runtime='_CustomDEVs/quote-workflow/vd_quote_workflow/product-request-conversion.php';
     if(!is_file($runtime)||!hash_equals(hash_file('sha256',__DIR__.'/product-request-conversion.php'),hash_file('sha256',$runtime)))throw new RuntimeException('Publique primeiro a implementação verificada.');
     $schema=vd_config_schema($db);
     foreach(['conversion.manual_process','conversion.automatic_process'] as $role) {
@@ -102,7 +102,7 @@ foreach(['preparing'=>'Em preparação','ready'=>'Pronto para orçamentar','conv
 }
 $schema=vd_config_schema($db);
 $db->query('UPDATE app_entity_'.$schema['config.entity'].' SET field_'.$status.'='.$schema['conversion.preparing']." WHERE field_$status IS NULL OR field_$status='' OR field_$status='0'");
-$require="require_once 'includes/vd_quote_workflow/product-request-conversion.php';\n";
+$require="require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/product-request-conversion.php';\n";
 $manual=vdConversionProcess($db,'conversion.manual_process','Pedido — criar orçamento em rascunho','default',
     $require.'vd_config_conversion_process((int)$item_id,$app_user,false);');
 $automatic=vdConversionProcess($db,'conversion.automatic_process','Pedido pronto — criar orçamento automaticamente','run_after_update',

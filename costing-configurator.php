@@ -101,7 +101,7 @@ while ($row = db_fetch_array($query)) {
 $simulation[$name][] = $row;
 }
 }
-require_once 'includes/vd_quote_workflow/quote-workflow-discovery.php';
+require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/quote-workflow-discovery.php';
 $simulation['costing_operations'] = vd_workflow_discover_operations($simulation['workflow_component'][0],
     $simulation['explicit_operation_settings'], $simulation['costing_catalog'], $simulation['workflow_rules']);
 unset($simulation['explicit_operation_settings']);
@@ -152,6 +152,6 @@ echo <<<'HTML'
 @media(max-width:1000px){#component-budget .cb-grid{grid-template-columns:minmax(0,1fr)}}
 @media print{#component-budget .cb-actions,#component-budget .cb-tabs,#component-budget details{display:none}#component-budget .cb-grid{display:block}#component-budget .cb-card{break-inside:avoid}}
 </style>
-<script src="js/vd-component-operation-costing-5214714efe7e.js"></script>
+<script src="_CustomDEVs/quote-workflow/js/vd-component-operation-costing-5214714efe7e.js"></script>
 HTML;
 } catch (\Throwable $vdReportError) { error_log("VD costing report: " . get_class($vdReportError) . ": " . $vdReportError->getMessage()); echo '<div class="alert alert-danger">Não foi possível carregar os dados de cálculo. Nenhuma gravação foi efetuada; consulte o registo técnico.</div>'; }

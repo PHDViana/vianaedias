@@ -5,11 +5,18 @@ require __DIR__.'/quote-workflow-integration-test.php';
 require __DIR__.'/product-request-conversion.php';
 $user=['id'=>1,'group_id'=>0,'email'=>'fixture@example.invalid','name'=>'Fixture'];
 $schema=vd_config_schema($db);$service=new VDProductConfigurator($db,$user);$store=new VDConfigNativeStore($db,$schema);
-$ids=[];$customers=[];$contacts=[];
-function vdConversionFixture($incomplete=false,$staged=false) {
-    global $db,$service,$schema,$store,$ids,$customers,$contacts;
+$ids=[];$customers=[];$contacts=[];$foldingPapers=[];
+function vdConversionFixture($incomplete=false,$staged=false,$folding=null,$foldOperation=null,$creaseOperation=null,$paperWeight=null) {
+    global $db,$service,$schema,$store,$ids,$customers,$contacts,$foldingPapers;
     $paper=$db->query("SELECT id FROM app_entity_99 WHERE FIND_IN_SET('190',field_1019)>0 AND field_3632+0>0 AND field_1021+0>0 AND field_1022+0>0 AND field_1023+0>0 AND field_1024+0>0 AND field_1024+0<=80 ORDER BY id LIMIT 1")->fetch_row();
     if(!$paper)throw new RuntimeException('No complete paper available for conversion fixtures.');
+    if($paperWeight!==null) {
+        $article=$db->query('SELECT * FROM app_entity_99 WHERE id='.(int)$paper[0])->fetch_assoc();
+        unset($article['id']);
+        $article['field_1020']='ISOLATED FOLDING PAPER';
+        $article['field_1023']=(string)$paperWeight;
+        $paper=[vd_config_insert($db,99,$article)];$foldingPapers[]=$paper[0];
+    }
     $customer=$customers[]=vdFixture(26,['field_221'=>'ISOLATED CONVERSION CUSTOMER','field_224'=>'176']);
     $contact=$contacts[]=vdFixture(90,['parent_item_id'=>$customer,'field_918'=>'ISOLATED CONVERSION CONTACT']);
     $payload=['type'=>'standard','product_type'=>3824,'quantities'=>[250,500],
@@ -22,6 +29,20 @@ function vdConversionFixture($incomplete=false,$staged=false) {
         $payload['request_details']['finishing']='Colocar biadesivo nos quatro cantos.';
         $payload['components'][0]['request']['finishing_operations']=[
             ['id'=>42,'name'=>'Aplicação de BiAdesivo','tape'=>['quantity'=>4,'x_mm'=>'20','y_mm'=>'20']]];
+    }
+    if($folding!==null) {
+        $payload['product_type']=3801;
+        $payload['quantities']=[500];
+        $payload['rubrics']=[['quantity'=>200,'description'=>'Versão A','code'=>'A'],['quantity'=>300,'description'=>'Versão B','code'=>'B']];
+        $payload['request_details']['workflow_version']=2;
+        $payload['request_details']['folding']=['count'=>2,'delivery'=>$folding];
+        $payload['components'][0]['name']='Desdobrável';
+        $payload['components'][0]['request']['die']=['status'=>'none','number'=>''];
+        $payload['components'][0]['request']['quote_preparation']['operation_quantities']=['12'=>1];
+        if($foldOperation!==null)$payload['components'][0]['request']['finishing_operations']=[
+            ['id'=>$foldOperation,'name'=>'Dobra escolhida']];
+        if($creaseOperation!==null)$payload['components'][0]['request']['finishing_operations'][]=[
+            'id'=>$creaseOperation,'name'=>'Vincar - Máquina'];
     }
     if($incomplete)$payload['quantities']=[];
     $state=$service->submit(0,0,['name'=>'ISOLATED CONVERSION FIXTURE','customer'=>$customer,'reference'=>'REFERENCE-FIXTURE','notes'=>'REQUISITO-SEM-PREÇO'],
@@ -101,6 +122,70 @@ if(($argv[1]??'')==='--convert') {
     $id=(int)($argv[2]??0);
     if($service->state($id)['name']!=='ISOLATED CONVERSION FIXTURE')throw new RuntimeException('Not a conversion fixture.');
     echo json_encode(vd_config_request_to_draft($db,$user,$id),JSON_THROW_ON_ERROR),"\n";exit;
+}
+if(($argv[1]??'')==='--folding') {
+    require_once __DIR__.'/product-quote-preparation.php';
+    try {
+        $cases=[];
+        foreach([149,150,150.01,170] as $weight)foreach(['open','closed'] as $delivery)
+            $cases[]=[$delivery,null,null,14,$weight];
+        $cases[]=['closed',33,null,14,170];$cases[]=['closed',35,null,14,170];
+        if(!empty($schema['operation.machine_crease'])) {
+            foreach([14,19] as $machine) {
+                $cases[]=['open',null,$schema['operation.machine_crease'],$machine,150];
+                $cases[]=['closed',35,$schema['operation.machine_crease'],$machine,170];
+            }
+        }
+        foreach($cases as [$delivery,$foldOperation,$creaseOperation,$machine,$weight]) {
+            $state=vdConversionFixture(false,false,$delivery,$foldOperation,$creaseOperation,$weight);
+            $payload=$state['payload'];$folding=['count'=>2,'delivery'=>$delivery];
+            vdCheck($payload['request_details']['folding']===$folding);
+            vdCheck(count($store->children('rubric',$state['id']))===2);
+            vdCheck($service->state($state['id'])['payload']===$payload);
+            $model=vd_config_quote_preparation_state($service,$state['id']);
+            $answers=[];
+            if($creaseOperation!==null) {
+                vdCheck($model['missing']===1);
+                $answers['1.equipment.'.$creaseOperation]=(string)$machine;
+            }else vdCheck($model['missing']===0);
+            $result=vd_config_request_to_draft($db,$user,$state['id'],false,$answers,$state['revision']);
+            $quote=(int)$result['quote'];
+            $parts=$db->query("SELECT * FROM app_entity_262 WHERE parent_item_id=$quote")->fetch_all(MYSQLI_ASSOC);
+            vdCheck(count($parts)===1);
+            $part=$parts[0];$component=(int)$part['id'];
+            vdCheck((int)$part['field_4220']===($creaseOperation===null&&$weight>150?1608:1565));
+            vdCheck((int)$part['field_6110']===($delivery==='closed'&&$foldOperation===null?1545:1544));
+            $operations=$db->query("SELECT field_4287 FROM app_entity_276 WHERE parent_item_id=$component ORDER BY field_4287+0")->fetch_all(MYSQLI_NUM);
+            $expectedOperations=$creaseOperation!==null?[$creaseOperation]:($weight>150?[18]:[]);
+            if($delivery==='closed')$expectedOperations[]=$foldOperation??21;
+            sort($expectedOperations);
+            vdCheck(array_map('intval',array_column($operations,0))===$expectedOperations);
+            if($creaseOperation!==null)vdCheck((int)$db->query("SELECT field_4288 FROM app_entity_276 WHERE parent_item_id=$component AND field_4287=$creaseOperation")->fetch_row()[0]===$machine);
+            $rubrics=$db->query("SELECT field_4320 quantity,field_4321 name,field_4322 code FROM app_entity_280 WHERE parent_item_id=$component ORDER BY id")->fetch_all(MYSQLI_ASSOC);
+            vdCheck(array_map('intval',array_column($rubrics,'quantity'))===[200,300]);
+            vdCheck(array_column($rubrics,'name')===['Versão A','Versão B']);
+            vdCheck(array_column($rubrics,'code')===['A','B']);
+            $metadata=vd_product_stage_read($db,$component);
+            vdCheck($metadata['requirements']['details']['folding']===$folding);
+            $simulation=['workflow_component'=>[$part],'component'=>[['binding'=>$part['field_6110']]],
+                'papers'=>[],'costing_catalog'=>[]];
+            vd_product_stage_simulation($db,$simulation,$component);
+            vdCheck($simulation['component'][0]['flat_folding']===true);
+            vdCheck($simulation['component'][0]['folding_count']===2);
+            vdCheck($simulation['component'][0]['operation_quantities']===[12=>1]);
+            vdCheck($simulation['component'][0]['binding']===$part['field_6110']);
+            $source=$store->source($quote);
+            vdCheck(hash_equals($source['hash'],hash('sha256',$source['payload'])));
+            vdCheck(json_decode($source['payload'],true,512,JSON_THROW_ON_ERROR)['payload']['request_details']['folding']===$folding);
+            vdCheck((int)$db->query("SELECT COUNT(*) FROM app_vd_quote_versions WHERE quote_id=$quote")->fetch_row()[0]===0);
+            vdCheck(vd_config_request_to_draft($db,$user,$state['id'])['quote']===$quote);
+        }
+        echo "$checks persisted leaflet conversion, operations and rubric checks passed.\n";
+    } finally {
+        foreach($ids as $id)vdConversionCleanup($id);
+        foreach($foldingPapers as $paper)$db->query("DELETE FROM app_entity_99 WHERE id=$paper AND field_1020='ISOLATED FOLDING PAPER'");
+    }
+    exit;
 }
 try {
     $counts=$db->query('SELECT (SELECT COUNT(*) FROM app_entity_146) quotes,(SELECT COUNT(*) FROM app_entity_121) orders,(SELECT COUNT(*) FROM app_entity_170) operations')->fetch_assoc();

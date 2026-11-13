@@ -4,16 +4,16 @@ chdir('/home/vianaedias/public_html');
 require 'config/database.php';
 mysqli_report(MYSQLI_REPORT_ERROR|MYSQLI_REPORT_STRICT);
 $db=new mysqli(DB_SERVER,DB_SERVER_USERNAME,DB_SERVER_PASSWORD,DB_DATABASE,(int)DB_SERVER_PORT);$db->set_charset('utf8mb4');
-$anchor="require_once 'includes/vd_quote_workflow/quote-workflow-discovery.php';";
+$anchor="require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/quote-workflow-discovery.php';";
 $addition=<<<'PHP'
 
-require_once 'includes/vd_quote_workflow/quote-product.php';
+require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/quote-product.php';
 $vdStageDb=new mysqli(DB_SERVER,DB_SERVER_USERNAME,DB_SERVER_PASSWORD,DB_DATABASE,(int)DB_SERVER_PORT);
 $vdStageDb->set_charset('utf8mb4');
 vd_product_stage_simulation($vdStageDb,$simulation,$componentId);
 $vdStageDb->close();
 PHP;
-require_once 'includes/vd_quote_workflow/quote-product.php';
+require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/quote-product.php';
 if(!function_exists('vd_product_stage_simulation'))throw new RuntimeException('Publique primeiro o runtime das etapas.');
 $db->begin_transaction();
 try {

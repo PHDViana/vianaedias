@@ -14,7 +14,7 @@
 
 <?php
 if ((int) $current_entity_id === 395) {
-    require_once 'includes/vd_quote_workflow/product-request-view.php';
+    require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/product-request-view.php';
     vd_config_request_info((int) $current_item_id);
     return;
 }
@@ -33,7 +33,7 @@ if ((int) $current_entity_id === 395) {
 
 <?php if ((int) $current_entity_id === 158): ?>
 <?php
-require_once 'includes/vd_quote_workflow/quote-workflow-store.php';
+require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/quote-workflow-store.php';
 $vdProductionDb = new mysqli(DB_SERVER, DB_SERVER_USERNAME, DB_SERVER_PASSWORD, DB_DATABASE, (int) DB_SERVER_PORT);
 $vdProductionDb->set_charset('utf8mb4');
 $vdProductionWorkflow = new VDQuoteWorkflow($vdProductionDb, $app_user);
@@ -82,7 +82,7 @@ $vdStaleDocument = null;
 if (!$vdAdjudicated && !db_fetch_array(db_query("SELECT id FROM app_vd_quote_documents WHERE quote_id=$vdActionQuote AND (sent_at IS NOT NULL OR state IN('sending','send_unknown')) LIMIT 1"))) {
     $vdStaleDocument = db_fetch_array(db_query("SELECT id,snapshot FROM app_vd_quote_documents WHERE quote_id=$vdActionQuote AND state IN('approved','send_failed') ORDER BY id DESC LIMIT 1"));
     if ($vdStaleDocument) {
-        require_once 'includes/vd_quote_workflow/quote-workflow-domain.php';
+        require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/quote-workflow-domain.php';
         $vdExtraRole = db_fetch_array(db_query("SELECT field_id FROM app_vd_quote_native_fields WHERE entity_id=146 AND role='extra_discount'"));
         $vdDiscountQuote = db_fetch_array(db_query("SELECT q.field_" . (int) $vdExtraRole['field_id'] . " extra,c.field_5124 customer FROM app_entity_146 q LEFT JOIN app_entity_26 c ON c.id=q.field_3923 WHERE q.id=$vdActionQuote"));
         $vdDocumentCustomer = json_decode($vdStaleDocument['snapshot'], true)['customer'] ?? [];

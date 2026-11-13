@@ -57,7 +57,7 @@ function vd_config_request_info($id) {
             echo '<div id="vd-quote-preparation" class="well"></div><script type="application/json" id="vd-quote-preparation-data">'.
                 json_encode(['id'=>(int)$id,'model'=>$model,'url'=>$api,'token'=>$app_session_token],
                     JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_THROW_ON_ERROR).'</script>'.
-                '<script src="js/vd-quote-preparation.js?v='.hash_file('sha256','js/vd-quote-preparation.js').'"></script>';
+                '<script src="_CustomDEVs/quote-workflow/js/vd-quote-preparation.js?v='.hash_file('sha256','_CustomDEVs/quote-workflow/js/vd-quote-preparation.js').'"></script>';
             $actions='';
         }
         echo vd_config_request_report_html($state,$service->catalog(),$status['name'],$actions,$schema['config.report'],$api);

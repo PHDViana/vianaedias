@@ -1,255 +1,219 @@
 {
-  "files": {
-    "includes/vd_quote_workflow/quote-workflow-domain.php": {
-      "source": "quote-workflow-domain.php",
-      "hash": "8552a77d5416f53c42bedc6f07198f87719a3bbe8ab21a1e79f12f050207a055",
-      "baseline": "fe863cd1df440e8fcd1a566a9aaebb38a29c71234048403ae66a3cc2619d6dc5"
+    "files": {
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/product-request-conversion.php": {
+            "source": "product-request-conversion.php",
+            "hash": "38f25cb3a7b1e18147a6aab15e157f3c4a588accfca82197a17a6d1edfd44c73",
+            "baseline": "a45d9eb4b7063bc6aec0a964cb5fde6297f9e9cab26c4e64cf534ebbbe989e9c"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/product-configurator.php": {
+            "source": "product-configurator.php",
+            "hash": "c5dc7187c1588bad6e22ec0d873b4a0a575acc50621544b0e004bb74227f650e",
+            "baseline": "976f260702b4b649427d58cc0272c859e9f408d60d21cf496e3e738eab1c704d"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/product-configurator-native.php": {
+            "source": "product-configurator-native.php",
+            "hash": "18df5b7d4e8605bf98b2d649023eb33bc427f0a0f019194c7889ad58aca232d4",
+            "baseline": "41c38ce196bcdf42a68abe0297480ec618287b3361b86e682f2b8ea85e44d6b5"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/product-finishing.php": {
+            "source": "product-finishing.php",
+            "hash": "664f4fc80462b3ccb0bb9548e9d6b5448d5c1c91e3e7c0ce8d59263b8ce8f3d4",
+            "baseline": "ec1984a9fa2389f1bd10e83005cbe81ac311303205e409bda2896dfc7fe5e055"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/product-configurator-queries.php": {
+            "source": "product-configurator-queries.php",
+            "hash": "85bd9da85980fc94b53a6ccc4ef703b6eea8b84a1c805045650a1dc253fff1c1",
+            "baseline": "aaad47d79cc2b943f2c81fcef6c9e8edc3a9a508aff9352e5366409e8a08f401"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/product-configurator-view.php": {
+            "source": "product-configurator-view.php",
+            "hash": "b722e909b6e23e061253dba089fc53bcdd1c0b455a2a2456ba9fbcc01719f76c",
+            "baseline": "512488bc9b04de0853da03fc347d0a39774bf4bb8de543b14e412a442c30fa75"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/production-evaluation.php": {
+            "source": "production-evaluation.php",
+            "hash": "7340c004c25758111016cdd813d13ebc7c3e22bab5947c00cea83eca86a1236c",
+            "baseline": "4e46228464051b1fa5bb9bf519437f1aa755ea5349eb255336140249b2cf8c39"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/production-evaluation-worker.php": {
+            "source": "production-evaluation-worker.php",
+            "hash": "9f3562e40afa2a4fc3a31c58ff00d3823980175a968365a3893c825d5be07b22"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/production-component-guards.php": {
+            "source": "production-component-guards.php",
+            "hash": "d0bfd8a120308717b6a1edbdb525dcecc3b042c6c1ccf0941fa8cc8164cd3292"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-product.php": {
+            "source": "quote-product.php",
+            "hash": "144ca8174a55c83c6f2cfddcf20fd865c4d67c64406039b31d832d8f8e0d8f4e",
+            "baseline": "fe9036d81bd96cc80c330a5d5e438813f723e2111b6705dcfbf1852c418118a3"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-ink.php": {
+            "source": "quote-ink.php",
+            "hash": "3713dd569ec99a79c054e1fd495e4955d9ceb46216950eeef6f0c16f6d3c0f3e",
+            "baseline": "ceab9c38b83873a3c4938923eefaa89b503a982067e000dc2b0c921d3fd7e059"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-ink-store.php": {
+            "source": "quote-ink-store.php",
+            "hash": "384b8472a041c7b4f18dacce479020f5934056df1915ba0157f9657e41efa070"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-ink-view.php": {
+            "source": "quote-ink-view.php",
+            "hash": "97dfad395bdd1f5f582ac13fb82c454dacb8011c3d81d6a3916be8532e1c34bd",
+            "baseline": "350627bf00b3386c876a258b1c138f03a618e49368eaca05d35175ba8141ec74"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-workflow-domain.php": {
+            "source": "quote-workflow-domain.php",
+            "hash": "8552a77d5416f53c42bedc6f07198f87719a3bbe8ab21a1e79f12f050207a055",
+            "baseline": "fe863cd1df440e8fcd1a566a9aaebb38a29c71234048403ae66a3cc2619d6dc5"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-component-materials.php": {
+            "source": "quote-component-materials.php",
+            "hash": "dfd152132312dff63538015a1eb8510467e478ed8ed8e36f795944f8c088d7a7",
+            "baseline": "8980227134bdc26adc1e547f1dac7a08580aab791b9f31272a5cba1b5415d73e"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/production-schedule.php": {
+            "source": "production-schedule.php",
+            "hash": "b20f1beb75972afb7cbb1743f5cbad144cdbcf69147fc201f4da4b218dbc3fa5",
+            "baseline": "a76d65a5c69e4884ea8dc0f5e4de0784a34cad839cc190ecb50e2d7bd499a9b0"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-workflow-store.php": {
+            "source": "quote-workflow-store.php",
+            "hash": "355e46c599489a6ee764fd2d6e47976a443e285d5b101afe89d8e420d87e5b11",
+            "baseline": "2c95e737e604465d47c747d73852aabc816710f409671b23c91bc672a7c8b505"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-workflow-discovery.php": {
+            "source": "quote-workflow-discovery.php",
+            "hash": "e23c64b0c30dcf116a09f0a36d5a99959b55b5422943e5971b68f67e2a7fc76c",
+            "baseline": "abc76fdd7b6710a2a0daf13c103f1f7ade0c21f7141aab3c8e626a4946edab80"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-operation-dependencies.php": {
+            "source": "quote-operation-dependencies.php",
+            "hash": "01ea97823bb529e0ff51ccca27a122663f0999a0f2c42a0df566b343d248b4eb",
+            "baseline": "0e4a1b80f82c9d9eb78e672752820fa899d0d372dbf2e32f1abcaf168a8d380f"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-workflow-pdf.php": {
+            "source": "quote-workflow-pdf.php",
+            "hash": "b6ff91ab24f27f46d185614c3648e45fd92ce7e27e134ba983d1806f69bc93b0",
+            "baseline": "a0c01664c949bf8f3401079826745387ff1fed0a588cd3d3a4bb9543b792b85e"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-approval-attachments.php": {
+            "source": "quote-approval-attachments.php",
+            "hash": "0299dc09936c0b3012be86f54e619ff380b15aa46b49c88e1254228cf8a86a4e",
+            "baseline": "bef24b5c6113dbb048a031279ef8fe8171aa3dbdf6aa99ebe29e08e0ef279fe8"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-production-order.php": {
+            "source": "quote-production-order.php",
+            "hash": "d1cad86c9d899913de033d8f896590f4e76f0cb787e227f1cd372d87c35979af",
+            "baseline": "e5bc859ec548a5d4678cb893966d7eaa914e580971356d2ba23a0c430a9c5783"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/product-stages.php": {
+            "source": "product-stages.php",
+            "hash": "485b453f5040c0fc97487903d623d127d617496b1ac7d429cc0459c85e11a6f7",
+            "baseline": "dfe39879b675b39020caaf58edf66d4bf83a6fecb4fd1d06c531d897220e29d1"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/product-requirements.php": {
+            "source": "product-requirements.php",
+            "hash": "07ed0592a9d6dfbd23c3959cb5684ad1efa73f00e70ab6d570307236e389d8ec",
+            "baseline": "8952fedfbda018a00233689fcfd6be3fe33d80a5a0d65cf8dd031b837ce1c143"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/product-request-view.php": {
+            "source": "product-request-view.php",
+            "hash": "27e221f6f121211ab3549f510f11a0b61efec2adc90b8cfc57de0a090e2b920b",
+            "baseline": "4c7be4ddfe06ad83910e08b120f6e83acf18958e78e2740f9c24d66c7fd74dc0"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/product-quote-preparation.php": {
+            "source": "product-quote-preparation.php",
+            "hash": "fd1883523bcbfd152edd2f844749f8671d388061d6a0f6cee8a43db97e958788",
+            "baseline": "0c298d75df7c03e687d11da4bfd169f3fff1ffda3cabf4751798ecd92d1c3c22"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-brand-logo.png": {
+            "source": "quote-brand-logo.png",
+            "hash": "f9ef4ad7381f22daef393098a8e6a443d4bc194adf48e363d7e2462383b62c45"
+        },
+        "_CustomDEVs/quote-workflow/vd_quote_workflow/quote-brand-footer.png": {
+            "source": "quote-brand-footer.png",
+            "hash": "8f2106a9ddc349d75dba23889e1d548d4f0d52fbffc8cee4fd089df97ba17034"
+        },
+        "_CustomDEVs/quote-workflow/modules/items/actions/vd_quote_ink.php": {
+            "source": "quote-ink-action.php",
+            "hash": "c24b7645c8686f7d1ffe0d28fceed255a38e39fe3da4a3958fd34b27262cf5d3"
+        },
+        "_CustomDEVs/quote-workflow/modules/items/actions/vd_product_configurator.php": {
+            "source": "product-configurator-action.php",
+            "hash": "be9a1f25dc80998e744292f193fa917ea4db163c94a039e3bd3c0e2415ab7064",
+            "baseline": "54e20122824c65e8b1d1213221b92a733e73847119b6096638a0a984d35f36f7"
+        },
+        "_CustomDEVs/quote-workflow/js/vd-product-configurator.js": {
+            "source": "product-configurator-ui.js",
+            "hash": "02b42dc0c5d028a1cd3b16ba5dc279da88916c5d63d065d779e0a549cb151814",
+            "baseline": "06ceb8ade5a21fbbed03d389d2a4f67fac7d58a75f9893026552192b32f7d11d"
+        },
+        "_CustomDEVs/quote-workflow/js/vd-quote-preparation.js": {
+            "source": "product-quote-preparation-ui.js",
+            "hash": "016a3b8ffa1db307c7e3fa1fd835713efb75d74061ca710465e0d97d7a91bfe6",
+            "baseline": "9216a73226bb1e7fcc893c1f3366b9c68df8eb4350380182722a2a045249fb20"
+        },
+        "_CustomDEVs/quote-workflow/js/vd-product-configurator.css": {
+            "source": "product-configurator.css",
+            "hash": "5b5c47f936e949c22a8937bafe21d1a854861f2d35707d14a2851bbcdeb08146"
+        },
+        "_CustomDEVs/quote-workflow/js/vd-product-request.css": {
+            "source": "product-request.css",
+            "hash": "a052c1aadb665406d833a62709c3bb39fda4cd9b02e57e6eaf40a67d5337b37c",
+            "baseline": "9a68312f3be1385cf920713ac2367ff19bc5cdb8f4028f5619760ffe7ea4d77c"
+        },
+        "_CustomDEVs/quote-workflow/js/vd-quote-ink.js": {
+            "source": "quote-ink-ui.js",
+            "hash": "1b8a55b3cf55ad6c6153a6579b3fed06a156b4cf2a27a620094babc6ff4242ce",
+            "baseline": "3cfc25c2399c7d032038b1873f7bbf08e2532bb52dcf98d99d62a70c4b7985df"
+        },
+        "_CustomDEVs/quote-workflow/js/vd-quote-product.js": {
+            "source": "quote-product-ui.js",
+            "hash": "efa97bb829ab7c3a2755f697aa09417104ab12e6f5d84a671273ec58c85bab25",
+            "baseline": "e8e75898d58978100f11d16bb34b6803b5e65fbecf40477f38b9972ca4d2eebc"
+        },
+        "_CustomDEVs/quote-workflow/modules/items/actions/vd_quote_workflow.php": {
+            "source": "quote-workflow-action.php",
+            "hash": "39304b4d63f7bd3b04155274923beeff1f00be75ddc3f86533b239d0c91e1f5d",
+            "baseline": "8f08360c45715090d25200dcf6f72bed2132211990b2772b7d395e7ce0bb3208"
+        },
+        "_CustomDEVs/quote-workflow/modules/items/views/vd_quote_workflow.php": {
+            "source": "quote-workflow-view.php",
+            "hash": "c81a7fd90ccea896fc2f76304fbd7238603ba8e0d7a1b78a4648d37433e9dbaa",
+            "baseline": "96fa57c0395d8bbece17bf8e9ac18e4ce0460fcf3a514e321b02d0d29da165e7"
+        },
+        "_CustomDEVs/quote-workflow/js/vd-quote-workflow.js": {
+            "source": "quote-workflow-ui.js",
+            "hash": "a6d2937ca8b07a9500732db60a297a796718d43f98859406e25a4eea33de660d",
+            "baseline": "f40305efa7d70b41c977c58246edbb8eef550bc1f1253513cad35cfa6acc68eb"
+        },
+        "modules/items/views/info.php": {
+            "source": "native-info-workflow.php",
+            "hash": "17bbaf2ff7c7b35a0b137db3b0a8f986f71da120fcbb824b1a983772e7b5d2c9",
+            "baseline": "a57e51f86f4773f2bac3bd89b8fd0d707bea06364937999f87501facc9529f77"
+        },
+        "plugins/ext/sms_modules/clicksend/clicksend.php": {
+            "source": "native-clicksend-workflow.php",
+            "hash": "70a0948c1f03114e9cca98bb66c3b88f3bfeb36a779473b2df67767a3946390d",
+            "baseline": "b78bda44d830c259b39d46803a5c0bcace576ccc21e2873ac97358704d6661f5"
+        },
+        "modules/items/actions/items.php": {
+            "source": "native-items-workflow.php",
+            "hash": "c81ea5de5e7de331354268e55593bcf61fe7d7a0e4ab8bee5bc4fe3ee01ef314",
+            "baseline": "011e46b05de573a6bc8624edc9322e08dd51993f6b4b13cae3f31ed522892f09"
+        },
+        "modules/items/actions/listing.php": {
+            "source": "native-listing-workflow.php",
+            "hash": "de5576a3cf3edcb0fe4336e27d66c548d82e3863bd1541ac61670d398ad2825f",
+            "baseline": "f55090ad152d5fc541da3b2df558ddb80af8ce784b7549f54c56769126e37edb"
+        }
     },
-    "includes/vd_quote_workflow/quote-workflow-store.php": {
-      "source": "quote-workflow-store.php",
-      "hash": "355e46c599489a6ee764fd2d6e47976a443e285d5b101afe89d8e420d87e5b11",
-      "baseline": "2c95e737e604465d47c747d73852aabc816710f409671b23c91bc672a7c8b505"
-    },
-    "includes/vd_quote_workflow/quote-workflow-discovery.php": {
-      "source": "quote-workflow-discovery.php",
-      "hash": "e23c64b0c30dcf116a09f0a36d5a99959b55b5422943e5971b68f67e2a7fc76c",
-      "baseline": "abc76fdd7b6710a2a0daf13c103f1f7ade0c21f7141aab3c8e626a4946edab80"
-    },
-    "includes/vd_quote_workflow/quote-operation-dependencies.php": {
-      "source": "quote-operation-dependencies.php",
-      "hash": "01ea97823bb529e0ff51ccca27a122663f0999a0f2c42a0df566b343d248b4eb",
-      "baseline": "0e4a1b80f82c9d9eb78e672752820fa899d0d372dbf2e32f1abcaf168a8d380f"
-    },
-    "modules/items/actions/vd_quote_workflow.php": {
-      "source": "quote-workflow-action.php",
-      "hash": "5c9b6b124d52828d9fae57dd6dbfe3cfdafd5e5b1c7d4c11cf09391ac0db3cf5",
-      "baseline": "8f08360c45715090d25200dcf6f72bed2132211990b2772b7d395e7ce0bb3208"
-    },
-    "modules/items/views/vd_quote_workflow.php": {
-      "source": "quote-workflow-view.php",
-      "hash": "75fcdc5bdecb9faadacabd827b9ae05d96d45a919b6d9cc81d0e00d25dc71cbc",
-      "baseline": "96fa57c0395d8bbece17bf8e9ac18e4ce0460fcf3a514e321b02d0d29da165e7"
-    },
-    "js/vd-quote-workflow.js": {
-      "source": "quote-workflow-ui.js",
-      "hash": "a6d2937ca8b07a9500732db60a297a796718d43f98859406e25a4eea33de660d",
-      "baseline": "f40305efa7d70b41c977c58246edbb8eef550bc1f1253513cad35cfa6acc68eb"
-    },
-    "modules/items/views/info.php": {
-      "source": "native-info-workflow.php",
-      "hash": "4d8403c222efe247d5805d39e3ac65e7bbd7fd0e6c7dd9728f8987d74ba549d6",
-      "baseline": "fac587125285ee193278f1e67b018420ff1f1a122ae9bcd28ba61a6b75925b05"
-    },
-    "modules/items/actions/items.php": {
-      "source": "native-items-workflow.php",
-      "hash": "011e46b05de573a6bc8624edc9322e08dd51993f6b4b13cae3f31ed522892f09",
-      "baseline": "dcdffa8bd14e7f5bcf6e9c89438101a0a57cf8d0a41a2a54028e9bbd90983037"
-    },
-    "modules/items/actions/listing.php": {
-      "source": "native-listing-workflow.php",
-      "hash": "de5576a3cf3edcb0fe4336e27d66c548d82e3863bd1541ac61670d398ad2825f",
-      "baseline": "f55090ad152d5fc541da3b2df558ddb80af8ce784b7549f54c56769126e37edb"
-    },
-    "includes/vd_quote_workflow/product-configurator.php": {
-      "source": "../../_CustomDEVs/product-request-import/product-configurator.php",
-      "hash": "e975e7bf4c33f141acbf8ff1c0eb4642b4928629b99fa381c379a0f65ea483cc",
-      "baseline": "c5dc7187c1588bad6e22ec0d873b4a0a575acc50621544b0e004bb74227f650e"
-    },
-    "includes/vd_quote_workflow/product-configurator-native.php": {
-      "source": "../../_CustomDEVs/product-request-import/product-configurator-native.php",
-      "hash": "18df5b7d4e8605bf98b2d649023eb33bc427f0a0f019194c7889ad58aca232d4",
-      "baseline": "41c38ce196bcdf42a68abe0297480ec618287b3361b86e682f2b8ea85e44d6b5"
-    },
-    "includes/vd_quote_workflow/product-configurator-queries.php": {
-      "source": "../../_CustomDEVs/product-request-import/product-configurator-queries.php",
-      "hash": "85bd9da85980fc94b53a6ccc4ef703b6eea8b84a1c805045650a1dc253fff1c1",
-      "baseline": "c5c8a8290b422878c8559419f853896ae78027f010309bbbd51cc871266bdba6"
-    },
-    "includes/vd_quote_workflow/product-configurator-view.php": {
-      "source": "../../_CustomDEVs/product-request-import/product-configurator-view.php",
-      "hash": "b43321def31d32f729d3d6636f5a33a0475011d66afb2b1ad83857bbde74e007",
-      "baseline": "512488bc9b04de0853da03fc347d0a39774bf4bb8de543b14e412a442c30fa75"
-    },
-    "modules/items/actions/vd_product_configurator.php": {
-      "source": "../../_CustomDEVs/product-request-import/product-configurator-action.php",
-      "hash": "69b782b18412c1226f8e4cd7685f0e38b9bdbc6faa719e3c8c552b57f796fafe",
-      "baseline": "44dbff0efe2bf9c67f1f48c43be163e2da010f587fd0ce151fc6ce1378724253"
-    },
-    "js/vd-product-configurator.js": {
-      "source": "../../_CustomDEVs/product-request-import/product-configurator-ui.js",
-      "hash": "89b3150899a0e5e9bd7a62413f0958cedf2e2ef90a98c2ddcb789ec2942f37e6",
-      "baseline": "4c78e56df27231646238ba5a869942796e3abbbbce16ca145c57900551eb5ad5"
-    },
-    "js/vd-product-request.css": {
-      "source": "../../_CustomDEVs/product-request-import/product-request.css",
-      "hash": "ee0164da1bd4fc451277992423f1db76d94dea6a830fecfaecf107528855e9a6",
-      "baseline": "a052c1aadb665406d833a62709c3bb39fda4cd9b02e57e6eaf40a67d5337b37c"
-    },
-    "_CustomDEVs/product-request-import/product-request-import.php": {
-      "source": "../../_CustomDEVs/product-request-import/product-request-import.php",
-      "hash": "d7785418990c552c5432327ae2a480c20cc119ab279e0f0e13a0337a541308de"
-    },
-    "_CustomDEVs/product-request-import/.htaccess": {
-      "source": "../../_CustomDEVs/product-request-import/.htaccess",
-      "hash": "dbdf47f62a27badc00789cd9369768de4d210117e6b04d534677154701c19435"
-    },
-    "_CustomDEVs/product-request-import/deploy-product-request-import.php": {
-      "source": "../../_CustomDEVs/product-request-import/deploy-product-request-import.php",
-      "hash": "d3f0a0419ceb0779a8faa73f05459838e75d9ea14e9e310cb217e8324c56f660",
-      "baseline": "97443f279bda890fac9550d0e9f32314122eafd96bc1b10dbca2d4bf6c9938ad"
-    },
-    "_CustomDEVs/product-request-import/SYSTEM-DEPENDENCIES.txt": {
-      "source": "../../_CustomDEVs/product-request-import/SYSTEM-DEPENDENCIES.txt",
-      "hash": "a7d3771a2cb7aeabb4fa149487081f2c3b0e9b4ac782f7b2a31b991c47d45df1"
-    },
-    "_CustomDEVs/product-request-import/product-request-import-test.php": {
-      "source": "../../_CustomDEVs/product-request-import/product-request-import-test.php",
-      "hash": "a02d5d1aba17128e36a8d11bc307a1fa68b628cb65b84e4713ed873b84f6a4f7",
-      "baseline": "0a698afe4631cded6a5dc989b45574c181f0e5695b035c514720964ab98fbec6"
-    },
-    "_CustomDEVs/product-request-import/product-request-import-integration-test.php": {
-      "source": "../../_CustomDEVs/product-request-import/product-request-import-integration-test.php",
-      "hash": "52398527c0ca5dd44140ae9a126c8ebf0a7ba0fbe77a34809d7c2975e3d40818"
-    },
-    "_CustomDEVs/product-request-import/README.md": {
-      "source": "../../_CustomDEVs/product-request-import/README.md",
-      "hash": "19cf52b88061e56c352b46600d098e628380c9fd94f0590c4a1f24bed66f4c0b",
-      "baseline": "afd5d70e2af40f0f316e5a91a492715f41b4ad5d8cc7dab9dc9ec6e7cbf75184"
-    },
-    "_CustomDEVs/product-request-import/build-quote-workflow.cjs": {
-      "source": "../../_CustomDEVs/product-request-import/build-quote-workflow.cjs",
-      "hash": "e3a8dd198830d1c84e70e94ac538e1af5c4878b34f4addb2d2d7ea19349de462",
-      "baseline": "f90b68931c3417aa909002cc08575a2431576ae468eafe9369d06ef00f493d96"
-    },
-    "includes/vd_quote_workflow/product-request-conversion.php": {
-      "source": "product-request-conversion.php",
-      "hash": "38f25cb3a7b1e18147a6aab15e157f3c4a588accfca82197a17a6d1edfd44c73",
-      "baseline": "a45d9eb4b7063bc6aec0a964cb5fde6297f9e9cab26c4e64cf534ebbbe989e9c"
-    },
-    "includes/vd_quote_workflow/product-finishing.php": {
-      "source": "product-finishing.php",
-      "hash": "664f4fc80462b3ccb0bb9548e9d6b5448d5c1c91e3e7c0ce8d59263b8ce8f3d4",
-      "baseline": "ec1984a9fa2389f1bd10e83005cbe81ac311303205e409bda2896dfc7fe5e055"
-    },
-    "includes/vd_quote_workflow/production-evaluation.php": {
-      "source": "production-evaluation.php",
-      "hash": "7340c004c25758111016cdd813d13ebc7c3e22bab5947c00cea83eca86a1236c",
-      "baseline": "4e46228464051b1fa5bb9bf519437f1aa755ea5349eb255336140249b2cf8c39"
-    },
-    "includes/vd_quote_workflow/production-evaluation-worker.php": {
-      "source": "production-evaluation-worker.php",
-      "hash": "9f3562e40afa2a4fc3a31c58ff00d3823980175a968365a3893c825d5be07b22"
-    },
-    "includes/vd_quote_workflow/production-component-guards.php": {
-      "source": "production-component-guards.php",
-      "hash": "d0bfd8a120308717b6a1edbdb525dcecc3b042c6c1ccf0941fa8cc8164cd3292"
-    },
-    "includes/vd_quote_workflow/quote-product.php": {
-      "source": "quote-product.php",
-      "hash": "144ca8174a55c83c6f2cfddcf20fd865c4d67c64406039b31d832d8f8e0d8f4e",
-      "baseline": "fe9036d81bd96cc80c330a5d5e438813f723e2111b6705dcfbf1852c418118a3"
-    },
-    "includes/vd_quote_workflow/quote-ink.php": {
-      "source": "quote-ink.php",
-      "hash": "3713dd569ec99a79c054e1fd495e4955d9ceb46216950eeef6f0c16f6d3c0f3e",
-      "baseline": "ceab9c38b83873a3c4938923eefaa89b503a982067e000dc2b0c921d3fd7e059"
-    },
-    "includes/vd_quote_workflow/quote-ink-store.php": {
-      "source": "quote-ink-store.php",
-      "hash": "384b8472a041c7b4f18dacce479020f5934056df1915ba0157f9657e41efa070"
-    },
-    "includes/vd_quote_workflow/quote-ink-view.php": {
-      "source": "quote-ink-view.php",
-      "hash": "b212ee3499ef09aa6347578f471f9145268bb7f836b96198b7236c492b1e6c26",
-      "baseline": "350627bf00b3386c876a258b1c138f03a618e49368eaca05d35175ba8141ec74"
-    },
-    "includes/vd_quote_workflow/quote-component-materials.php": {
-      "source": "quote-component-materials.php",
-      "hash": "dfd152132312dff63538015a1eb8510467e478ed8ed8e36f795944f8c088d7a7",
-      "baseline": "8980227134bdc26adc1e547f1dac7a08580aab791b9f31272a5cba1b5415d73e"
-    },
-    "includes/vd_quote_workflow/production-schedule.php": {
-      "source": "production-schedule.php",
-      "hash": "b20f1beb75972afb7cbb1743f5cbad144cdbcf69147fc201f4da4b218dbc3fa5",
-      "baseline": "a76d65a5c69e4884ea8dc0f5e4de0784a34cad839cc190ecb50e2d7bd499a9b0"
-    },
-    "includes/vd_quote_workflow/quote-workflow-pdf.php": {
-      "source": "quote-workflow-pdf.php",
-      "hash": "b6ff91ab24f27f46d185614c3648e45fd92ce7e27e134ba983d1806f69bc93b0",
-      "baseline": "a0c01664c949bf8f3401079826745387ff1fed0a588cd3d3a4bb9543b792b85e"
-    },
-    "includes/vd_quote_workflow/quote-approval-attachments.php": {
-      "source": "quote-approval-attachments.php",
-      "hash": "0299dc09936c0b3012be86f54e619ff380b15aa46b49c88e1254228cf8a86a4e",
-      "baseline": "bef24b5c6113dbb048a031279ef8fe8171aa3dbdf6aa99ebe29e08e0ef279fe8"
-    },
-    "includes/vd_quote_workflow/quote-production-order.php": {
-      "source": "quote-production-order.php",
-      "hash": "d1cad86c9d899913de033d8f896590f4e76f0cb787e227f1cd372d87c35979af",
-      "baseline": "e5bc859ec548a5d4678cb893966d7eaa914e580971356d2ba23a0c430a9c5783"
-    },
-    "includes/vd_quote_workflow/product-stages.php": {
-      "source": "product-stages.php",
-      "hash": "485b453f5040c0fc97487903d623d127d617496b1ac7d429cc0459c85e11a6f7",
-      "baseline": "dfe39879b675b39020caaf58edf66d4bf83a6fecb4fd1d06c531d897220e29d1"
-    },
-    "includes/vd_quote_workflow/product-requirements.php": {
-      "source": "product-requirements.php",
-      "hash": "07ed0592a9d6dfbd23c3959cb5684ad1efa73f00e70ab6d570307236e389d8ec",
-      "baseline": "8952fedfbda018a00233689fcfd6be3fe33d80a5a0d65cf8dd031b837ce1c143"
-    },
-    "includes/vd_quote_workflow/product-request-view.php": {
-      "source": "product-request-view.php",
-      "hash": "e395e0514d2f140fa8b361b4473383dc03a64ad1109303c6fd2cd0a69f04784c",
-      "baseline": "4c7be4ddfe06ad83910e08b120f6e83acf18958e78e2740f9c24d66c7fd74dc0"
-    },
-    "includes/vd_quote_workflow/product-quote-preparation.php": {
-      "source": "product-quote-preparation.php",
-      "hash": "fd1883523bcbfd152edd2f844749f8671d388061d6a0f6cee8a43db97e958788",
-      "baseline": "0c298d75df7c03e687d11da4bfd169f3fff1ffda3cabf4751798ecd92d1c3c22"
-    },
-    "includes/vd_quote_workflow/quote-brand-logo.png": {
-      "source": "quote-brand-logo.png",
-      "hash": "f9ef4ad7381f22daef393098a8e6a443d4bc194adf48e363d7e2462383b62c45"
-    },
-    "includes/vd_quote_workflow/quote-brand-footer.png": {
-      "source": "quote-brand-footer.png",
-      "hash": "8f2106a9ddc349d75dba23889e1d548d4f0d52fbffc8cee4fd089df97ba17034"
-    },
-    "modules/items/actions/vd_quote_ink.php": {
-      "source": "quote-ink-action.php",
-      "hash": "c6b153fd10ba96358fd019700b433b299d213b2fb5167dfbdae07607084f257e"
-    },
-    "js/vd-quote-preparation.js": {
-      "source": "product-quote-preparation-ui.js",
-      "hash": "016a3b8ffa1db307c7e3fa1fd835713efb75d74061ca710465e0d97d7a91bfe6",
-      "baseline": "9216a73226bb1e7fcc893c1f3366b9c68df8eb4350380182722a2a045249fb20"
-    },
-    "js/vd-product-configurator.css": {
-      "source": "product-configurator.css",
-      "hash": "5b5c47f936e949c22a8937bafe21d1a854861f2d35707d14a2851bbcdeb08146"
-    },
-    "js/vd-quote-ink.js": {
-      "source": "quote-ink-ui.js",
-      "hash": "1b8a55b3cf55ad6c6153a6579b3fed06a156b4cf2a27a620094babc6ff4242ce",
-      "baseline": "3cfc25c2399c7d032038b1873f7bbf08e2532bb52dcf98d99d62a70c4b7985df"
-    },
-    "js/vd-quote-product.js": {
-      "source": "quote-product-ui.js",
-      "hash": "efa97bb829ab7c3a2755f697aa09417104ab12e6f5d84a671273ec58c85bab25",
-      "baseline": "e8e75898d58978100f11d16bb34b6803b5e65fbecf40477f38b9972ca4d2eebc"
-    },
-    "plugins/ext/sms_modules/clicksend/clicksend.php": {
-      "source": "native-clicksend-workflow.php",
-      "hash": "70a0948c1f03114e9cca98bb66c3b88f3bfeb36a779473b2df67767a3946390d",
-      "baseline": "b78bda44d830c259b39d46803a5c0bcace576ccc21e2873ac97358704d6661f5"
+    "custom_php": {
+        "5": {
+            "source": "native-dependencies-workflow.php",
+            "baseline": "8f8393d37f66ab71ea76e8d478fbb8ab38f40f30d4d85920a362de6dca9a5aa4",
+            "hash": "c861ac9f7c8e67b3102acc53b4f157216d3d5e32bfc307e51ed33cc9f04a0f50"
+        }
     }
-  },
-  "custom_php": {
-    "5": {
-      "source": "native-dependencies-workflow.php",
-      "baseline": "8f8393d37f66ab71ea76e8d478fbb8ab38f40f30d4d85920a362de6dca9a5aa4",
-      "hash": "c861ac9f7c8e67b3102acc53b4f157216d3d5e32bfc307e51ed33cc9f04a0f50"
-    }
-  }
 }

@@ -229,7 +229,7 @@ try {
                 'settings'=>'{"hide_page_title":"0","hide_print_button":"1"}']));
             $db->query("INSERT INTO app_vd_config_schema(role,native_id) VALUES('$role.report',$reportId)");
         }
-        $code="require_once 'includes/vd_quote_workflow/product-configurator-view.php'; vd_product_configurator_report('".$role."', ".($role==='config'?'0':"(int)'[current_item_id]'").");";
+        $code="require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/product-configurator-view.php'; vd_product_configurator_report('".$role."', ".($role==='config'?'0':"(int)'[current_item_id]'").");";
         $settings=json_encode(['php_code'=>$code],JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);
         $block=$db->query("SELECT native_id FROM app_vd_config_schema WHERE role='$role.block'")->fetch_assoc();
         if (!$block) {
@@ -240,7 +240,7 @@ try {
         elseif($role==='config') {
             $old=$db->query('SELECT settings FROM app_ext_report_page_blocks WHERE id='.(int)$block['native_id'])->fetch_row()[0];
             $previous=json_decode($old,true,512,JSON_THROW_ON_ERROR);
-            $expected="require_once 'includes/vd_quote_workflow/product-configurator-view.php'; vd_product_configurator_report('config', (int)'[current_item_id]');";
+            $expected="require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/product-configurator-view.php'; vd_product_configurator_report('config', (int)'[current_item_id]');";
             if($old!==$settings) {
                 if(($previous['php_code']??'')!==$expected)throw new RuntimeException('Report block changed externally.');
                 $s=$db->prepare('UPDATE app_ext_report_page_blocks SET settings=? WHERE id=? AND settings=?');
@@ -326,7 +326,7 @@ try {
     }
 } finally {$db->query("SELECT RELEASE_LOCK('vd_product_config_schema')");}
 if(in_array('--enable-worker',$argv,true)) {
-    $worker='/home/vianaedias/public_html/includes/vd_quote_workflow/production-evaluation-worker.php';
+    $worker='/home/vianaedias/public_html/_CustomDEVs/quote-workflow/vd_quote_workflow/production-evaluation-worker.php';
     if(!is_file($worker)||hash_file('sha256',$worker)!==hash_file('sha256',__DIR__.'/production-evaluation-worker.php'))throw new RuntimeException('Publish the verified worker before enabling automation.');
     $cron="* * * * * root /opt/cpanel/ea-php74/root/usr/bin/php -d display_errors=stderr $worker >> /var/log/vd-production-evaluation.log 2>&1\n";
     $path='/etc/cron.d/vd-production-evaluation';

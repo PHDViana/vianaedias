@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-cd /home/vianaedias/public_html/includes/vd_workflow_deployment
+cd /home/vianaedias/public_html/_CustomDEVs/quote-workflow/vd_workflow_deployment
 install -d -m 0755 /usr/local/libexec
 install -o root -g root -m 0644 quote-ink-worker.php /usr/local/libexec/vd-ink-worker.php
 install -o root -g root -m 0755 vd-ink-analyze /usr/local/sbin/vd-ink-analyze

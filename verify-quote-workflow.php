@@ -126,7 +126,7 @@ if ($db->query("SHOW TABLES LIKE 'app_vd_production_time_files'")->num_rows) {
         }
         echo "Verified production Gantt minute schedule files.\n";
     }
-    if (is_file('includes/vd_quote_workflow/quote-ink.php')) {
+    if (is_file('_CustomDEVs/quote-workflow/vd_quote_workflow/quote-ink.php')) {
         foreach (['/usr/local/sbin/vd-ink-analyze'=>'vd-ink-analyze','/usr/local/libexec/vd-ink-worker.php'=>'quote-ink-worker.php'] as $path=>$source) {
             if (!is_file($path) || !hash_equals(hash_file('sha256',__DIR__.'/'.$source),hash_file('sha256',$path)) ||
                 fileowner($path)!==0 || (fileperms($path)&0022)!==0) throw new RuntimeException('PDF ink worker changed or unsafe permissions: '.$path);

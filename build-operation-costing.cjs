@@ -71,7 +71,7 @@ php = replace(php, 'p.field_2174 component_height,p.field_2178 width,',
 php = replace(php, 'WHERE parent_item_id={$componentId}",\n];',
     'WHERE parent_item_id={$componentId} ORDER BY id",\n];');
 php = replace(php, "echo '<script type=\"application/json\" id=\"component-simulation-data\">'",
-    `require_once 'includes/vd_quote_workflow/quote-workflow-discovery.php';
+    `require_once '_CustomDEVs/quote-workflow/vd_quote_workflow/quote-workflow-discovery.php';
 $simulation['costing_operations'] = vd_workflow_discover_operations($simulation['workflow_component'][0],
     $simulation['explicit_operation_settings'], $simulation['costing_catalog'], $simulation['workflow_rules']);
 unset($simulation['explicit_operation_settings']);

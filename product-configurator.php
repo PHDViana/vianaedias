@@ -89,7 +89,14 @@ function vd_config_document($name,$content) {
         return $result;
     }
 function vd_config_rubric_types() {
-    return [3708,3744,3745,3746,3761,3834,3835];
+    return [3708,3744,3745,3746,3761,3801,3834,3835];
+}
+function vd_config_sticker_cutting_choices() {
+    return [
+        'cut_and_crease'=>['label'=>'Corte e vinco','operation_ids'=>[8,11]],
+        'plotter_a3'=>['label'=>'Corte de plotter A3','operation_ids'=>[30]],
+        'cutting_table'=>['label'=>'Mesa de corte','operation_ids'=>[41]]
+    ];
 }
 function vd_config_rubrics_validate(array $payload) {
     if(!array_key_exists('rubrics',$payload))return;
@@ -97,7 +104,7 @@ function vd_config_rubrics_validate(array $payload) {
     if(!is_array($rubrics)||array_values($rubrics)!==$rubrics||count($rubrics)>500)throw new DomainException('Indique até 500 rubricas.');
     if(!$rubrics)return;
     if(!in_array((int)($payload['product_type']??0),vd_config_rubric_types(),true))
-        throw new DomainException('Rubricas disponíveis apenas para Cartões, Etiquetas, Cintas, Autocolantes, Expositores, Rótulos e Tags.');
+        throw new DomainException('Rubricas disponíveis apenas para Cartões, Etiquetas, Cintas, Autocolantes, Expositores, Desdobráveis, Rótulos e Tags.');
     $total=0;
     foreach($rubrics as $index=>$rubric) {
         $prefix='Rubrica '.($index+1).': ';
@@ -153,6 +160,11 @@ function vd_config_request_validate(array $payload,$requirePrintFaces=true) {
     foreach($dispatch as $method)if(!is_string($method)||!in_array($method,['pickup','carrier','delivery'],true))throw new DomainException('Opção de expedição inválida.');
     if(count($dispatch)!==count(array_unique($dispatch)))throw new DomainException('Opções de expedição repetidas.');
     if(count($dispatch)>1)throw new DomainException('Escolha apenas uma opção de expedição.');
+    $cutting=$payload['request_details']['cutting_operation']??'';
+    if((int)($payload['product_type']??0)===3761) {
+        if(!is_string($cutting)||!isset(vd_config_sticker_cutting_choices()[$cutting]))
+            throw new DomainException('Escolha a operação de corte pretendida para os autocolantes.');
+    }elseif($cutting!=='')throw new DomainException('A operação de corte indicada só se aplica a autocolantes.');
     foreach($payload['components']??[] as $component) {
         foreach(['paper'=>1000,'description'=>2000] as $key=>$limit)if(isset($component['request'][$key])&&(!is_string($component['request'][$key])||strlen($component['request'][$key])>$limit))throw new DomainException('Descrição do produto demasiado longa ou inválida.');
         foreach([4218,4219,4233] as $field)if(isset($component['fields'][$field])&&$component['fields'][$field]!=='')vd_product_number($component['fields'][$field],'tamanho / páginas do produto',false);
@@ -254,7 +266,7 @@ class VDProductConfigurator {
         $productField=$this->operationProductField();
         $stageField=$this->schema['operation.stage']??0;
         $stageSelect=$stageField?"field_$stageField":"''";
-        $rows=$this->workflow->rows("SELECT id,COALESCE(NULLIF(TRIM(field_6293),''),field_1982) name,field_6128 base,$stageSelect stage,field_$productField product_types FROM app_entity_36 WHERE field_6129='true' AND (field_6292=?".($stageField?" OR $stageSelect IN('Assemblagem','Embalamento individual')":"").") ORDER BY name,id",[$extra[0]['id']]);
+        $rows=$this->workflow->rows("SELECT id,COALESCE(NULLIF(TRIM(field_6293),''),field_1982) name,field_6128 base,$stageSelect stage,field_$productField product_types FROM app_entity_36 WHERE field_6129='true' AND (field_6292=? OR id IN(18,21,33,35)".($stageField?" OR $stageSelect IN('Assemblagem','Embalamento individual')":"").") ORDER BY name,id",[$extra[0]['id']]);
         foreach($rows as &$row) {
             $row['product_types']=$this->operationProducts($row['product_types']);
             $code=vd_product_stage_code($row['stage']);
@@ -279,6 +291,8 @@ class VDProductConfigurator {
     }
     function finishingRules() {
         $rules=vd_config_finishing_rules($this->schema['config.die_operation']??0,$this->schema['config.enveloping_operation']??0);
+        $rules['crease']=[18];
+        if(!empty($this->schema['operation.machine_crease']))$rules['crease'][]=$this->schema['operation.machine_crease'];
         $rules['lamination_available']=false;
         $rules['lamination_products']=[];
         $field=$this->operationProductField();

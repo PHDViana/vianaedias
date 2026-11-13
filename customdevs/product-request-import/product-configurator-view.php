@@ -14,10 +14,10 @@ function vd_product_configurator_report($role,$id) {
         $service->access();
         $data=['catalog'=>$service->catalog(),'schema'=>$service->schema,
             'token'=>$app_session_token,'url'=>url_for('items/vd_product_configurator','path='.$service->schema['config.entity'])];
-        echo '<link rel="stylesheet" href="js/vd-product-request.css?v='.hash_file('sha256','js/vd-product-request.css').'">';
+        echo '<link rel="stylesheet" href="_CustomDEVs/quote-workflow/js/vd-product-request.css?v='.hash_file('sha256','_CustomDEVs/quote-workflow/js/vd-product-request.css').'">';
         echo '<div id="vd-product-configurator"></div><script type="application/json" id="vd-product-configurator-data">'.
             json_encode($data,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_THROW_ON_ERROR).'</script>';
-        echo '<script src="js/vd-product-configurator.js?v='.hash_file('sha256','js/vd-product-configurator.js').'"></script>';
+        echo '<script src="_CustomDEVs/quote-workflow/js/vd-product-configurator.js?v='.hash_file('sha256','_CustomDEVs/quote-workflow/js/vd-product-configurator.js').'"></script>';
     }catch(Throwable $error) {
         error_log('VD product configurator report: '.$error->getMessage());
         echo '<div class="alert alert-danger">Não foi possível carregar o configurador. Verifique o acesso ou consulte o registo técnico.</div>';
